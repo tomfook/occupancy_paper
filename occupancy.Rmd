@@ -16,31 +16,45 @@ knitr::opts_chunk$set(echo = FALSE)
 One of the most important issue for park operation is raising guestcounts of attractions.
 Since guestcounts can be decomposed by dispatch count and seat occupancy, we focus on these two numbers.
 The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
-We revealed that seat occupancy is derivable by statistics of group size, queue formation, the number of seats and grouping strategy.  
+We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the number of seats, queue formation and grouping strategy.
 This framework will help us to optimize queue formation and grouping strategy.
-Because the model is general, that is, the model is not dependent on any actual attraction, our framework can be applied to every attractions.
+Because the model is general, that is, the model is not dependent on any actual attraction, the framework can be applied to every attractions.
 
 ## Modeling and Framework
-We consider about ride attractions.
-We want to find out how much seat occupancy we can achieve.
-If we have theoretical seat occupancy, we can compare actual value with it and evaluate its efficiency.
-Then we can identify which attractions can be more efficient.
-Or if we have other options for grouping strategy, we can judge if we change strategy or not.
+### Overview
+For ride attractions, grouping operation is deeply related to seat occupancy.
+Crew create a group to dispatch from arrival guests not to break each group of guests.
+Thus if a group size of arrival guest is note suited, crew can not make seat full however efficient they are.
+This indicates the existence of upper bound of seat occupancy in each attractions.
 
-Mathematical setting
+The upper bound would depend on statistics of group size of arrival guest and the number of seats for a vehicle.
+If we obtain the value, it could be possible to clarify the efficiency of grouping operation and whether seat occupancy can improve or not.
+In addition we will be able to judge which operations can achieve more seat occupnacy.
 
-- the size of $i$th arrival group is $x_i$
-- the probability that a group sized $k$ arrives is stationary and $p[x_i=k]=p_k$ 
-- After the $i$th group have seats, the number of seats filled with persons is $a_i$
+This upper bound can be probability variable because arrivals of guest should be probabilistic.
+Thus the expected value of 
 
-To evaluate the expectation value of seat occupancy, we apply **Markov chain model** to this situation.
+### Modeling
+To evaluate the upper bound, we set some operational situations as probabilistic model.
+Thus we will obtain the upper bound as expectation value.  
+Let
+
+- the size of $i$th arrival group be probability variable $x_i$.
+- the number of seats filled with persons be a probability variable $a_i$ after the $i$the group have seats.
+
+And we assume that
+
+- the probability that a group sized $k$ arrives is time stationary and $p[x_i=k]=p_k$ .
+
+We use **Markov chain model** to solve this problem.
 Markov chain model is a stochastic model using state and transition.
 
-We set $a_i$ as state after $i$ times transitions.
+We set $a_i$ as a state after $i$ times transitions.
 State of Markov chain 
 
 Arrival probability and grouping strategy decide a transition matrix of Markov chain.  
 
+### Solving
 Steps to Solve a Problem is
 
 1. Set a transition matrix $T$. 
