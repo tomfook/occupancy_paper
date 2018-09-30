@@ -32,15 +32,13 @@ If we obtain the value, it could be possible to clarify the efficiency of groupi
 In addition we will be able to judge which operations can achieve more seat occupnacy.
 
 This upper bound can be probability variable because arrivals of guest should be probabilistic.
-Thus the expected value of 
+Thus we will obtain the upper bound as expectation value.  
 
 ### Modeling
-To evaluate the upper bound, we set some operational situations as probabilistic model.
-Thus we will obtain the upper bound as expectation value.  
-Let
+To evaluate the upper bound, we define some operational situations by probabilistic model as below
 
-- the size of $i$th arrival group be probability variable $x_i$.
-- the number of seats filled with persons be a probability variable $a_i$ after the $i$the group have seats.
+- the size of $i$th arrival group is probability variable $x_i$.
+- the number of seats filled with persons is a probability variable $a_i$ after the $i$the group have seats.
 
 And we assume that
 

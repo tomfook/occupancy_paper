@@ -134,15 +134,14 @@ Operation Planning<br><h4 class="date"><em>2018-08-20</em></h4>
 <h3>Overview</h3>
 <p>For ride attractions, grouping operation is deeply related to seat occupancy. Crew create a group to dispatch from arrival guests not to break each group of guests. Thus if a group size of arrival guest is note suited, crew can not make seat full however efficient they are. This indicates the existence of upper bound of seat occupancy in each attractions.</p>
 <p>The upper bound would depend on statistics of group size of arrival guest and the number of seats for a vehicle. If we obtain the value, it could be possible to clarify the efficiency of grouping operation and whether seat occupancy can improve or not. In addition we will be able to judge which operations can achieve more seat occupnacy.</p>
-<p>This upper bound can be probability variable because arrivals of guest should be probabilistic. Thus the expected value of</p>
+<p>This upper bound can be probability variable because arrivals of guest should be probabilistic. Thus we will obtain the upper bound as expectation value.</p>
 </div>
 <div id="modeling" class="section level3">
 <h3>Modeling</h3>
-<p>To evaluate the upper bound, we set some operational situations as probabilistic model. Thus we will obtain the upper bound as expectation value.<br />
-Let</p>
+<p>To evaluate the upper bound, we define some operational situations by probabilistic model as below</p>
 <ul>
-<li>the size of <span class="math inline">\(i\)</span>th arrival group be probability variable <span class="math inline">\(x_i\)</span>.</li>
-<li>the number of seats filled with persons be a probability variable <span class="math inline">\(a_i\)</span> after the <span class="math inline">\(i\)</span>the group have seats.</li>
+<li>the size of <span class="math inline">\(i\)</span>th arrival group is probability variable <span class="math inline">\(x_i\)</span>.</li>
+<li>the number of seats filled with persons is a probability variable <span class="math inline">\(a_i\)</span> after the <span class="math inline">\(i\)</span>the group have seats.</li>
 </ul>
 <p>And we assume that</p>
 <ul>
