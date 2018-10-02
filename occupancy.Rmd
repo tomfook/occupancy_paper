@@ -28,13 +28,13 @@ Thus if a group size of arrival guest is note suited, crew can not make seat ful
 This indicates the existence of upper bound of seat occupancy in each attractions.
 
 The upper bound would depend on statistics of group size of arrival guest and the number of seats for a vehicle.
-If we obtain the value, it could be possible to clarify the efficiency of grouping operation and whether seat occupancy can improve or not.
-In addition we will be able to judge which operations can achieve more seat occupnacy.
+With the value, it could be possible to clarify the efficiency of grouping operation and whether seat occupancy can improve or not.
+In addition we will be able to judge if a new operation can achieve more seat occupnacy.
 
-This upper bound can be probability variable because arrivals of guest should be probabilistic.
-Thus we will obtain the upper bound as expectation value.  
+The upper bound can be probability variable because arrivals of guest should be probabilistic.
+Thus we have to estimate upper bounds as expectation values.  
 
-### Modeling
+### Model
 To evaluate the upper bound, we define some operational situations by probabilistic model as below
 
 - the size of $i$th arrival group is probability variable $x_i$.
@@ -52,7 +52,7 @@ State of Markov chain
 
 Arrival probability and grouping strategy decide a transition matrix of Markov chain.  
 
-### Solving
+### Solution
 Steps to Solve a Problem is
 
 1. Set a transition matrix $T$. 

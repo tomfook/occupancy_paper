@@ -133,11 +133,11 @@ Operation Planning<br><h4 class="date"><em>2018-08-20</em></h4>
 <div id="overview" class="section level3">
 <h3>Overview</h3>
 <p>For ride attractions, grouping operation is deeply related to seat occupancy. Crew create a group to dispatch from arrival guests not to break each group of guests. Thus if a group size of arrival guest is note suited, crew can not make seat full however efficient they are. This indicates the existence of upper bound of seat occupancy in each attractions.</p>
-<p>The upper bound would depend on statistics of group size of arrival guest and the number of seats for a vehicle. If we obtain the value, it could be possible to clarify the efficiency of grouping operation and whether seat occupancy can improve or not. In addition we will be able to judge which operations can achieve more seat occupnacy.</p>
-<p>This upper bound can be probability variable because arrivals of guest should be probabilistic. Thus we will obtain the upper bound as expectation value.</p>
+<p>The upper bound would depend on statistics of group size of arrival guest and the number of seats for a vehicle. With the value, it could be possible to clarify the efficiency of grouping operation and whether seat occupancy can improve or not. In addition we will be able to judge if a new operation can achieve more seat occupnacy.</p>
+<p>The upper bound can be probability variable because arrivals of guest should be probabilistic. Thus we have to estimate upper bounds as expectation values.</p>
 </div>
-<div id="modeling" class="section level3">
-<h3>Modeling</h3>
+<div id="model" class="section level3">
+<h3>Model</h3>
 <p>To evaluate the upper bound, we define some operational situations by probabilistic model as below</p>
 <ul>
 <li>the size of <span class="math inline">\(i\)</span>th arrival group is probability variable <span class="math inline">\(x_i\)</span>.</li>
@@ -151,8 +151,8 @@ Operation Planning<br><h4 class="date"><em>2018-08-20</em></h4>
 <p>We set <span class="math inline">\(a_i\)</span> as a state after <span class="math inline">\(i\)</span> times transitions. State of Markov chain</p>
 <p>Arrival probability and grouping strategy decide a transition matrix of Markov chain.</p>
 </div>
-<div id="solving" class="section level3">
-<h3>Solving</h3>
+<div id="solution" class="section level3">
+<h3>Solution</h3>
 <p>Steps to Solve a Problem is</p>
 <ol style="list-style-type: decimal">
 <li>Set a transition matrix <span class="math inline">\(T\)</span>.</li>
