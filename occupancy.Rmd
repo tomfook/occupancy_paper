@@ -35,29 +35,51 @@ The upper bound can be probability variable because arrivals of guest should be 
 Thus we have to estimate upper bounds as expectation values.  
 
 ### Model
-To evaluate the upper bound, we define some operational situations by probabilistic model as below
+To evaluate the upper bound, we define some operational numbers by probabilistic model as below
 
 - the size of $i$th arrival group is probability variable $x_i$.
-- the number of seats filled with persons is a probability variable $a_i$ after the $i$the group have seats.
+- the number of seats filled by guests is a probability variable $a_i$ after the $i$the group have seats.
 
 And we assume that
 
 - the probability that a group sized $k$ arrives is time stationary and $p[x_i=k]=p_k$ .
 
-We use **Markov chain model** to solve this problem.
-Markov chain model is a stochastic model using state and transition.
+We apply **Markov chain model** to this problem.
+Markov chain model is a kind of stochastic model having state and transition.  
+This model focuses relationships between states and transition and a lot of techniques is established to solve this problem.
 
-We set $a_i$ as a state after $i$ times transitions.
-State of Markov chain 
+We consider state after $i$th transition as $a_i$ and the probability of transition as $p_k$.
 
-Arrival probability and grouping strategy decide a transition matrix of Markov chain.  
+```{r markov, fig.width = 3, fig.height = 2}
+library(DiagrammeR)
+grViz(
+  "digraph dot{
+    graph[
+      rankdir = LR,
+      label = 'State and Transition',
+      fontsize = 10
+    ]
+    node[
+      shape = circle,
+      fixedsize = true
+    ]
+      a1[label = '<I>a@_{i}</I>'];
+      a2[label = '<I>a</I>@_{<I>i</I>+1}']
+    edge[label = '<I>p@_{k}</I>']
+      a1 -> a2}
+  "
+)
+```
+
+If we obtain the probability of each states $p[a_i]$, the expectation value of seat occupancy can be easily calculated.
+Thus our problem for expectation of seat occupancies can be translated into how to set transition $p_k$ and how to derive $p[a_i]$ from $p_k$.
 
 ### Solution
-Steps to Solve a Problem is
+Our steps to solve problem is
 
-1. Set a transition matrix $T$. 
-2. Find the stationary state as a solution of equation $Tx=x$.
-3. Calculate expectation value of occupancy.
+1. Set a transition matrix $T$ from seat number and grouping strategy.
+2. Find the stationary state as a solution of equation $Tx=x$
+3. Calculate expectation value of occupancy from stationary probability.
 
 ## Example: Single Grouping
 We calculate seat occupancy 
