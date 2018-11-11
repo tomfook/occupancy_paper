@@ -18,31 +18,31 @@ Since guestcounts can be decomposed by dispatch count and seat occupancy, we foc
 The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
 We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the number of seats, queue formation and grouping strategy.
 This framework will help us to optimize queue formation and grouping strategy.
-Because the model is general, that is, the model is not dependent on any actual attraction, the framework can be applied to every attractions.
+Because the model is general, that is, the model is not dependent on any actual attraction, the framework can be applied to any attractions.
 
 ## Modeling and Framework
 ### Overview
 For ride attractions, grouping operation is deeply related to seat occupancy.
 Crew create a group to dispatch from arrival guests not to break each group of guests.
-Thus if a group size of arrival guest is note suited, crew can not make seat full however efficient they are.
-This indicates the existence of upper bound of seat occupancy in each attractions.
+Thus if a group size of arrival guest is not suited, crew will not be able to make seat full however efficient they are.
+This fact indicates the existence of upper bound of seat occupancy in each attractions.
 
 The upper bound would depend on statistics of group size of arrival guest and the number of seats for a vehicle.
-With the value, it could be possible to clarify the efficiency of grouping operation and whether seat occupancy can improve or not.
-In addition we will be able to judge if a new operation can achieve more seat occupnacy.
+If we have a knowledge of upper bound of an attraction, we can clarify its efficiency of grouping operation and whether the seat occupancy can improve or not by comparing the upper bound and the actual value.
+And we will be able to judge if a change of operation can achieve more seat occupnacy.
 
 The upper bound can be probability variable because arrivals of guest should be probabilistic.
-Thus we have to estimate upper bounds as expectation values.  
+Thus we will obtain upper bounds as expectation values.  
 
-### Model
-To evaluate the upper bound, we define some operational numbers by probabilistic model as below
+### Mathematical Modeling
+To evaluate the upper bound, we define few numbers for situation of operation.
 
 - the size of $i$th arrival group is probability variable $x_i$.
 - the number of seats filled by guests is a probability variable $a_i$ after the $i$the group have seats.
 
-And we assume that
+And we assume that situation is stationary.
 
-- the probability that a group sized $k$ arrives is time stationary and $p[x_i=k]=p_k$ .
+- the probability that a size $k$ group arrives is time stationary and $P[x_i=k]=p_k$ .
 
 We apply **Markov chain model** to this problem.
 Markov chain model is a kind of stochastic model having state and transition.  
@@ -56,7 +56,7 @@ grViz(
   "digraph dot{
     graph[
       rankdir = LR,
-      label = 'State and Transition',
+      label = 'Fig.1: State and Transition',
       fontsize = 10
     ]
     node[
@@ -71,23 +71,129 @@ grViz(
 )
 ```
 
-If we obtain the probability of each states $p[a_i]$, the expectation value of seat occupancy can be easily calculated.
-Thus our problem for expectation of seat occupancies can be translated into how to set transition $p_k$ and how to derive $p[a_i]$ from $p_k$.
+Then our problem for expectation of seat occupancies is translated into how to find out transition probability $P[x_i=k]=p_k$ and how to derive the probability having each states $P[a_i]$ from $p_k$ because the expectation value can be easily calculated by $p_k$ and $P[a_i]$.
+This expectation value should be the upper bound of seat occupancy.
 
-### Solution
-Our steps to solve problem is
+### Steps to solve the problem
+We 
 
-1. Set a transition matrix $T$ from seat number and grouping strategy.
-2. Find the stationary state as a solution of equation $Tx=x$
+1. Set a transition matrix from seat number and grouping strategy.
+2. Identify the stationary state.
 3. Calculate expectation value of occupancy from stationary probability.
 
+#### Setting a transition matrix
+Suppose that a group sized $k$ has arrived.
+In case the number of empty seats is greater than $k$, they will take their seats.
+If it's less than $k$, the vehicle will dispatch and the group will take their seats of new vehicle.  
+
+- $a_i<x_i$ then $a_{i+1}=a_i+x_i$ 
+- $a_i>x_i$ then $a_{i+1}=x_i$
+
+This means that a probability having a state can be described by previous state and arrival probability.
+Because arrival probability is indenpendent on state, these probabilities are 
+$$
+\begin{eqnarray}
+T_{jk}&=&P[a_{i+1}=k|a_{i}=j]\\
+  &=&\begin{cases}p_{j-k}P[a_{i}=j]&(j-k>0)\\ p_{k}P[a_{i}=j]&(j-k\leq0)\end{cases}\\
+\end{eqnarray}
+$$
+And we call a matrix which elements are these probabilities as **transition matrix**.
+
+We show an example in the simplest case, which has only two seats.
+In this case, seat occupancy can take states from zero to two $a_i=0, 1, 2$.
+
+
+Markov state and transition in this situation will be described in Fig.2.
+```{r twoseattransition, fig.width = 4}
+grViz("
+  digraph dot{
+    graph[
+      rankdir = LR,
+      label = 'Fig.2: Simplest Case(two seats). \nRed means dispatch',
+      fontsize = 10,
+      layout = neato,
+      ordering = out,
+    ];
+    node[
+      shape = circle,
+      fixedsize = true
+    ];
+    a0[label = '0'];
+    a1[label = '1'];
+    a2[label = '2'];
+    a0 -> a1[label = '<I>p</I>@_{1}'];
+    a0 -> a2[label = '<I>p</I>@_{2}'];
+    a1 -> a2[label = '<I>p</I>@_{1}'];
+    a1 -> a2[label = '<I>p</I>@_{2}', color = red];
+    a2 -> a1[label = '<I>p</I>@_{1}', color = red];
+    a2 -> a2[label = '<I>p</I>@_{2}', color = red];
+  }
+#  digraph dot{
+#    graph[
+#      rankdir = LR,
+#      label = 'Fig.2: Simplest Case(two seats). \nRed means dispatch',
+#      fontsize = 10,
+#      layout = dot,
+#      ordering = out,
+#    ];
+#    node[
+#      shape = circle,
+#      fixedsize = true
+#    ];
+#    a0[label = '<I>a@_{i}</I>=0'];
+#    a1[label = '<I>a@_{i}</I>=1'];
+#    a2[label = '<I>a@_{i}</I>=2'];
+#    b0[label = '<I>a@_{i+1}</I>=0'];
+#    b1[label = '<I>a@_{i+1}</I>=1'];
+#    b2[label = '<I>a@_{i+1}</I>=2'];
+#    a0 -> b1[label = '<I>p</I>@_{1}'];
+#    a0 -> b2[label = '<I>p</I>@_{2}'];
+#    a1 -> b2[label = '<I>p</I>@_{1}'];
+#    a1 -> b2[label = '<I>p</I>@_{2}', color = red];
+#    a2 -> b2[label = '<I>p</I>@_{2}', color = red];
+#    a2 -> b1[label = '<I>p</I>@_{1}', color = red];
+#    {rank = min; a0;a1;a2;}
+#    {rank = max; b0;b1;b2;}
+#  } 
+")
+```
+As an element $T_{jk}$ means probability to move from state $a_i=j$ to state $a_{i+1}=k$, we can define transition matrix
+$$
+T=\begin{pmatrix}
+  0 & p_1 & p_2 \\
+  0 & 0 & 1\\
+  0 & p_1 & p_2
+  \end{pmatrix},
+$$
+since $p_1+p_2=1$.  
+
+#### Stationary State
+Set state probability
+$$
+A_i = \begin{pmatrix}a\\b\\c\end{pmatrix}
+$$
+next step $A_{i+1}=A_iT$.
+we can calculate state probability in each step.
+if we continue to calculation and state converge, state probability should be sufficient equation
+$$
+A=AT
+$$
+This means stationary state is eigenvector corresponding eigenvalues 1 of $T$.
+So we obtain stationary state by calculating eigenvector of $T$.
+
+Example:
+
+#### Expectation value of seat occupancy
+
 ## Example: Single Grouping
-We calculate seat occupancy 
+As an example, we calculate seat occupancy in a situation of
 
-- we make only one line of seats
-- 4 seats on the line
+- one line of seats
+- four seats in the line
 
-We imagined an attraction like Harry Potter and the Forbidden Journey.
+This situation is fit attractions like Harry Potter and the Forbidden Journey.
+
+We 
 
 ### Transition Matrix 
 If we make only one line, we have to group guests in arrival order.
