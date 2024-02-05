@@ -23,12 +23,13 @@ Because the model is general, that is, the model is not dependent on any actual 
 ## Modeling and Framework
 ### Problem
 For ride attractions, grouping operation is deeply related to seat occupancy.
-Attraction staff forms a group to dispatch a vehicle from arrival guests not to break a friend group.
-That staff is called grouper.
-Guests come continuously and a grouper guides former arrival guest first.
+Attraction crew forms a group to dispatch a vehicle from arrival guests not to break a friend group.
+That crew is called a grouper.
+Guests come again and again.
+A grouper guides former arrival guest first.
 Grouper can not choose a size of friend group to come next and even expect it.
 
-Almost all seat arrangement of vehicle is designed as a rectangle pattern.
+Almost all seat arrangement of vehicle is designed to be a rectangle pattern.
 This means that seats are set in a row, and one or more rows are line up.
 Grouping operation is to gather people to have a seat in the same row.
 And of course friend group should be in the same group and sit next to each other.
@@ -37,51 +38,45 @@ Grouping problem is how to maximize guest experience to fill seats with guest gr
 Grouper ask a size of group and select a row to guide.
 Grouping strategy is to select an optimal row when a size of group come.
 
-We 
-This fact indicates the existence of upper bound of seat occupancy in each attractions.
+Therefore there exists an upper bound of seat occupancy in each attractions.
 
 The upper bound would depend on statistics of group size of arrival guest and a pattern of seats configuration.
 If we have a knowledge of upper bound of an attraction, we can evaluate its efficiency of grouping operation and whether the seat occupancy can improve or not.
 
 ### Mathematical Modeling
-To evaluate the upper bound, we define a few numbers for the state of operation.
+Our problem can be handled as a state-action-reward model.
 
-- the size of $i$th arrival group is probability variable $x_i$.
-- staff guides $i$th arrival group to seats $a_i$.
-- staff decides for a vehicle to go because of vacant seats left few $b_i\in\{0,1\}$.
-- the seats filled by guests after the $i$th group has seats $s_i$.
+- **state**:  the seats pattern filled by guests
+- **action**: decision which row to guide arrival guests and to dispatch a vehicle or not
+- **reward**: the number of guests who take a seat when a vehicle is dispatched
 
-And we assume that the situation is stationary.
+To treat this model, we define a numbers of variables for state and transition
 
-- the probability that a size $k$ group arrives is independent on time $P[x_i=k]=p_k$ .
+- the size of $i$th arrival group is a probability variable $x_i$.
+- the seats filled pattern after the $i$th group has seats $s_i$.
+- the set of pattern of seats filled $\sigma in \Sigma$.
 
-We can model our problem as a state-action-reward model.
-Our reward is the number of guests who take a seat when a vehicle goes.
+After a vehicle is dispatched, a new vacant vehicle will come.
+This means the state will be initialized as $sigma_0$.
 
-<!--
-We apply the **Markov chain model** to this problem.
-Markov chain model is a kind of stochastic model having state and transition.  
-This model focuses on relationships between states and transition and a lot of techniques are established to solve this kind of problems.
--->
+      <!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
 
-We consider the state after $i$th transition as $s_i$ and the probability of transition as $p_k$.
-
-```{r markov, fig.width = 3, fig.height = 2}
+```{r markov, fig.width = 5, fig.height = 2}
 library(DiagrammeR)
 grViz(
   "digraph dot{
     graph[
       rankdir = LR,
       label = 'Fig.1: State, Action, and Transition',
-      fontsize = 20
+      fontsize = 15
     ]
     node[
       fixedsize = false
     ]
-      a1[label = '<I>s@_{i}</I>', shape = circle];
-      a2[label = '<I>a@_{i}</I>', shape = square];
-    edge[label = '<I>p@_{k}</I>'] a1 -> a2 ;
-      a3[label = '<I>b@_{i}</I>', shape = square];
+      a1[texlbl = '$s_i=\\sigma$', shape = circle];
+      a2[label = 'Which row\n to guid?', shape = square];
+    edge[label = '<I>x@_{i}</I>'] a1 -> a2 ;
+      a3[label = 'Dispatch\n or not?', shape = square];
     edge[label = ''] a2 -> a3;
       a4[label = '<I>s</I>@_{<I>i</I>+1}', shape = circle];
       edge[label = ''] a3 -> a4;
@@ -91,9 +86,14 @@ grViz(
 )
 ```
 
+We assume that the situation is stationary.
+The assumption induces the probability that a size $k$ group arrives is independent on time $P[x_i=k]=p_k$ .
+
 ## Simple case: Markov chain
-If the seat layout is one line, then our option is giving seats or dispatch a vehicle because we can not choose which seats we provide
-In that case, our model become simple **Markov chain model** and the expectation of seat occupancies is translated into how to find out transition probability $P[x_i=k]=p_k$ and how to derive the probability having each state $P[a_i=n]$ from $p_k$ because the expectation value can be easily calculated by $p_k$ and $P[a_i=n]$.
+If the seat layout is one line, then our option is giving seats or dispatch a vehicle because we can not choose which seats we provide.
+In that case, our model can be treated as a simple **Markov chain model**.
+Then the expectation of seat occupancies is calculated from a transition probability $P[x_i=k]=p_k$.
+and how to derive the probability having each state $P[a_i=n]$ from $p_k$ because the expectation value can be easily calculated by $p_k$ and $P[a_i=n]$.
 This expectation value should be the upper bound of seat occupancy.
 
 ### Steps to solve the problem
