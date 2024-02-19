@@ -52,14 +52,14 @@ Our problem can be handled as a state-action-reward model.
 
 To treat this model, we define a numbers of variables for state and transition
 
-- the size of $i$th arrival group is a probability variable $x_i$.
+- the size of $i$th arrival group is a probability variable $x_i \in \mathbb N$.
 - the seats filled pattern after the $i$th group has seats $s_i$.
-- the set of pattern of seats filled $\sigma in \Sigma$.
+- the set of pattern of seats filled $\sigma \in \Sigma$.
 
 After a vehicle is dispatched, a new vacant vehicle will come.
-This means the state will be initialized as $sigma_0$.
+This means the state will be initialized as $\sigma_0$.
 
-      <!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
+<!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
 
 ```{r markov, fig.width = 5, fig.height = 2}
 library(DiagrammeR)
@@ -73,12 +73,12 @@ grViz(
     node[
       fixedsize = false
     ]
-      a1[texlbl = '$s_i=\\sigma$', shape = circle];
+      a1[label = '<I>s</I>@_{<I>i</I>}=<I>&sigma;</I>', shape = circle];
       a2[label = 'Which row\n to guid?', shape = square];
     edge[label = '<I>x@_{i}</I>'] a1 -> a2 ;
       a3[label = 'Dispatch\n or not?', shape = square];
     edge[label = ''] a2 -> a3;
-      a4[label = '<I>s</I>@_{<I>i</I>+1}', shape = circle];
+      a4[label = '<I>s</I>@_{<I>i</I>+1}=<I>&sigma;</I>&prime;', shape = circle];
       edge[label = ''] a3 -> a4;
 
 }
