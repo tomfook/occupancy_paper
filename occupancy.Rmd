@@ -10,6 +10,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(DiagrammeR)
+library(ggplot2)
 ```
 
 ## Introduction
@@ -59,10 +61,7 @@ To treat this model, we define a numbers of variables for state and transition
 After a vehicle is dispatched, a new vacant vehicle will come.
 This means the state will be initialized as $\sigma_0$.
 
-<!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
-
 ```{r markov, fig.width = 5, fig.height = 2}
-library(DiagrammeR)
 grViz(
   "digraph dot{
     graph[
@@ -91,41 +90,47 @@ The assumption induces the probability that a size $k$ group arrives is independ
 
 ## Simple case: Markov chain
 If the seat layout is one line, then our option is giving seats or dispatch a vehicle because we can not choose which seats we provide.
-In that case, our model can be treated as a simple **Markov chain model**.
-Then the expectation of seat occupancies is calculated from a transition probability $P[x_i=k]=p_k$.
-and how to derive the probability having each state $P[a_i=n]$ from $p_k$ because the expectation value can be easily calculated by $p_k$ and $P[a_i=n]$.
+This means that statistics of a guest arrival directly gives the probability of transition from a state to another.
+We can handle such problems as a simple Markov chain model.
+
+In this case, the number of occupied seats describes the state completely,
+
+$$
+\sigma \in \Sigma = \{1,2,\ldots,N\}
+$$
+
+where $N$ is the number of seats in the line.
+We can calculate the probability being each state $P[s_i=n]$ from $p_k$, and the expectation of seat occupancy from the state probabilities.
 This expectation value should be the upper bound of seat occupancy.
 
 ### Steps to solve the problem
 We 
 
-1. Give a transition matrix from the number of seats and size of arrival group.
+1. Give a transition matrix
 2. Identify the stationary state.
 3. Calculate the expectation value of occupancy from stationary probability.
 
-#### Setting a transition matrix
+#### transition matrix
 Suppose that a group sized $k$ has arrived.
 In case the number of empty seats is greater than $k$, they will take their seats.
-If it's less than $k$, the crew dispatch the vehicle and the group will take their seats of new vehicle.  
+If it's less than $k$, the crew dispatch the vehicle and give them a new vacant vehicle.
 
 - $s_i<x_i$ then $s_{i+1}=s_i+x_i$ 
 - $s_i>x_i$ then $s_{i+1}=x_i$
 
-This means that the probability of having a state can be described by the previous state and arrival probability.
-Because arrival probability is independent on state, these probabilities are 
+Because arrival probability is independent on state, we can calculate probabilities from state j to k as
 $$
 \begin{eqnarray}
 T_{jk}&=&P[s_{i+1}=k|s_{i}=j]\\
-  &=&\begin{cases}p_{j-k}P[s_{i}=j]&(j-k>0)\\ p_{k}P[s_{i}=j]&(j-k\leq0)\end{cases}\\
+  &=&\begin{cases}p_{j-k}P[s_{i}=j]&(j-k>0)\\ p_{k}P[s_{i}=j]&(j-k\leq0)\end{cases}.\\
 \end{eqnarray}
 $$
 And we call a matrix which elements are these probabilities as **transition matrix**.
 
 We show an example in the simplest case, which has only two seats.
-In this case, seat occupancy can take states from zero to two $s_i=0, 1, 2$.
+In this case, seat occupancy can take $s_i=0, 1, 2$.
 
-
-Markov state and transition in this situation will be described in Fig.2.
+Markov state and transition in this situation can be shown in Fig.2.
 ```{r twoseattransition, fig.width = 4}
 grViz("
   digraph dot{
@@ -150,36 +155,9 @@ grViz("
     a2 -> a1[label = '<I>p</I>@_{1}', color = red];
     a2 -> a2[label = '<I>p</I>@_{2}', color = red];
   }
-#  digraph dot{
-#    graph[
-#      rankdir = LR,
-#      label = 'Fig.2: Simplest Case(two seats). \nRed means dispatch',
-#      fontsize = 10,
-#      layout = dot,
-#      ordering = out,
-#    ];
-#    node[
-#      shape = circle,
-#      fixedsize = true
-#    ];
-#    a0[label = '<I>a@_{i}</I>=0'];
-#    a1[label = '<I>a@_{i}</I>=1'];
-#    a2[label = '<I>a@_{i}</I>=2'];
-#    b0[label = '<I>a@_{i+1}</I>=0'];
-#    b1[label = '<I>a@_{i+1}</I>=1'];
-#    b2[label = '<I>a@_{i+1}</I>=2'];
-#    a0 -> b1[label = '<I>p</I>@_{1}'];
-#    a0 -> b2[label = '<I>p</I>@_{2}'];
-#    a1 -> b2[label = '<I>p</I>@_{1}'];
-#    a1 -> b2[label = '<I>p</I>@_{2}', color = red];
-#    a2 -> b2[label = '<I>p</I>@_{2}', color = red];
-#    a2 -> b1[label = '<I>p</I>@_{1}', color = red];
-#    {rank = min; a0;a1;a2;}
-#    {rank = max; b0;b1;b2;}
-#  } 
-")
+  ")
 ```
-As an element $T_{jk}$ means probability to move from state $s_i=j$ to state $s_{i+1}=k$, we can define transition matrix
+In this case our transition matrix is
 $$
 T=\begin{pmatrix}
   0 & p_1 & p_2 \\
@@ -190,16 +168,67 @@ $$
 since $p_1+p_2=1$.  
 
 #### Stationary State
-If state probability is given by $A_i$ then next step $A_{i+1}=A_iT$.
-We can calculate state probability in each step.
-If we continue to calculate and state converge, state probability should be a sufficient equation
+If state probability is given by a vector $A_i=(P[s_i=0],P[s_i=1],P[s_i=2])$, then next step $A_{i+1}=A_iT$.
+We can calculate a state probability in each step.
+If the calculation converges, state probability satisfies an equation
 $$
 A=AT
 $$
-This means stationary state is eigenvector corresponding eigenvalues 1 of $T$.
-So we obtain stationary state by calculating eigenvector of $T$.
+This probability vector is called a **stationary distribution**.
+The stationary distribution is an eigenvector corresponding eigenvalues 1 of $T$.
+
+We empirically know that it is very fast to approach the stationary distribution.
+So we can expect we observe the states with the stationary distribution in most of the time.
+This means that the expectation of seat occupancy from the stationary distribution is a reasonable estimation.
+
+By easy calculation, we can get the stationary distribution as
+$$
+A = \left(0, \frac{p}{p+2}, \frac{2}{p+2}\right)
+$$
+where $p=p_1=1-p_2$.
 
 #### Expectation value of seat occupancy
+The expectation of seat occupancy can be described with the conditional probability
+$$
+\mathrm E\left[ \mathrm{ Seat Occupancy } | \mathrm{ Dispatch } \right] = \frac{\mathrm E[\mathrm{OccupancyWhenDispatch}]}{P[\mathrm{Dispatch}]}.
+$$
+
+The probability of dispatch is
+$$
+P[\mathrm{Dispatch}]=a_1p_2+a_2(p_1+p_2) = \frac{-p^2+p+2}{p+2}
+$$
+
+And the numerator is
+$$
+\mathrm{E}[\mathrm{OccupancyWhenDispatch}]=1\cdot a_1p_2 + 2\cdot a_2(p_1+p_2) = \frac{-p^2+p+4}{p+2}
+$$
+
+Thus our goal is
+$$
+\mathrm E\left[ \mathrm{ Seat Occupancy } | \mathrm { Dispatch } \right] = \frac{-p^2+p+4}{-p^2+p+2}.
+$$
+
+```{r simplest_occupancy}
+p <- seq(0, 1, by = 0.01)
+fun <- function(p) return((-p^2+p+4)/(-p^2+p+2))
+df <- data.frame(p = p, seat_occupancy = fun(p))
+ggplot(df) +
+  geom_line(aes(p, seat_occupancy)) +
+  scale_y_continuous(breaks = seq(1.85,2,by=0.05)) +
+  labs(
+       title = "Fig3. Seat Occupancy vs Arrival Probability of single guest",
+       subtitle = "uncertainity reduces occupancy expectation",
+       y = "Occupancy Expectation"
+  )
+```
+
+We can see the expectation of seat occupancy has the greatest value 2 in $p=0,p=1$.
+This is obvious because in the case the arrival group size is fixed with 1 or 2.
+In the most uncertain case $p=1/2$ our expectation is the least $17/9\sim1.89$
+
+We completely solved the problem.
+Logically we could solve any other situation having one line seats in the same manner.
+But it does not mean we can solve such problem easily.
 
 ## Actual setting: one line of four seats
 As an example, we calculate seat occupancy in a situation of
