@@ -1579,7 +1579,7 @@ Operation Planning<br><h4 class="date">2018-08-20</h4>
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>One of the most important issue for theme park operation is raising guestcounts of attractions. Since guestcounts can be decomposed by dispatch count and seat occupancy, we separately focus on these two numbers. The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions. We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the configuration of seats, queue formation and grouping strategy. This framework will help us to optimize queue formation and grouping strategy. Because the model is general, that is, the model is not dependent on any actual attraction, the framework can be applied to any attractions.</p>
+<p>One of the most important issue for theme park operation is raising guestcounts of attractions. Since guestcounts can be decomposed by dispatch count and seat occupancy, we separately focus on these two numbers. The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions. We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the configuration of seats, queue formation and grouping strategy. This framework will help us to optimize queue formation and grouping strategy. The model is so general that the framework will be applied to any attractions.</p>
 </div>
 <div id="modeling-and-framework" class="section level2">
 <h2>Modeling and Framework</h2>
@@ -1606,8 +1606,8 @@ Operation Planning<br><h4 class="date">2018-08-20</h4>
 <li>the set of pattern of seats filled <span class="math inline">\(\sigma \in \Sigma\)</span>.</li>
 </ul>
 <p>After a vehicle is dispatched, a new vacant vehicle will come. This means the state will be initialized as <span class="math inline">\(\sigma_0\)</span>.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-b376a4d299ef7465198b" style="width:480px;height:192px;"></div>
-<script type="application/json" data-for="htmlwidget-b376a4d299ef7465198b">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n      a2[label = \"Which row\n to guid?\", shape = square];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a3[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n      edge[label = \"\"] a3 -> a4;\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-7ae3fc6855d5eb298697" style="width:480px;height:192px;"></div>
+<script type="application/json" data-for="htmlwidget-7ae3fc6855d5eb298697">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n      a2[label = \"Which row\n to guid?\", shape = square];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a3[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n      edge[label = \"\"] a3 -> a4;\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>We assume that the situation is stationary. The assumption induces the probability that a size <span class="math inline">\(k\)</span> group arrives is independent on time <span class="math inline">\(P[x_i=k]=p_k\)</span> .</p>
 </div>
 </div>
@@ -1642,8 +1642,8 @@ T_{jk}&amp;=&amp;P[s_{i+1}=k|s_{i}=j]\\
 \]</span> And we call a matrix which elements are these probabilities as <strong>transition matrix</strong>.</p>
 <p>We show an example in the simplest case, which has only two seats. In this case, seat occupancy can take <span class="math inline">\(s_i=0, 1, 2\)</span>.</p>
 <p>Markov state and transition in this situation can be shown in Fig.2.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-c1238c964152ebb33f17" style="width:384px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-c1238c964152ebb33f17">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case(two seats). \nRed means dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3b7283235cabb2c379ed" style="width:384px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-3b7283235cabb2c379ed">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case(two seats). \nRed means dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>In this case our transition matrix is <span class="math display">\[
 T=\begin{pmatrix}
   0 &amp; p_1 &amp; p_2 \\
@@ -1694,8 +1694,8 @@ P[\mathrm{Dispatch}]=a_1p_2+a_2(p_1+p_2) = \frac{-p^2+p+2}{p+2}
 <div id="occupancy-expectation" class="section level3">
 <h3>Occupancy expectation</h3>
 <p>The transition of state is described by below.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-a468c8a66d44d63cd869" style="width:768px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-a468c8a66d44d63cd869">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      label = \"Fig.4: One line, four seats. \nRed means dispatch\",\n      fontsize = 10\n    ];\n    node[\n      shape = circle,\n      fixedsize = true,\n      fontsize = 10\n    ];\n    edge[\n\t fontsize = 10,\n\t arrowsize = 0.5\n    ];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a3[label = \"3\"];\n    a4[label = \"4\"];\n    a1 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>];\n    a1 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a2 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a2 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a2 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a2 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a3 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a1[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3b6014f702ff6e326791" style="width:768px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-3b6014f702ff6e326791">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      label = \"Fig.4: One line, four seats. \nRed means dispatch\",\n      fontsize = 10\n    ];\n    node[\n      shape = circle,\n      fixedsize = true,\n      fontsize = 10\n    ];\n    edge[\n\t fontsize = 10,\n\t arrowsize = 0.5\n    ];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a3[label = \"3\"];\n    a4[label = \"4\"];\n    a1 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>];\n    a1 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a2 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a2 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a2 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a2 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a3 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a1[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>and transition matrix is</p>
 <p><span class="math display">\[
 T=\begin{pmatrix}
@@ -1725,26 +1725,30 @@ Z = p_1(1-p_1p_2-p_2p_3-p_3+p_2^2+p_1+p_2+p_1^2) + p_2+1.
 \]</span> <span class="math display">\[
 P[\mathrm{Dispatch}] = \pi_1p_4+\pi_2(p_3+p_4)+\pi_3(p_2+p_3+p_4)+\pi_4(p_1+p_2+p_3+p_4)
 \]</span></p>
+<p>Because this value is continious, there is the maximum and minimum value in <span class="math inline">\(p_i\in[0,1],\sum p_i=1\)</span>. We would obtain the value using the Lagrange multiplier.</p>
 </div>
 <div id="with-single-rider-queue" class="section level3">
 <h3>With Single-Rider Queue</h3>
-<p>We suppose that we configure a single-rider queue. A single-rider queue is a independent queue only for guests of group size 1. In this configuration, we evaluate occupancy expectation without the arrivals of group size 1, and adjust its effect later.</p>
-<p>The stationary distribution can be simplified much in case <span class="math inline">\(p_1=0\)</span>, <span class="math display">\[
-\pi = \begin{pmatrix}0\\\frac{p_2}{1+p_2}\\p_3\\\frac{p_2^2}{1+p_2}+p_4\\\end{pmatrix}.
-\]</span> <span class="math display">\[
-\mathrm{E}[\mathrm{Occupancy}] = \frac{2p_2+3p_3+4p_4}{\frac{1}{1+p_2}+p_3+p_4}
+<p>We suppose configuration of a single-rider queue. A single-rider queue is an independent queue only for guests of group size 1. In this configuration, we evaluate occupancy expectation without the arrivals of group size 1, and adjust its effect later. We use arrival probabilities given no single guests <span class="math display">\[
+p_2&#39; = P[s_i=2|s_i\neq1]=p_2/(1-p_1)\\
+p_3&#39; = P[s_i=3|s_i\neq1]=p_3/(1-p_1)\\
+p_4&#39; = P[s_i=4|s_i\neq1]=p_4/(1-p_1).
 \]</span></p>
-<p>If we have a single-rider queue, the parameters should be modified as <span class="math display">\[
-p_1=0, p_2=p_3=p_4=1/3
-\]</span> Then we can obtain the stationary state as <span class="math display">\[
-\pi=\begin{pmatrix}0.417\\0\\0.25\\0.333\end{pmatrix}
-\]</span> Using this, we can easily calculate the dispatch probability <span class="math display">\[
-D = 0.9167
-\]</span> and the expectation of occupancy <span class="math display">\[
-\mathrm E[Ocp]=0.818
-\]</span> Finally, we adjust a single-rider effect as <span class="math display">\[
-\mathrm E[Ocp_S]=\mathrm E[Ocp](1+p_s)=0.859
-\]</span> where <span class="math inline">\(p_s\)</span> is a single-rider availability assumed by 0.05.</p>
+<p>The stationary distribution can be simplified much in case <span class="math inline">\(p_1=0\)</span>, <span class="math display">\[
+\pi = \begin{pmatrix}0\\\frac{p_2&#39;}{1+p_2&#39;}\\p_3&#39;\\\frac{p_2&#39;^2}{1+p_2&#39;}+p_4&#39;\\\end{pmatrix}.
+\]</span> <span class="math display">\[
+\mathrm{E}[Ocp|s_i\neq1] = \frac{2p_2&#39;+3p_3&#39;+4p_4&#39;}{\frac{p_2&#39;}{1+p_2&#39;}+p_3&#39;+p_4&#39;}
+\]</span></p>
+<p>Actually we have guests of group size 1 in <span class="math inline">\(p_1\)</span>. The ratio of the single guests in the total guests can be evaluated <span class="math display">\[
+r = \frac{p_1}{p_1+2p_2+3p_3+4p_4}
+\]</span></p>
+<p>Single guests will take their seat if a vacant seat is left before dispatch. Thus we just add them to occupancy expectation.</p>
+<p><span class="math display">\[
+\mathrm{E}[Ocp] = \mathrm{E}[Ocp|s_i\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
+\]</span></p>
+<p>To compare with the original the one normal queue and queues having isolated single rider queue, we assume arrival probability <span class="math display">\[
+\begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\1/3\\1/3\\1/3\end{pmatrix}.
+\]</span> In the case,</p>
 </div>
 <div id="pre-grouping" class="section level3">
 <h3>Pre-grouping</h3>

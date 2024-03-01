@@ -20,7 +20,7 @@ Since guestcounts can be decomposed by dispatch count and seat occupancy, we sep
 The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
 We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the configuration of seats, queue formation and grouping strategy.
 This framework will help us to optimize queue formation and grouping strategy.
-Because the model is general, that is, the model is not dependent on any actual attraction, the framework can be applied to any attractions.
+The model is so general that the framework will be applied to any attractions.
 
 ## Modeling and Framework
 ### Problem
@@ -324,21 +324,66 @@ $$
 $$
 P[\mathrm{Dispatch}] = \pi_1p_4+\pi_2(p_3+p_4)+\pi_3(p_2+p_3+p_4)+\pi_4(p_1+p_2+p_3+p_4)
 $$
+
+Because this value is continious, there is the maximum and minimum value in $p_i\in[0,1],\sum p_i=1$.
+We would obtain the value using the Lagrange multiplier.
  
 ### With Single-Rider Queue
-We suppose that we configure a single-rider queue.
-A single-rider queue is a independent queue only for guests of group size 1.
+We suppose configuration of a single-rider queue.
+A single-rider queue is an independent queue only for guests of group size 1.
 In this configuration, we evaluate occupancy expectation without the arrivals of group size 1, and adjust its effect later.
+We use arrival probabilities given no single guests
+$$
+p_2' = P[s_i=2|s_i\neq1]=p_2/(1-p_1)\\
+p_3' = P[s_i=3|s_i\neq1]=p_3/(1-p_1)\\
+p_4' = P[s_i=4|s_i\neq1]=p_4/(1-p_1).
+$$
 
 The stationary distribution can be simplified much in case $p_1=0$,
 $$
-\pi = \begin{pmatrix}0\\\frac{p_2}{1+p_2}\\p_3\\\frac{p_2^2}{1+p_2}+p_4\\\end{pmatrix}.
+\pi = \begin{pmatrix}0\\\frac{p_2'}{1+p_2'}\\p_3'\\\frac{p_2'^2}{1+p_2'}+p_4'\\\end{pmatrix}.
 $$
 $$
-\mathrm{E}[\mathrm{Occupancy}] = \frac{2p_2+3p_3+4p_4}{\frac{1}{1+p_2}+p_3+p_4}
+\mathrm{E}[Ocp|s_i\neq1] = \frac{2p_2'+3p_3'+4p_4'}{\frac{p_2'}{1+p_2'}+p_3'+p_4'}
 $$
 
+Actually we have guests of group size 1 in $p_1$.
+The ratio of the single guests in the total guests can be evaluated
+$$
+r = \frac{p_1}{p_1+2p_2+3p_3+4p_4}
+$$
 
+Single guests will take their seat if a vacant seat is left before dispatch.
+Thus we just add them to occupancy expectation.
+
+$$
+\mathrm{E}[Ocp] = \mathrm{E}[Ocp|s_i\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
+$$
+
+To compare with the original the one normal queue and queues having isolated single rider queue, we assume arrival probability
+$$
+\begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\1/3\\1/3\\1/3\end{pmatrix}.
+$$
+In the case,
+```{r compare_single}
+stat_dist <- function(p1,p2,p3,p4){
+  z <- p1*(1-p1*p2-p2*p3-p3+p2^2+p1+p2+p1^2)+p2+1
+  pi1 <- p1*(1-p1*p2-p2*p3-p3)/z
+  pi2 <- (p1*p2^2+p2+p1^2-p1^2*p3)/z
+  pi3 <- (2*p1*p2+p1^3+p1^2*p3+p2*p3+p3)/z
+  pi4 <- (1-p1*p2-p2*p3-p3)
+  return(c(pi1,pi2,pi3,pi4))
+}
+ocp <- function(p1,p2,p3,p4){
+  pi1 <- stat_dist(p1,p2,p3,p4)[1]
+  pi2 <- stat_dist(p1,p2,p3,p4)[2]
+  pi3 <- stat_dist(p1,p2,p3,p4)[3]
+  pi4 <- stat_dist(p1,p2,p3,p4)[4]
+  numerator <- pi1*p4 + 2*pi2*(p3+p4) + 3*pi3*(p2+p3+p4)+4*pi4
+  denominator <- pi1*p4 + pi2*(p3+p4) + pi3*(p2+p3+p4) + pi4
+  return(numerator/denominator)
+}
+```
 
 
 ### Pre-grouping
