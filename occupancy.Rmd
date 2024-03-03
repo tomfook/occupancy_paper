@@ -348,7 +348,7 @@ $$
 $$
 
 Actually we have guests of group size 1 in $p_1$.
-The ratio of the single guests in the total guests can be evaluated
+The ratio of the single guests in the total guest count can be evaluated
 $$
 r = \frac{p_1}{p_1+2p_2+3p_3+4p_4}
 $$
@@ -357,7 +357,7 @@ Single guests will take their seat if a vacant seat is left before dispatch.
 Thus we just add them to occupancy expectation.
 
 $$
-\mathrm{E}[Ocp] = \mathrm{E}[Ocp|s_i\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
+\mathrm{E}[Ocp Single] = \mathrm{E}[Ocp|s_i\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
 $$
 
 To compare with the original the one normal queue and queues having isolated single rider queue, we assume arrival probability
@@ -383,8 +383,35 @@ ocp <- function(p1,p2,p3,p4){
   denominator <- pi1*p4 + pi2*(p3+p4) + pi3*(p2+p3+p4) + pi4
   return(numerator/denominator)
 }
+eocp <- ocp(1/10,1/3,1/3,1/3)
+eocp_sg <- ocp(0,3/10,3/10,3/10)*(2*1/10+2/3+3/3+4/3)/(1/10+2/3+3/3+4/3)
 ```
+$$
+E[Ocp] = `r eocp`\\
+E[OcpSingle] = `r eocp_sg`
+$$
 
+We can expect `r eocp_sg-eocp` improvement of occupancy by using the single rider queue.
+
+#### Corollary: minimum occupancy without single arrival
+In case of $p_1=0$, what is the lowest value of the occupancy expectation for $p_2,p_3,p_4$? 
+The values of variables should be extremum,
+$$
+\frac{\partial}{\partial p_2}\mathrm E[Ocp|s_i\neq1]=0\\
+\frac{\partial}{\partial p_3}\mathrm E[Ocp|s_i\neq1]=0\\
+\frac{\partial}{\partial p_4}\mathrm E[Ocp|s_i\neq1]=0.
+$$
+But the solution of equations does not exist in $p_2,p_3,p_4\in[0,1], p_2+p_3+p_4=1$.
+Thus a boundary must be our goal.
+
+Comparing with boundaries, we got the minimum value $\frac{4\sqrt{5}+16}{9}\sim2.77$ at $(p_2,p_3,p_4)=(\frac{\sqrt{5}-1}{2},\frac{3-\sqrt{5}}{2},0)$ which is the solution of
+$$
+\frac{\partial}{\partial p_3}\mathrm{E}[Ocp|p_1=0, p_4=0] = 0.
+$$
+
+#### Question
+When we configure two queues, is it optimal to separate singles and the others?
+By calculating every pattern, we would find out the optimal.
 
 ### Pre-grouping
 - we separate guests by its group size (2,4) and 3 before grouping
