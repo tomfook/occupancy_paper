@@ -348,7 +348,7 @@ $$
 Actually we have guests of group size 1 in $p_1$.
 The ratio of the single guests in the total guest count can be evaluated
 $$
-r = \frac{p_1}{p_1+2p_2+3p_3+4p_4}
+r = \frac{p_1}{p_1+2p_2+3p_3+4p_4} \cdots (1)
 $$
 
 Single guests will take their seat if a vacant seat is left before dispatch.
@@ -360,7 +360,7 @@ $$
 
 To compare with the original the one normal queue and queues having isolated single rider queue, we assume arrival probability
 $$
-\begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\1/3\\1/3\\1/3\end{pmatrix}.
+\begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\1/3\\1/3\\1/3\end{pmatrix} \cdots (2)
 $$
 In the case,
 ```{r compare_single}
@@ -391,7 +391,7 @@ $$
 
 We can expect `r eocp_sg-eocp` improvement of occupancy by using the single rider queue.
 
-#### Extra: minimum occupancy without single arrival
+#### Knowledge: minimum occupancy without single arrival
 In case of $p_1=0$, what is the lowest value of the occupancy expectation for $p_2,p_3,p_4$? 
 The values of variables should be extremum,
 $$
@@ -408,37 +408,121 @@ $$
 $$
 
 #### Question
-When we configure two queues, is it optimal to separate singles and the others?
-By calculating every pattern, we would find out the optimal.
+When we configure two queues, is it optimal to separate singles and the others? (Maybe yes)
 
 ### Pre-grouping
-- we separate guests by its group size (2,4) and 3 before grouping
+If the facility has redundancy, we can make one more queue line.
+We distribute arrival guests into different queue lines by its group size.
+The operation is called pre-grouping.
 
-If group size is only 3, expected occupancy will be 0.75.
+We hope to know
 
-In case of group size 2 or 4, we set each probability as $p, 1-p$.
+- Does pre-grouping improve seat occupancy?
+- How much is its improvement?
+- What is the best pre-grouping strategy?
 
-Transition matrix
+When we suppose to use a single-rider queue, our pre-grouping option is below
+
+1. Queue1:$x_t\in\{2,3\}$, Queue2: $x_t=4$
+2. Queue2:$x_t\in\{2,4\}$, Queue2: $x_t=3$
+3. Queue3:$x_t\in\{3,4\}$, Queue3: $x_t=2$
+
+Which is the best pre-grouping?
+We use actual arrival probabilities assumed before (2) $(p_i)=(1/10,1/3,1/3,1/3)$ to compare with them.
+
+#### Option 1 (2,3)-4
+For queue 1, arrival probabilities is transformed
 $$
-T = \begin{pmatrix} 1-p&1\\p&0\end{pmatrix}
+p_2' = \frac{p_2}{p_2+p_3}\\
+p_3' = \frac{p_3}{p_2+p_3}
+$$
+and the occupancy expectation would be
+$$
+\mathrm {E[Occupancy|Option1,Queue1]} = \frac{2p_2'+3p_3'}{\frac{p_2'}{1+p_2'}+p_3}
+$$
+For queue 2, we only receive group size 4 therefore $\mathrm{E[Ocp|O1,Q2]}=4$.
+
+
+We combine them with arrival guest count ratio.
+$$
+\mathrm{E[Occupancy|Option1]} = \left(\frac{2p_2+3p_3}{p_1+2p_2+3p_3+4p_4}\frac{2p_2'+3p_3'}{\frac{p_2'}{1+p_2'}+p_3'} + \frac{4p_4}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
+$$
+where $r$ is a single rider effect (1).
+
+```{r exocp_pg_o1}
+exocp_pg_o1 <- function(p1,p2,p3,p4){
+  exg <- p1 + 2*p2 + 3*p3 + 4*p4
+  e23 <- (2*p2 + 3*p3)/exg * (2*p2 + 3*p3)/(p2*(p2 + p3)/(2*p2 + p3) + p3)
+  e4 <- 4*p4/exg*4
+  r <- p1/exg
+  return( (e23+e4)*(1+r))
+}
+```
+
+We substitute actual probability values (2) and obtain $\mathrm {E[Ocp|O1]}= `r exocp_pg_o1(1/10,1/3,1/3,1/3)`$ .
+
+#### Option 2 (2,4)-3
+For queue 1
+$$
+p_2' = \frac{p_2}{p_2+p_4}\\
+p_4' = \frac{p_4}{p_2+p_4}\\
+\mathrm {E[Occupancy|Option2,Queue1]} = \frac{2p_2'+4p_4'}{\frac{p_2'}{1+p_2'}+p_4}.
+$$
+Then
+$$
+\mathrm{E[Occupancy|Option2]} = \left(\frac{2p_2+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{2p_2'+4p_4'}{\frac{p_2'}{1+p_2'}+p_4'} + \frac{3p_3}{p_1+2p_2+3p_3+4p_4}\cdot 3 \right)(1+r)
 $$
 
-Stationary state
+```{r exocp_pg_o2}
+exocp_pg_o2 <- function(p1,p2,p3,p4){
+  exg <- p1 + 2*p2 + 3*p3 + 4*p4
+  e24 <- (2*p2 + 4*p4)/exg * (2*p2 + 4*p4)/(p2*(p2 + p4)/(2*p2 + p4) + p4)
+  e3 <- 3*p3/exg*3
+  r <- p1/exg
+  return( (e24+e3)*(1+r))
+}
+```
+
+If we substitute actual probability values (2) and obtain $\mathrm {E[Ocp|O2]}= `r exocp_pg_o2(1/10,1/3,1/3,1/3)`$ .
+
+#### Option 3 (3,4)-2
+For queue 1
 $$
-\pi = \frac{1}{1+p}\begin{pmatrix}1\\p\end{pmatrix}
+p_3' = \frac{p_3}{p_3+p_4}\\
+p_4' = \frac{p_4}{p_3+p_4}\\
+\mathrm {E[Occupancy|Option3,Queue1]} = \frac{3p_3'+4p_4'}{p_3'+p_4}.
+$$
+Then
+$$
+\mathrm{E[Occupancy|Option3]} = \left(\frac{3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{3p_3'+4p_4'}{p_3'+p_4'} + \frac{2p_2}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
 $$
 
-Expected Dispatch
-$$
-\mathrm E[D]=\frac{-p^2+p+1}{p+1}
-$$
+```{r exocp_pg_o3}
+exocp_pg_o3 <- function(p1,p2,p3,p4){
+  exg <- p1 + 2*p2 + 3*p3 + 4*p4
+  e34 <- (3*p3 + 4*p4)/exg * (3*p3 + 4*p4)/(p3 + p4)
+  e2 <- 2*p2/exg*4
+  r <- p1/exg
+  return( (e34+e2)*(1+r))
+}
+```
 
-The expected Occupancy
-$$
-\mathrm E[Ocp]=\frac{p^2-p+2}{2(-p^2+p+1)}
-$$
-In case $p=1/2$, expected occupancy is minimum 0.9.
+If we substitute actual probability values (2) and obtain $\mathrm {E[Ocp|O3]}= `r exocp_pg_o3(1/10,1/3,1/3,1/3)`$ .
 
+#### Question
+If our arrival probability was changed, the best pre-grouping option would be changed.
+Which is its boundary?
 
 ## Conclusion
-- change 
+We introduce the framework to evaluate seat occupancy expectation from arrival group size statistics, seat configuration and grouping strategy.
+And we calculate the expectation in some simple situations by using Markov chain model.
+The case of five or more seats in a line would be calculated in the future work.
+
+We only evaluate the expectation.
+But more analysis would make more useful knowledge, 
+The relationship between the best grouping strategy and arrival probabilities is interesting because arrival probabilities can be changed over timein actual setting and we want to know the stability of our grouping strategy.
+
+The most strong constraint was the one line seat configuration.
+In the case, we can not apply Markov chain model.
+Thus we need different model to analyze.
+
