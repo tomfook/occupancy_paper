@@ -2,8 +2,6 @@
 title: "General Framework for Seat Occupancy Expectation"
 author:
   name: "Fukumoto Tomoya"
-  affiliation: "Operation Planning"
-date: "2018-08-20"
 output: html_document
 #abstract: "hogehoge is important issue for us. We established a mathematical framework to expect seat occupancy of ride attractions. Our model is based on Markov chain model. Since our model is general, we can aplly to any attraction."
 ---
