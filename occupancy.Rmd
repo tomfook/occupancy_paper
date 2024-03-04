@@ -16,7 +16,7 @@ library(ggplot2)
 
 ## Introduction
 One of the most important issue for theme park operation is raising guestcounts of attractions.
-Since guestcounts can be decomposed by dispatch count and seat occupancy, we separately focus on these two numbers.
+Since guestcounts can be decomposed by dispatch count of vehicles and seat occupancy, we usually focus on these two numbers.
 The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
 We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the configuration of seats, queue formation and grouping strategy.
 This framework will help us to optimize queue formation and grouping strategy.
@@ -25,13 +25,13 @@ The model is so general that the framework will be applied to any attractions.
 ## Modeling and Framework
 ### Problem
 For ride attractions, grouping operation is deeply related to seat occupancy.
-Attraction crew forms a group to dispatch a vehicle from arrival guests not to break a friend group.
+Attraction crew forms a group to dispatch a vehicle from arrival guests not to break a friendship.
 That crew is called a grouper.
 Guests come again and again.
 A grouper guides former arrival guest first.
 Grouper can not choose a size of friend group to come next and even expect it.
 
-Almost all seat arrangement of vehicle is designed to be a rectangle pattern.
+Almost all seat arrangement of vehicle is designed to be a rectangle.
 This means that seats are set in a row, and one or more rows are line up.
 Grouping operation is to gather people to have a seat in the same row.
 And of course friend group should be in the same group and sit next to each other.
@@ -54,8 +54,8 @@ Our problem can be handled as a state-action-reward model.
 
 To treat this model, we define a numbers of variables for state and transition
 
-- the size of $i$th arrival group is a probability variable $x_i \in \mathbb N$.
-- the seats filled pattern after the $i$th group has seats $s_i$.
+- the size of $t$th arrival group is a probability variable $x_t \in \mathbb N$.
+- the seats filled pattern after the $t$th group has seats $s_t$.
 - the set of pattern of seats filled $\sigma \in \Sigma$.
 
 After a vehicle is dispatched, a new vacant vehicle will come.
@@ -72,12 +72,12 @@ grViz(
     node[
       fixedsize = false
     ]
-      a1[label = '<I>s</I>@_{<I>i</I>}=<I>&sigma;</I>', shape = circle];
+      a1[label = '<I>s</I>@_{<I>t</I>}=<I>&sigma;</I>', shape = circle];
       a2[label = 'Which row\n to guid?', shape = square];
-    edge[label = '<I>x@_{i}</I>'] a1 -> a2 ;
+    edge[label = '<I>x@_{t}</I>'] a1 -> a2 ;
       a3[label = 'Dispatch\n or not?', shape = square];
     edge[label = ''] a2 -> a3;
-      a4[label = '<I>s</I>@_{<I>i</I>+1}=<I>&sigma;</I>&prime;', shape = circle];
+      a4[label = '<I>s</I>@_{<I>t</I>+1}=<I>&sigma;</I>&prime;', shape = circle];
       edge[label = ''] a3 -> a4;
 
 }
@@ -86,7 +86,7 @@ grViz(
 ```
 
 We assume that the situation is stationary.
-The assumption induces the probability that a size $k$ group arrives is independent on time $P[x_i=k]=p_k$ .
+The assumption induces the probability that a size $k$ group arrives is independent on time $P[x_t=k]=p_k$ .
 
 ## Simple case: Markov chain
 If the seat layout is one line, then our option is giving seats or dispatch a vehicle because we can not choose which seats we provide.
@@ -100,7 +100,7 @@ $$
 $$
 
 where $N$ is the number of seats in the line.
-We can calculate the probability being each state $P[s_i=n]$ from $p_k$, and the expectation of seat occupancy from the state probabilities.
+We can calculate the probability being each state $P[s_t=k]$ from $p_k$, and the expectation of seat occupancy from the state probabilities.
 This expectation value should be the upper bound of seat occupancy.
 
 ### Steps to solve the problem
@@ -112,23 +112,21 @@ We
 
 #### transition matrix
 Suppose that a group sized $k$ has arrived.
-In case the number of empty seats is greater than $k$, they will take their seats.
+In case the number of empty seats is greater than $k$, they will have their seats.
 If it's less than $k$, the crew dispatch the vehicle and give them a new vacant vehicle.
 
-- $s_i<x_i$ then $s_{i+1}=s_i+x_i$ 
-- $s_i>x_i$ then $s_{i+1}=x_i$
+- $s_t<x_t$ then $s_{t+1}=s_t+x_t$ 
+- $s_t>x_t$ then $s_{t+1}=x_t$
 
-Because arrival probability is independent on state, we can calculate probabilities from state j to k as
+Because arrival probability is independent on state, we can calculate probabilities from state $j$ to $k$ as
 $$
-\begin{eqnarray}
-T_{jk}&=&P[s_{i+1}=k|s_{i}=j]\\
-  &=&\begin{cases}p_{j-k}P[s_{i}=j]&(j-k>0)\\ p_{k}P[s_{i}=j]&(j-k\leq0)\end{cases}.\\
-\end{eqnarray}
+T_{jk}=P[s_{t+1}=k|s_{t}=j]=(p_{j-k}+p_k)P[s_{t}=j]
 $$
+where $p_k=0$ for $k\leq0$.
 And we call a matrix which elements are these probabilities as **transition matrix**.
 
 We show an example in the simplest case, which has only two seats.
-In this case, seat occupancy can take $s_i=0, 1, 2$.
+In this case, seat occupancy can take $s_t=0, 1, 2$.
 
 Markov state and transition in this situation can be shown in Fig.2.
 ```{r twoseattransition, fig.width = 4}
@@ -168,7 +166,7 @@ $$
 since $p_1+p_2=1$.  
 
 #### Stationary State
-If state probability is given by a vector $A_i=(P[s_i=0],P[s_i=1],P[s_i=2])$, then next step $A_{i+1}=A_iT$.
+If state probability is given by a vector $A_t=(P[s_t=0],P[s_t=1],P[s_t=2])$, then next step $A_{t+1}=A_tT$.
 We can calculate a state probability in each step.
 If the calculation converges, state probability satisfies an equation
 $$
@@ -248,7 +246,7 @@ The transition of state is described by below.
 grViz("
   digraph dot{
     graph[
-      label = 'Fig.4: One line, four seats. \nRed means dispatch',
+      label = 'Fig.4: One line, four seats. Red means dispatch. The state 0 is removed',
       fontsize = 10
     ];
     node[
@@ -334,9 +332,9 @@ A single-rider queue is an independent queue only for guests of group size 1.
 In this configuration, we evaluate occupancy expectation without the arrivals of group size 1, and adjust its effect later.
 We use arrival probabilities given no single guests
 $$
-p_2' = P[s_i=2|s_i\neq1]=p_2/(1-p_1)\\
-p_3' = P[s_i=3|s_i\neq1]=p_3/(1-p_1)\\
-p_4' = P[s_i=4|s_i\neq1]=p_4/(1-p_1).
+p_2' = P[s_t=2|s_t\neq1]=p_2/(1-p_1)\\
+p_3' = P[s_t=3|s_t\neq1]=p_3/(1-p_1)\\
+p_4' = P[s_t=4|s_t\neq1]=p_4/(1-p_1).
 $$
 
 The stationary distribution can be simplified much in case $p_1=0$,
@@ -344,7 +342,7 @@ $$
 \pi = \begin{pmatrix}0\\\frac{p_2'}{1+p_2'}\\p_3'\\\frac{p_2'^2}{1+p_2'}+p_4'\\\end{pmatrix}.
 $$
 $$
-\mathrm{E}[Ocp|s_i\neq1] = \frac{2p_2'+3p_3'+4p_4'}{\frac{p_2'}{1+p_2'}+p_3'+p_4'}
+\mathrm{E}[Ocp|s_t\neq1] = \frac{2p_2'+3p_3'+4p_4'}{\frac{p_2'}{1+p_2'}+p_3'+p_4'}
 $$
 
 Actually we have guests of group size 1 in $p_1$.
@@ -357,7 +355,7 @@ Single guests will take their seat if a vacant seat is left before dispatch.
 Thus we just add them to occupancy expectation.
 
 $$
-\mathrm{E}[Ocp Single] = \mathrm{E}[Ocp|s_i\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
+\mathrm{E}[Ocp Single] = \mathrm{E}[Ocp|s_t\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
 $$
 
 To compare with the original the one normal queue and queues having isolated single rider queue, we assume arrival probability
@@ -393,13 +391,13 @@ $$
 
 We can expect `r eocp_sg-eocp` improvement of occupancy by using the single rider queue.
 
-#### Corollary: minimum occupancy without single arrival
+#### Extra: minimum occupancy without single arrival
 In case of $p_1=0$, what is the lowest value of the occupancy expectation for $p_2,p_3,p_4$? 
 The values of variables should be extremum,
 $$
-\frac{\partial}{\partial p_2}\mathrm E[Ocp|s_i\neq1]=0\\
-\frac{\partial}{\partial p_3}\mathrm E[Ocp|s_i\neq1]=0\\
-\frac{\partial}{\partial p_4}\mathrm E[Ocp|s_i\neq1]=0.
+\frac{\partial}{\partial p_2}\mathrm E[Ocp|s_t\neq1]=0\\
+\frac{\partial}{\partial p_3}\mathrm E[Ocp|s_t\neq1]=0\\
+\frac{\partial}{\partial p_4}\mathrm E[Ocp|s_t\neq1]=0.
 $$
 But the solution of equations does not exist in $p_2,p_3,p_4\in[0,1], p_2+p_3+p_4=1$.
 Thus a boundary must be our goal.
