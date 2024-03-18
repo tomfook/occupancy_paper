@@ -58,8 +58,10 @@ To treat this model, we define a numbers of variables for state and transition
 - the seats filled pattern after the $t$th group has seats $s_t$.
 - the set of pattern of seats filled $\sigma \in \Sigma$.
 
-After a vehicle is dispatched, a new vacant vehicle will come.
-This means the state will be initialized as $\sigma_0$.
+After a vehicle is dispatched, a new vacant vehicle will come and the state will be initialized as $\sigma_0$.
+
+To make analysis easy, we only dispatch a vehicle when the seats is not enough for new arrivals.
+Thus we judge whether to dispatch or not before giving seats to a guest.
 
 ```{r markov, fig.width = 5, fig.height = 2}
 grViz(
@@ -73,12 +75,12 @@ grViz(
       fixedsize = false
     ]
       a1[label = '<I>s</I>@_{<I>t</I>}=<I>&sigma;</I>', shape = circle];
-      a2[label = 'Which row\n to guid?', shape = square];
     edge[label = '<I>x@_{t}</I>'] a1 -> a2 ;
-      a3[label = 'Dispatch\n or not?', shape = square];
+      a2[label = 'Dispatch\n or not?', shape = square];
     edge[label = ''] a2 -> a3;
+      a3[label = 'Which row\n to guid?', shape = square];
+    edge[label = ''] a3 -> a4;
       a4[label = '<I>s</I>@_{<I>t</I>+1}=<I>&sigma;</I>&prime;', shape = circle];
-      edge[label = ''] a3 -> a4;
 
 }
   "
@@ -88,10 +90,10 @@ grViz(
 We assume that the situation is stationary.
 The assumption induces the probability that a size $k$ group arrives is independent on time $P[x_t=k]=p_k$ .
 
-## Simple case: Markov chain
+## Simple case: One line
 If the seat layout is one line, then our option is giving seats or dispatch a vehicle because we can not choose which seats we provide.
 This means that statistics of a guest arrival directly gives the probability of transition from a state to another.
-We can handle such problems as a simple Markov chain model.
+We can handle such problems as a simple **Markov chain model** .
 
 In this case, the number of occupied seats describes the state completely,
 
@@ -104,11 +106,14 @@ We can calculate the probability being each state $P[s_t=k]$ from $p_k$, and the
 This expectation value should be the upper bound of seat occupancy.
 
 ### Steps to solve the problem
-We 
+Generally Markov chain state probability $P[s_t=k]$ is converge very fast to a stationary state.
+The expectation of any quantity is provided from the stationary state.
 
-1. Give a transition matrix
-2. Identify the stationary state.
-3. Calculate the expectation value of occupancy from stationary probability.
+Thus our plan is
+
+1. Giving a transition matrix
+2. Identifying the stationary state.
+3. Calculating the expectation value of occupancy from stationary probability.
 
 #### transition matrix
 Suppose that a group sized $k$ has arrived.
@@ -123,7 +128,7 @@ $$
 T_{jk}=P[s_{t+1}=k|s_{t}=j]=(p_{j-k}+p_k)P[s_{t}=j]
 $$
 where $p_k=0$ for $k\leq0$.
-And we call a matrix which elements are these probabilities as **transition matrix**.
+And we call a matrix which elements are these probabilities as transition matrix.
 
 We show an example in the simplest case, which has only two seats.
 In this case, seat occupancy can take $s_t=0, 1, 2$.
@@ -161,9 +166,8 @@ T=\begin{pmatrix}
   0 & p_1 & p_2 \\
   0 & 0 & 1\\
   0 & p_1 & p_2
-  \end{pmatrix},
+  \end{pmatrix}.
 $$
-since $p_1+p_2=1$.  
 
 #### Stationary State
 If state probability is given by a vector $A_t=(P[s_t=0],P[s_t=1],P[s_t=2])$, then next step $A_{t+1}=A_tT$.
@@ -172,7 +176,7 @@ If the calculation converges, state probability satisfies an equation
 $$
 A=AT
 $$
-This probability vector is called a **stationary distribution**.
+This probability vector is called a stationary distribution.
 The stationary distribution is an eigenvector corresponding eigenvalues 1 of $T$.
 
 We empirically know that it is very fast to approach the stationary distribution.
@@ -433,26 +437,28 @@ We use actual arrival probabilities assumed before (2) $(p_i)=(1/10,1/3,1/3,1/3)
 #### Option 1 (2,3)-4
 For queue 1, arrival probabilities is transformed
 $$
-p_2' = \frac{p_2}{p_2+p_3}\\
-p_3' = \frac{p_3}{p_2+p_3}
+p_2^{(1)} = \frac{p_2}{p_2+p_3}\\
+p_3^{(1)} = \frac{p_3}{p_2+p_3}
 $$
 and the occupancy expectation would be
 $$
-\mathrm {E[Occupancy|Option1,Queue1]} = \frac{2p_2'+3p_3'}{\frac{p_2'}{1+p_2'}+p_3}
+\mathrm {E[Occupancy|Option1,Queue1]} = \frac{2p_2^{(1)}+3p_3^{(1)}}{\frac{p_2^{(1)}}{1+p_2^{(1)}}+p_3^{(1)}}
 $$
 For queue 2, we only receive group size 4 therefore $\mathrm{E[Ocp|O1,Q2]}=4$.
 
 
 We combine them with arrival guest count ratio.
 $$
-\mathrm{E[Occupancy|Option1]} = \left(\frac{2p_2+3p_3}{p_1+2p_2+3p_3+4p_4}\frac{2p_2'+3p_3'}{\frac{p_2'}{1+p_2'}+p_3'} + \frac{4p_4}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
+\mathrm{E[Occupancy|Option1]} = \left(\frac{2p_2+3p_3}{p_1+2p_2+3p_3+4p_4}\frac{2p_2^{(1)}+3p_3^{(1)}}{\frac{p_2^{(1)}}{1+p_2^{(1)}}+p_3^{(1)}} + \frac{4p_4}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
 $$
 where $r$ is a single rider effect (1).
 
 ```{r exocp_pg_o1}
 exocp_pg_o1 <- function(p1,p2,p3,p4){
   exg <- p1 + 2*p2 + 3*p3 + 4*p4
-  e23 <- (2*p2 + 3*p3)/exg * (2*p2 + 3*p3)/(p2*(p2 + p3)/(2*p2 + p3) + p3)
+  p2_1 <- p2/(p2+p3)
+  p3_1 <- p3/(p2+p3)
+  e23 <- (2*p2 + 3*p3)/exg * (2*p2_1 + 3*p3_1)/(p2_1/(p2_1+1)+p3_1)
   e4 <- 4*p4/exg*4
   r <- p1/exg
   return( (e23+e4)*(1+r))
@@ -464,19 +470,21 @@ We substitute the actual probability values (2) to this and obtain $\mathrm {E[O
 #### Option 2 (2,4)-3
 For queue 1
 $$
-p_2' = \frac{p_2}{p_2+p_4}\\
-p_4' = \frac{p_4}{p_2+p_4}\\
-\mathrm {E[Occupancy|Option2,Queue1]} = \frac{2p_2'+4p_4'}{\frac{p_2'}{1+p_2'}+p_4}.
+p_2^{(2)} = \frac{p_2}{p_2+p_4}\\
+p_4^{(2)} = \frac{p_4}{p_2+p_4}\\
+\mathrm {E[Occupancy|Option2,Queue1]} = \frac{2p_2^{(2)}+4p_4^{(2)}}{\frac{p_2^{(2)}}{1+p_2^{(2)}}+p_4^{(2)}}.
 $$
 Then
 $$
-\mathrm{E[Occupancy|Option2]} = \left(\frac{2p_2+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{2p_2'+4p_4'}{\frac{p_2'}{1+p_2'}+p_4'} + \frac{3p_3}{p_1+2p_2+3p_3+4p_4}\cdot 3 \right)(1+r)
+\mathrm{E[Occupancy|Option2]} = \left(\frac{2p_2+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{2p_2^{(2)}+4p_4^{(2)}}{\frac{p_2^{(2)}}{1+p_2^{(2)}}+p_4^{(2)}} + \frac{3p_3}{p_1+2p_2+3p_3+4p_4}\cdot 3 \right)(1+r)
 $$
 
 ```{r exocp_pg_o2}
 exocp_pg_o2 <- function(p1,p2,p3,p4){
   exg <- p1 + 2*p2 + 3*p3 + 4*p4
-  e24 <- (2*p2 + 4*p4)/exg * (2*p2 + 4*p4)/(p2*(p2 + p4)/(2*p2 + p4) + p4)
+  p2_2 <- p2/(p2+p4)
+  p4_2 <- p4/(p2+p4)
+  e24 <- (2*p2 + 4*p4)/exg * (2*p2_2+4*p4_2)/(p2_2/(1+p2_2)+p4_2)
   e3 <- 3*p3/exg*3
   r <- p1/exg
   return( (e24+e3)*(1+r))
@@ -488,19 +496,21 @@ If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O2]}= 
 #### Option 3 (3,4)-2
 For queue 1
 $$
-p_3' = \frac{p_3}{p_3+p_4}\\
-p_4' = \frac{p_4}{p_3+p_4}\\
-\mathrm {E[Occupancy|Option3,Queue1]} = \frac{3p_3'+4p_4'}{p_3'+p_4}.
+p_3^{(3)} = \frac{p_3}{p_3+p_4}\\
+p_4^{(3)} = \frac{p_4}{p_3+p_4}\\
+\mathrm {E[Occupancy|Option3,Queue1]} = \frac{3p_3^{(3)}+4p_4^{(3)}}{p_3^{(3)}+p_4^{(3)}}.
 $$
 Then
 $$
-\mathrm{E[Occupancy|Option3]} = \left(\frac{3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{3p_3'+4p_4'}{p_3'+p_4'} + \frac{2p_2}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
+\mathrm{E[Occupancy|Option3]} = \left(\frac{3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{3p_3^{(3)}+4p_4^{(3)}}{p_3^{(3)}+p_4^{(3)}} + \frac{2p_2}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
 $$
 
 ```{r exocp_pg_o3}
 exocp_pg_o3 <- function(p1,p2,p3,p4){
   exg <- p1 + 2*p2 + 3*p3 + 4*p4
-  e34 <- (3*p3 + 4*p4)/exg * (3*p3 + 4*p4)/(p3 + p4)
+  p3_3 <- p3/(p3+p4)
+  p4_3 <- p4/(p3+p4)
+  e34 <- (3*p3 + 4*p4)/exg * (3*p3_3 + 4*p4_3)/(p3_3 + p4_3)
   e2 <- 2*p2/exg*4
   r <- p1/exg
   return( (e34+e2)*(1+r))
@@ -537,8 +547,18 @@ plot_boundary <- function(grid = 0.01, p1_given = 0.1){
       ggplot(aes(p2, p3)) +
       geom_point(aes(color = best))
 }
-plot_boundary(0.005, 0.1) + labs(title = "Simulation at p1=0.1", subtitle = "the boundary is independent on p1.")
+plot_boundary(0.005, 0.1) + labs(title = "Fig. 5: The best option simulated at p1=0.1")
 ```
+
+By simulation, Option 3 looks the best in almost condition except for low $p_2$ at $p_1=0.1$.
+
+The boundary between Option 1 and Option 3 should be on the root of
+$$
+F_{13}(p_1, p_2, p_3, p_4) = \mathrm{E[Occupancy|Option1] - E[Occupancy|Option3]} = 0.
+$$
+
+We can easily show the root is independent on $p_1$.
+Thus the boundary must be the same to Fig.5 for any $p_1$.
 
 ## Conclusion
 We introduce the framework to evaluate seat occupancy expectation from arrival group size statistics, seat configuration and grouping strategy.
