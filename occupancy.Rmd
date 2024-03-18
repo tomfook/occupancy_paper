@@ -15,53 +15,57 @@ library(modelr)
 ```
 
 ## Introduction
-One of the most important issue for theme park operation is raising guestcounts of attractions.
-Since guestcounts can be decomposed by dispatch count of vehicles and seat occupancy, we usually focus on these two numbers.
+One of the most important issues for theme park operation is raising guestcounts of attractions.
+Since guest counts can be decomposed by the dispatch count of vehicles and seat occupancy, we usually focus on these two numbers.
 The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
-We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the configuration of seats, queue formation and grouping strategy.
+We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the configuration of seats, queue formation, and grouping strategy.
 This framework will help us to optimize queue formation and grouping strategy.
 The model is so general that the framework will be applied to any attractions.
 
 ## Modeling and Framework
 ### Problem
+
 For ride attractions, grouping operation is deeply related to seat occupancy.
-Attraction crew forms a group to dispatch a vehicle from arrival guests not to break a friendship.
+The attraction crew forms a group to dispatch a vehicle from arriving guests so as not to break a friendship.
 That crew is called a grouper.
 Guests come again and again.
-A grouper guides former arrival guest first.
+A grouper guides former arrival guests first.
 Grouper can not choose a size of friend group to come next and even expect it.
 
-Almost all seat arrangement of vehicle is designed to be a rectangle.
-This means that seats are set in a row, and one or more rows are line up.
+Almost all seat arrangements of a vehicle are designed to be a rectangle.
+This means that seats are set in a row, and one or more rows are lined up.
 Grouping operation is to gather people to have a seat in the same row.
-And of course friend group should be in the same group and sit next to each other.
+And of course the friend group should be in the same group and sit next to each other.
 
-Grouping problem is how to maximize guest experience to fill seats with guest group.
-Grouper ask a size of group and select a row to guide.
-Grouping strategy is to select an optimal row when a size of group come.
+The grouping problem is how to maximize guest experience to fill seats with guest groups.
+Grouper asks for the size of the group and selects a row to guide.
+The grouping strategy is to select an optimal row when the size of group comes.
 
-Therefore there exists an upper bound of seat occupancy in each attractions.
 
-The upper bound would depend on statistics of group size of arrival guest and a pattern of seats configuration.
-If we have a knowledge of upper bound of an attraction, we can evaluate its efficiency of grouping operation and whether the seat occupancy can improve or not.
+Therefore there exists an upper bound of seat occupancy in each attraction.
+
+The upper bound would depend on statistics of group size of arrival guests and a pattern of seat configuration.
+If we have a knowledge of the upper bound of an attraction, we can evaluate its efficiency of grouping operation and whether seat occupancy can improve or not.
+
 
 ### Mathematical Modeling
 Our problem can be handled as a state-action-reward model.
 
-- **state**:  the seats pattern filled by guests
-- **action**: decision which row to guide arrival guests and to dispatch a vehicle or not
+- **state**: the pattern of the seats filled by guests
+- **action**: decision on which row to guide arrival guests and to dispatch a vehicle or not
 - **reward**: the number of guests who take a seat when a vehicle is dispatched
 
-To treat this model, we define a numbers of variables for state and transition
+To treat this model, we define a number of variables for state and transition
 
 - the size of $t$th arrival group is a probability variable $x_t \in \mathbb N$.
 - the seats filled pattern after the $t$th group has seats $s_t$.
-- the set of pattern of seats filled $\sigma \in \Sigma$.
+- the set of patterns of seats filled $\sigma \in \Sigma$.
 
 After a vehicle is dispatched, a new vacant vehicle will come and the state will be initialized as $\sigma_0$.
 
-To make analysis easy, we only dispatch a vehicle when the seats is not enough for new arrivals.
+To make analysis easy, we only dispatch a vehicle when the seats are not enough for new arrivals.
 Thus we judge whether to dispatch or not before giving seats to a guest.
+
 
 ```{r markov, fig.width = 5, fig.height = 2}
 grViz(
@@ -88,12 +92,12 @@ grViz(
 ```
 
 We assume that the situation is stationary.
-The assumption induces the probability that a size $k$ group arrives is independent on time $P[x_t=k]=p_k$ .
+The assumption induces the probability that a size $k$ group arrives is independent on time $P[x_t=k]=p_k$.
 
 ## Simple case: One line
-If the seat layout is one line, then our option is giving seats or dispatch a vehicle because we can not choose which seats we provide.
-This means that statistics of a guest arrival directly gives the probability of transition from a state to another.
-We can handle such problems as a simple **Markov chain model** .
+If the seat layout is one line, then our option is to give seats or dispatch a vehicle because we can not choose which seats we provide.
+This means that statistics of a guest's arrival directly give the probability of transition from one state to another.
+We can handle such problems as a simple **Markov chain model**.
 
 In this case, the number of occupied seats describes the state completely,
 
@@ -106,34 +110,35 @@ We can calculate the probability being each state $P[s_t=k]$ from $p_k$, and the
 This expectation value should be the upper bound of seat occupancy.
 
 ### Steps to solve the problem
-Generally Markov chain state probability $P[s_t=k]$ is converge very fast to a stationary state.
+Generally, Markov chain state probability $P[s_t=k]$ converges very fast to a stationary state.
 The expectation of any quantity is provided from the stationary state.
 
 Thus our plan is
 
-1. Giving a transition matrix
-2. Identifying the stationary state.
+1. Giving a transition matrix,
+2. Identifying the stationary state,
 3. Calculating the expectation value of occupancy from stationary probability.
 
 #### transition matrix
 Suppose that a group sized $k$ has arrived.
 In case the number of empty seats is greater than $k$, they will have their seats.
-If it's less than $k$, the crew dispatch the vehicle and give them a new vacant vehicle.
+If it's less than $k$, the crew dispatchs the vehicle and gives them a new vacant vehicle.
 
 - $s_t<x_t$ then $s_{t+1}=s_t+x_t$ 
 - $s_t>x_t$ then $s_{t+1}=x_t$
 
-Because arrival probability is independent on state, we can calculate probabilities from state $j$ to $k$ as
+Because arrival probability is independent of state, we can calculate probabilities from state $j$ to $k$ as
 $$
 T_{jk}=P[s_{t+1}=k|s_{t}=j]=(p_{j-k}+p_k)P[s_{t}=j]
 $$
 where $p_k=0$ for $k\leq0$.
-And we call a matrix which elements are these probabilities as transition matrix.
+We call a matrix which elements are these probabilities a transition matrix.
 
 We show an example in the simplest case, which has only two seats.
 In this case, seat occupancy can take $s_t=0, 1, 2$.
 
 Markov state and transition in this situation can be shown in Fig.2.
+
 ```{r twoseattransition, fig.width = 4}
 grViz("
   digraph dot{
@@ -177,10 +182,10 @@ $$
 A=AT
 $$
 This probability vector is called a stationary distribution.
-The stationary distribution is an eigenvector corresponding eigenvalues 1 of $T$.
+The stationary distribution is an eigenvector corresponding to eigenvalues 1 of $T$.
 
 We empirically know that it is very fast to approach the stationary distribution.
-So we can expect we observe the states with the stationary distribution in most of the time.
+So we can expect we observe the states with a stationary distribution in most of the time.
 This means that the expectation of seat occupancy from the stationary distribution is a reasonable estimation.
 
 By easy calculation, we can get the stationary distribution as
@@ -224,27 +229,28 @@ ggplot(df) +
   )
 ```
 
-We can see the expectation of seat occupancy has the greatest value 2 in $p=0,p=1$.
-This is obvious because in the case the arrival group size is fixed with 1 or 2.
-In the most uncertain case $p=1/2$ our expectation is the least $17/9\sim1.89$
+We can see the expectation of seat occupancy has the greatest value of 2 in $p=0,p=1$.
+This is obvious because in this case the arrival group size is fixed with 1 or 2.
+In the most uncertain case, $p=1/2$ our expectation is the least $17/9\sim1.89$
 
 We completely solved the problem.
-Logically we could solve any other situation having one line seats in the same manner.
-But it does not mean we can solve such problem easily.
+Logically we could solve any other situation having one line seat in the same manner.
+But it does not mean we can solve such a problem easily.
 
-## Actual setting: one line of four seats
+## Actual setting: one-line of four seats
 As an example, we consider a situation
 
-- one line of seats 
+- one line of seats
 - four seats in a line
 
-This corresponds the seats configuration of the Harry Potter and the Forbidden Journey.
+This corresponds to the seat configuration of the Harry Potter and the Forbidden Journey.
 
 Because we have only one line, we have to provide guests in arrival order.
-Thus the expectation of seat occupancy can be evaluated with Markov chain model.
+Thus the expectation of seat occupancy can be evaluated with the Markov chain model.
+
 
 ### Occupancy expectation
-The transition of state is described by below.
+The transition of the state is described below.
 
 ```{r FBJtransition, fig.width = 8}
 grViz("
@@ -327,13 +333,13 @@ $$
 P[\mathrm{Dispatch}] = \pi_1p_4+\pi_2(p_3+p_4)+\pi_3(p_2+p_3+p_4)+\pi_4(p_1+p_2+p_3+p_4)
 $$
 
-Because this value is continious, there is the maximum and minimum value in $p_i\in[0,1],\sum p_i=1$.
+Because this value is continuous, there is the maximum and minimum value in $p_i\in[0,1],\sum p_i=1$.
 We would obtain the value using the Lagrange multiplier.
  
 ### With Single-Rider Queue
-We suppose configuration of a single-rider queue.
+We suppose that the configuration of a single-rider queue.
 A single-rider queue is an independent queue only for guests of group size 1.
-In this configuration, we evaluate occupancy expectation without the arrivals of group size 1, and adjust its effect later.
+In this configuration, we evaluate occupancy expectation without the arrivals of group size 1 and adjust its effect later.
 We use arrival probabilities given no single guests
 $$
 p_2' = P[s_t=2|s_t\neq1]=p_2/(1-p_1)\\
@@ -349,20 +355,20 @@ $$
 \mathrm{E}[Ocp|s_t\neq1] = \frac{2p_2'+3p_3'+4p_4'}{\frac{p_2'}{1+p_2'}+p_3'+p_4'}
 $$
 
-Actually we have guests of group size 1 in $p_1$.
+Actually, we have guests of group size 1 in $p_1$.
 The ratio of the single guests in the total guest count can be evaluated
 $$
 r = \frac{p_1}{p_1+2p_2+3p_3+4p_4} \cdots (1)
 $$
 
-Single guests will take their seat if a vacant seat is left before dispatch.
-Thus we just add them to occupancy expectation.
+Single guests will take their seats if a vacant seat is left before dispatch.
+Thus we just add them to occupancy expectations.
 
 $$
 \mathrm{E}[Ocp Single] = \mathrm{E}[Ocp|s_t\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
 $$
 
-To compare with the original the one normal queue and queues having isolated single rider queue, we assume arrival probability
+To compare with the original queues and queues having isolated single-rider queues, we assume the arrival probability
 $$
 \begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\1/3\\1/3\\1/3\end{pmatrix} \cdots (2)
 $$
@@ -393,10 +399,10 @@ E[Ocp] = `r eocp`\\
 E[OcpSingle] = `r eocp_sg`
 $$
 
-We can expect `r eocp_sg-eocp` improvement of occupancy by using the single rider queue.
+We can expect `r eocp_sg-eocp` improvement in occupancy by using the single rider queue.
 
 #### Knowledge: minimum occupancy without single arrival
-In case of $p_1=0$, what is the lowest value of the occupancy expectation for $p_2,p_3,p_4$? 
+In the case of $p_1=0$, what is the lowest value of the occupancy expectation for $p_2,p_3,p_4$? 
 The values of variables should be extremum,
 $$
 \frac{\partial}{\partial p_2}\mathrm E[Ocp|s_t\neq1]=0\\
@@ -416,7 +422,7 @@ When we configure two queues, is it optimal to separate singles and the others? 
 
 ### Pre-grouping
 If the facility has redundancy, we can make one more queue line.
-We distribute arrival guests into different queue lines by its group size.
+We distribute arrival guests into different queue lines by group size.
 The operation is called pre-grouping.
 
 We hope to know
@@ -435,7 +441,7 @@ Which is the best pre-grouping?
 We use actual arrival probabilities assumed before (2) $(p_i)=(1/10,1/3,1/3,1/3)$ to compare with them.
 
 #### Option 1 (2,3)-4
-For queue 1, arrival probabilities is transformed
+For queue 1, the arrival probabilities is transformed
 $$
 p_2^{(1)} = \frac{p_2}{p_2+p_3}\\
 p_3^{(1)} = \frac{p_3}{p_2+p_3}
@@ -446,8 +452,7 @@ $$
 $$
 For queue 2, we only receive group size 4 therefore $\mathrm{E[Ocp|O1,Q2]}=4$.
 
-
-We combine them with arrival guest count ratio.
+We combine them with the arrival guest count ratio.
 $$
 \mathrm{E[Occupancy|Option1]} = \left(\frac{2p_2+3p_3}{p_1+2p_2+3p_3+4p_4}\frac{2p_2^{(1)}+3p_3^{(1)}}{\frac{p_2^{(1)}}{1+p_2^{(1)}}+p_3^{(1)}} + \frac{4p_4}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
 $$
@@ -465,7 +470,7 @@ exocp_pg_o1 <- function(p1,p2,p3,p4){
 }
 ```
 
-We substitute the actual probability values (2) to this and obtain $\mathrm {E[Ocp|O1]}= `r exocp_pg_o1(1/10,1/3,1/3,1/3)`$ .
+We substitute the actual probability values (2) to this and obtain $\mathrm {E[Ocp|O1]}= `r exocp_pg_o1(1/10,1/3,1/3,1/3)`$.
 
 #### Option 2 (2,4)-3
 For queue 1
@@ -491,7 +496,7 @@ exocp_pg_o2 <- function(p1,p2,p3,p4){
 }
 ```
 
-If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O2]}= `r exocp_pg_o2(1/10,1/3,1/3,1/3)`$ .
+If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O2]}= `r exocp_pg_o2(1/10,1/3,1/3,1/3)`$.
 
 #### Option 3 (3,4)-2
 For queue 1
@@ -517,7 +522,7 @@ exocp_pg_o3 <- function(p1,p2,p3,p4){
 }
 ```
 
-If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O3]}= `r exocp_pg_o3(1/10,1/3,1/3,1/3)`$ .
+If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O3]}= `r exocp_pg_o3(1/10,1/3,1/3,1/3)`$.
 
 #### Question
 If our arrival probability was changed, the best pre-grouping option would be changed.
@@ -550,26 +555,27 @@ plot_boundary <- function(grid = 0.01, p1_given = 0.1){
 plot_boundary(0.005, 0.1) + labs(title = "Fig. 5: The best option simulated at p1=0.1")
 ```
 
-By simulation, Option 3 looks the best in almost condition except for low $p_2$ at $p_1=0.1$.
+By simulation, Option 3 looks the best in almost every condition except for low $p_2$ at $p_1=0.1$.
 
-The boundary between Option 1 and Option 3 should be on the root of
+The boundary between Option 1 and Option 3 should be at the root of
 $$
 F_{13}(p_1, p_2, p_3, p_4) = \mathrm{E[Occupancy|Option1] - E[Occupancy|Option3]} = 0.
 $$
 
 We can easily show the root is independent on $p_1$.
-Thus the boundary must be the same to Fig.5 for any $p_1$.
+Thus the boundary must be the same as Fig.5 for any $p_1$.
+
 
 ## Conclusion
-We introduce the framework to evaluate seat occupancy expectation from arrival group size statistics, seat configuration and grouping strategy.
-And we calculate the expectation in some simple situations by using Markov chain model.
-The case of five or more seats in a line would be calculated in the future work.
+We have introduced the framework to evaluate seat occupancy expectations from arrival group size statistics, seat configuration, and grouping strategy.
+We calculate the expectation in some simple situations by using the Markov chain model.
+The case of five or more seats in a line would be calculated in future work.
 
 We only evaluate the expectation.
-But more analysis would make more useful knowledge, 
-The relationship between the best grouping strategy and arrival probabilities is interesting because arrival probabilities can be changed over timein actual setting and we want to know the stability of our grouping strategy.
+But more analysis would make more useful knowledge,
+The relationship between the best grouping strategy and arrival probabilities is interesting because arrival probabilities can be changed over time in an actual setting and we want to know the stability of our grouping strategy.
 
-The most strong constraint in the study was the one line seat configuration.
-We can not apply Markov chain model for multiple line seat configuration.
-Thus we need different model to analyze.
+The strongest constraint in the study was the one-line seat configuration.
+We can not apply the Markov chain model for multiple-line seat configuration.
+Thus we need a different model to analyze.
 
