@@ -370,7 +370,7 @@ $$
 
 To compare with the original queues and queues having isolated single-rider queues, we assume the arrival probability
 $$
-\begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\1/3\\1/3\\1/3\end{pmatrix} \cdots (2)
+\begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\3/10\\3/10\\3/10\end{pmatrix} \cdots (2)
 $$
 In the case,
 ```{r compare_single}
@@ -391,8 +391,8 @@ ocp <- function(p1,p2,p3,p4){
   denominator <- pi1*p4 + pi2*(p3+p4) + pi3*(p2+p3+p4) + pi4
   return(numerator/denominator)
 }
-eocp <- ocp(1/10,1/3,1/3,1/3)
-eocp_sg <- ocp(0,3/10,3/10,3/10)*(2*1/10+2/3+3/3+4/3)/(1/10+2/3+3/3+4/3)
+eocp <- ocp(1/10,3/10,3/10,3/10)
+eocp_sg <- ocp(0,1/3,1/3,1/3)*(2*1/10+2*3/10+3*3/10+4*3/10)/(1/10+2*3/10+3*3/10+4*3/10)
 ```
 $$
 E[Ocp] = `r eocp`\\
@@ -438,7 +438,7 @@ When we suppose to use a single-rider queue, our pre-grouping option is below
 3. Queue3:$x_t\in\{3,4\}$, Queue3: $x_t=2$
 
 Which is the best pre-grouping?
-We use actual arrival probabilities assumed before (2) $(p_i)=(1/10,1/3,1/3,1/3)$ to compare with them.
+We use actual arrival probabilities assumed before (2) $(p_i)=(1/10,3/10,3/10,3/10)$ to compare with them.
 
 #### Option 1 (2,3)-4
 For queue 1, the arrival probabilities is transformed
@@ -470,7 +470,7 @@ exocp_pg_o1 <- function(p1,p2,p3,p4){
 }
 ```
 
-We substitute the actual probability values (2) to this and obtain $\mathrm {E[Ocp|O1]}= `r exocp_pg_o1(1/10,1/3,1/3,1/3)`$.
+We substitute the actual probability values (2) to this and obtain $\mathrm {E[Ocp|O1]}= `r exocp_pg_o1(1/10,3/10,3/10,3/10)`$.
 
 #### Option 2 (2,4)-3
 For queue 1
@@ -496,7 +496,7 @@ exocp_pg_o2 <- function(p1,p2,p3,p4){
 }
 ```
 
-If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O2]}= `r exocp_pg_o2(1/10,1/3,1/3,1/3)`$.
+If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O2]}= `r exocp_pg_o2(1/10,3/10,3/10,3/10)`$.
 
 #### Option 3 (3,4)-2
 For queue 1
@@ -522,7 +522,7 @@ exocp_pg_o3 <- function(p1,p2,p3,p4){
 }
 ```
 
-If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O3]}= `r exocp_pg_o3(1/10,1/3,1/3,1/3)`$.
+If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O3]}= `r exocp_pg_o3(1/10,3/10,3/10,3/10)`$.
 
 #### Question
 If our arrival probability was changed, the best pre-grouping option would be changed.
@@ -534,7 +534,7 @@ plot_boundary <- function(grid = 0.01, p1_given = 0.1){
   df <- tibble(p1 = p1_given, p2 = p_grid, p3 = p_grid) %>%
     data_grid(p1,p2,p3) %>%
     mutate(p4 = 1-p1-p2-p3) %>%
-    filter(p4>=0) %>%
+    filter(p4>0) %>%
     mutate(
 	   o1 = exocp_pg_o1(p1,p2,p3,p4),
 	   o2 = exocp_pg_o2(p1,p2,p3,p4),
@@ -565,6 +565,220 @@ $$
 We can easily show the root is independent on $p_1$.
 Thus the boundary must be the same as Fig.5 for any $p_1$.
 
+## one-line of $n$ seats
+### 定常状態
+一列のシート数が一般の$n$の場合について検討する。
+Transition matrixは
+$$
+T_n = \begin{pmatrix}
+  0&p_1&p_2&\cdots&p_{n-2}&p_{n-1}\\
+  0&0&p_1&\cdots&p_{n-3}&p_{n-2}\\
+  \vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+  0&0&0&\cdots&p_1&p_2\\
+  0&0&0&\cdots&0&p_1\\
+  0&0&0&\cdots&0&0\\
+\end{pmatrix}
++ \begin{pmatrix}
+  0&0&0&\cdots&0&p_n\\
+  0&0&0&\cdots&p_{n-1}&p_n\\ 
+  \vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+  0&0&p_3&\cdots&p_{n-1}&p_n\\
+  0&p_2&p_3&\cdots&p_{n-1}&p_n\\
+  p_1&p_2&p_3&\cdots&p_{n-1}&p_n
+  \end{pmatrix}
+  =:U_n+D_n
+$$
+となる。
+第一項が空席が十分あり来客が着席できた場合、第二項が空席が足りずにディスパッチして新しい乗り物を提供してから着席した場合である。
+
+Stationary equationは
+$$
+\pi = \pi T_n = \pi U_n + \pi D_n 
+$$
+で、項別に書くと
+$$
+\pi_i = \sum_{j=1}^{i}p_{i-j}\pi_j + p_i\sum_{j=1}^i\pi_{n-j+1}
+$$
+ただし$p_0=0$とする。
+
+ここで $\pi_n=1-\sum_{j=1}^{n-1}\pi_j$ を代入すると右辺第二項は次のように整理できる。
+$$
+\begin{eqnarray}
+p_i\sum_{j=1}^i\pi_{n-j+1}&=&p_i\sum_{j=2}^i\pi_{n-j+1}+p_i\pi_n\\
+  &=& p_i\sum_{j=2}^i\pi_{n-j+1}+p_i\left(1-\sum_{j=1}^{n-1}\pi_j\right)\\
+  &=& p_i-p_i\sum_{j=1}^{n-i}\pi_j
+\end{eqnarray}
+$$
+これを元の項別の式の右辺に代入し整理すると次の式が得られる。
+$$
+p_i=\pi_i-\sum_{j=1}^{i-1}p_{i-j}\pi_j+p_i\sum_{j=1}^{n-i}\pi_j
+$$
+改めて行列表記に戻すと
+$$
+\check p=\check\pi\left(I_{n-1}
+-
+\begin{pmatrix}
+  0 & p_1 & p_2 & \ldots & p_{n-2}\\
+  0 & 0 & p_1 & \ldots & p_{n-3}\\
+  \vdots & \vdots & \vdots & \ddots & \vdots \\
+  0 & 0 & 0 & \ldots & p_1\\
+  0 & 0 & 0 & \ldots & 0
+\end{pmatrix}
++
+\begin{pmatrix}
+  p_1 & p_2 & \ldots & p_{n-1}\\
+  p_1 & p_2 & \ldots & 0\\
+  \vdots & \vdots & \ddots & \vdots\\
+  \vdots & p_2 & \ddots & \vdots\\
+  p_1 & 0 & \vdots & 0\\
+\end{pmatrix}
+\right)=:\check\pi(I_{n-1}-U_{n-1}+\tilde D_{n-1})
+$$
+ただし$\check p=(p_1,p_2,\ldots,p_{n-1}), \check \pi=(\pi_1,\pi_2,\ldots,\pi_{n-1})$である。
+よって右辺の$I_{n-1}-U_{n-1}+\tilde D_{n-1}$の逆行列を求めれば、両辺に左からかけることで定常状態$\pi$を得ることができることがわかった。
+
+### 期待Occupancy
+期待Occupancyは
+$$
+\mathrm{E[Occupancy|Disppatch]}=\frac{\mathrm{E[Occupancy When Dispatch]}}{\mathrm{P[Dispatch]}}
+$$
+であるため、それぞれ上で求めた定常状態$\pi$を使って次のように計算できる
+$$
+\mathrm{P[Dispatch]}=\pi D_n\mathbf 1_n\\
+\mathrm{E[Occupancy When Dispatch]} = \mathrm{diag}(1,2,\ldots,n)
+\pi D_n\mathbf 1_n
+$$
+ただし
+$$
+\mathrm{diag}(1,2,\ldots,n)=\begin{pmatrix}
+1&0&\cdots&0&0\\
+0&2&\cdots&0&0\\
+\vdots&\vdots&\ddots&\vdots&\vdots\\
+0&0& &n-1&0\\
+0&0&\cdots&0&n
+\end{pmatrix}\\
+\mathbf 1_n=\begin{pmatrix}1\\1\\\vdots\\1\end{pmatrix}
+$$
+
+### 疑問
+- Single Riderはどれだけ期待Occupancyを向上させるか？
+- どのようなPre-Groupingが最も期待Occupancyを向上させるか？
+  - Pre-Groupingを２つの場合、たとえば$n/2$未満と$n/2$以上とに分割する戦略と偶数/奇数で分割する戦略とでどちらが期待Occupancyを向上させるか？
+  - Pre-Groupingを３つできる場合はどうだろう？
+
+### 拡張
+$n$が十分大きければ連続値とみなして解析することもできるのではないか
+
+## シートの列数が2以上
+シートの列数が2以上の場合、ゲストに提供する座席は一つに決定しないため単純なマルコフ過程では解析できない。
+条件付き確率と動的計画法で期待Occupancyを最大にする提供戦略を計算することはできる。
+
+### 最も単純な場合：二列二席
+着席状態を$(a,b)$のように２つの数値の組で表現し、１つ目の数値を一列目の着席数、２つ目の数値を二列目の着席数を表すものとする。
+状態遷移図は次になる。
+```{r 2line_2seats, fig.width = 8}
+grViz("
+  digraph dot{
+    graph[
+      label = 'Fig. 6: Two line, two seats. Blue arrows depend on a strategy to adopt',
+      fontsize = 10,
+      rankdir = 'LR'
+    ];
+    node[
+      shape = circle,
+      fixedsize = true,
+      fontsize = 10
+    ];
+    edge[
+	 fontsize = 10,
+	 arrowsize = 0.5
+    ];
+    a00[label = '(0,0)'];
+    a10[label = '(1,0)'];
+    a20[label = '(2,0)'];
+    a11[label = '(1,1)'];
+    a12[label = '(1,2)'];
+    a21[label = '(2,1)'];
+    a22[label = '(2,2)'];
+    d2[label = 'Dispatch for 2', shape = square, fixedsize = false];
+    d3[label = 'Dispatch for 3', shape = square, fixedsize = false];
+    d4[label = 'Dispatch for 4', shape = square, fixedsize = false];
+    a00 -> a10[label = 'p@_{1}'];
+    a00 -> a20[label = 'p@_{2}'];
+    a10 -> a11[label = 'A:p@_{1}', color = 'blue'];
+    a10 -> a20[label = 'B:p@_{1}', color = 'blue'];
+    a10 -> a12[label = 'p@_{2}'];
+    a20 -> a21[label = 'p@_{1}'];
+    a20 -> a22[label = 'p@_{2}'];
+    a11 -> a12[label = 'p@_{1}'];
+    a11 -> d2[label = 'p@_{2}'];
+    a12 -> a22[label = 'p@_{1}'];
+    a12 -> d3[label = 'p@_{2}'];
+    a21 -> a22[label = 'p@_{1}'];
+    a21 -> d3[label = 'p@_{2}'];
+    a22 -> d4[label = 'p@_{1}+p@_{2}'];
+  }
+  ")
+```
+状態$(1,0)$から$p_1$の遷移が二本引かれており、来客を前の列に案内するか、後ろの列に案内するかの選択肢があることを反映している。
+期待Occupancyを高める選択を採用したい。
+このためには選択肢Aの行き先$(1,1)$と選択肢Bの行き先$(2,0)$の期待Occupancyを求めて比較すれば良い。
+$(1,1)$と$(2,0)$以降の状態は案内の自由度は存在しないため期待Occupancyは条件付き確率で計算できる。
+
+$$
+\begin{eqnarray}
+\mathrm{E[Occupancy}|s=(2,2)]&=&4\\
+\mathrm{E[Occupancy}|s=(2,1)]&=&p_1\mathrm{E[Occupancy}|s=(2,2)] + p_2\cdot 3 = 4p_1+3p_2\\
+\mathrm{E[Occupancy}|s=(1,2)]&=&p_1\mathrm{E[Occupancy}|s=(2,2)] + p_2\cdot 3 = 4p_1+3p_2\\
+\mathrm{E[Occupancy}|s=(1,1)]&=&p_1\mathrm{E[Occupancy}|s=(1,2)] + p_2\cdot 2 = 4p_1^2+3p_1p_2+2p_2\\
+\mathrm{E[Occupancy}|s=(2,0)]&=&p_1\mathrm{E[Occupancy}|s=(2,1)] + p_2\mathrm{E[Occupancy}|s=(2,2)]=4p_1^2+3p_1p_2+4p_2
+\end{eqnarray}
+$$
+
+以上より選択肢Aの行き先$(1,1)$と選択肢Bの行き先$(2,0)$の期待Occupancyの差は$2p_2$となり、$p_2>0$であれば選択肢Bのほうが期待Occupancyを高める選択であり、$p_2=0$であればどちらも同じと結論できる。
+
+選択肢Bを取ると仮定するとすべての状態遷移確率は決定され、Stationary equationは
+$$
+\begin{eqnarray}
+\pi_{10}&=&p_1\pi_{22}\\
+\pi_{20}&=&p_1\pi_{10}\\
+\pi_{11}&=&0\\
+\pi_{12}&=&p_1\pi_{11}+p_2\pi_{10}\\
+\pi_{21}&=&p_1\pi_{20}\\
+\pi_{22}&=&p_1\pi_{12}+p_1\pi_{21}+p_2\pi_{20}\\
+\end{eqnarray}
+$$
+その解は
+$$
+\begin{eqnarray}
+\pi_{10}&=&p_1/Z\\
+\pi_{20}&=&p_1^2/Z\\
+\pi_{11}&=&0\\
+\pi_{12}&=&p_1p_2/Z\\
+\pi_{21}&=&p_1^3/Z\\
+\pi_{22}&=&1/Z\\
+\end{eqnarray}
+$$
+ただし
+$$
+Z=\frac{1}{2p_1+p_1^3+1}
+$$
+
+これらから期待Occupancyを計算できて
+$$
+\mathrm{E[Occupancy]}=\frac{4\pi_{22}+3\pi_{21}p_2+3\pi_{12}p_2+2\pi_{11}p_2}{\pi_{22}+\pi_{21}p_2+\pi_{12}p_2+\pi_{11}p_2}
+=\frac{4+3p_1^3p_2+3p_1p_2^2+2p_1p_2}{1+p_1^3p_2+p_1p_2^2+p_1p_2}
+$$
+
+- グラフ
+- １列２席と比較
+
+### 眼の前のチャレンジ
+- 列あたり2⃣席の場合は列数を増やすと期待Occupancyは減った。これは一般的な事実だろうか？
+- 前の列から案内していくとしたとき、前の列に案内できる空席があるにもかかわらず、後ろの席に案内したほうが期待Occupancyを高める状況はあるだろうか？
+- 5列5席や5列6⃣席のときの最適な案内戦略は？
+- 2列4席の場合の最適なPre-grouping戦略は何になるだろうか？
+- これらの戦略は来場者数のグループサイズ統計に対してロバストだろうか？
 
 ## Conclusion
 We have introduced the framework to evaluate seat occupancy expectations from arrival group size statistics, seat configuration, and grouping strategy.

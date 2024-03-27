@@ -1604,8 +1604,8 @@ pre code {
 </ul>
 <p>After a vehicle is dispatched, a new vacant vehicle will come and the state will be initialized as <span class="math inline">\(\sigma_0\)</span>.</p>
 <p>To make analysis easy, we only dispatch a vehicle when the seats are not enough for new arrivals. Thus we judge whether to dispatch or not before giving seats to a guest.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-8a55690b994b80bf8c3e" style="width:480px;height:192px;"></div>
-<script type="application/json" data-for="htmlwidget-8a55690b994b80bf8c3e">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>t<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>t<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a2[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a3[label = \"Which row\n to guid?\", shape = square];\n    edge[label = \"\"] a3 -> a4;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>t<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3ea26565f0292a515ab6" style="width:480px;height:192px;"></div>
+<script type="application/json" data-for="htmlwidget-3ea26565f0292a515ab6">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>t<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>t<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a2[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a3[label = \"Which row\n to guid?\", shape = square];\n    edge[label = \"\"] a3 -> a4;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>t<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>We assume that the situation is stationary. The assumption induces the probability that a size <span class="math inline">\(k\)</span> group arrives is independent on time <span class="math inline">\(P[x_t=k]=p_k\)</span>.</p>
 </div>
 </div>
@@ -1638,8 +1638,8 @@ T_{jk}=P[s_{t+1}=k|s_{t}=j]=(p_{j-k}+p_k)P[s_{t}=j]
 \]</span> where <span class="math inline">\(p_k=0\)</span> for <span class="math inline">\(k\leq0\)</span>. We call a matrix which elements are these probabilities a transition matrix.</p>
 <p>We show an example in the simplest case, which has only two seats. In this case, seat occupancy can take <span class="math inline">\(s_t=0, 1, 2\)</span>.</p>
 <p>Markov state and transition in this situation can be shown in Fig.2.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e5c2b43625edcbb0239c" style="width:384px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-e5c2b43625edcbb0239c">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case(two seats). \nRed means dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e2bb0f1d68a45d88f543" style="width:384px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-e2bb0f1d68a45d88f543">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case(two seats). \nRed means dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>In this case our transition matrix is <span class="math display">\[
 T=\begin{pmatrix}
   0 &amp; p_1 &amp; p_2 \\
@@ -1690,8 +1690,8 @@ P[\mathrm{Dispatch}]=a_1p_2+a_2(p_1+p_2) = \frac{-p^2+p+2}{p+2}
 <div id="occupancy-expectation" class="section level3">
 <h3>Occupancy expectation</h3>
 <p>The transition of the state is described below.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-1bfb8026a3091f305e65" style="width:768px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-1bfb8026a3091f305e65">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      label = \"Fig.4: One line, four seats. Red means dispatch. The state 0 is removed\",\n      fontsize = 10\n    ];\n    node[\n      shape = circle,\n      fixedsize = true,\n      fontsize = 10\n    ];\n    edge[\n\t fontsize = 10,\n\t arrowsize = 0.5\n    ];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a3[label = \"3\"];\n    a4[label = \"4\"];\n    a1 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>];\n    a1 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a2 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a2 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a2 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a2 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a3 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a1[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-78551991281b98eafbb3" style="width:768px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-78551991281b98eafbb3">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      label = \"Fig.4: One line, four seats. Red means dispatch. The state 0 is removed\",\n      fontsize = 10\n    ];\n    node[\n      shape = circle,\n      fixedsize = true,\n      fontsize = 10\n    ];\n    edge[\n\t fontsize = 10,\n\t arrowsize = 0.5\n    ];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a3[label = \"3\"];\n    a4[label = \"4\"];\n    a1 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>];\n    a1 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a2 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a2 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a2 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a2 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a3 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a3 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a1[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a3[label = <p<FONT POINT-SIZE=\"8\"><SUB>3<\/SUB><\/FONT>>, color = \"red\"];\n    a4 -> a4[label = <p<FONT POINT-SIZE=\"8\"><SUB>4<\/SUB><\/FONT>>, color = \"red\"];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>and transition matrix is</p>
 <p><span class="math display">\[
 T=\begin{pmatrix}
@@ -1743,13 +1743,13 @@ r = \frac{p_1}{p_1+2p_2+3p_3+4p_4} \cdots (1)
 \mathrm{E}[Ocp Single] = \mathrm{E}[Ocp|s_t\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
 \]</span></p>
 <p>To compare with the original queues and queues having isolated single-rider queues, we assume the arrival probability <span class="math display">\[
-\begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\1/3\\1/3\\1/3\end{pmatrix} \cdots (2)
+\begin{pmatrix}p_1\\p_2\\p_3\\p_4\end{pmatrix}=\begin{pmatrix}1/10\\3/10\\3/10\\3/10\end{pmatrix} \cdots (2)
 \]</span> In the case,</p>
 <p><span class="math display">\[
-E[Ocp] = 3.3182954\\
-E[OcpSingle] = 3.5747003
+E[Ocp] = 3.4135061\\
+E[OcpSingle] = 3.4887218
 \]</span></p>
-<p>We can expect 0.2564049 improvement in occupancy by using the single rider queue.</p>
+<p>We can expect 0.0752157 improvement in occupancy by using the single rider queue.</p>
 <div id="knowledge-minimum-occupancy-without-single-arrival" class="section level4">
 <h4>Knowledge: minimum occupancy without single arrival</h4>
 <p>In the case of <span class="math inline">\(p_1=0\)</span>, what is the lowest value of the occupancy expectation for <span class="math inline">\(p_2,p_3,p_4\)</span>? The values of variables should be extremum, <span class="math display">\[
@@ -1781,7 +1781,7 @@ E[OcpSingle] = 3.5747003
 <li>Queue2:<span class="math inline">\(x_t\in\{2,4\}\)</span>, Queue2: <span class="math inline">\(x_t=3\)</span></li>
 <li>Queue3:<span class="math inline">\(x_t\in\{3,4\}\)</span>, Queue3: <span class="math inline">\(x_t=2\)</span></li>
 </ol>
-<p>Which is the best pre-grouping? We use actual arrival probabilities assumed before (2) <span class="math inline">\((p_i)=(1/10,1/3,1/3,1/3)\)</span> to compare with them.</p>
+<p>Which is the best pre-grouping? We use actual arrival probabilities assumed before (2) <span class="math inline">\((p_i)=(1/10,3/10,3/10,3/10)\)</span> to compare with them.</p>
 <div id="option-1-23-4" class="section level4">
 <h4>Option 1 (2,3)-4</h4>
 <p>For queue 1, the arrival probabilities is transformed <span class="math display">\[
@@ -1793,7 +1793,7 @@ p_3^{(1)} = \frac{p_3}{p_2+p_3}
 <p>We combine them with the arrival guest count ratio. <span class="math display">\[
 \mathrm{E[Occupancy|Option1]} = \left(\frac{2p_2+3p_3}{p_1+2p_2+3p_3+4p_4}\frac{2p_2^{(1)}+3p_3^{(1)}}{\frac{p_2^{(1)}}{1+p_2^{(1)}}+p_3^{(1)}} + \frac{4p_4}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
 \]</span> where <span class="math inline">\(r\)</span> is a single rider effect (1).</p>
-<p>We substitute the actual probability values (2) to this and obtain <span class="math inline">\(\mathrm {E[Ocp|O1]}= 3.4408602\)</span>.</p>
+<p>We substitute the actual probability values (2) to this and obtain <span class="math inline">\(\mathrm {E[Ocp|O1]}= 3.440051\)</span>.</p>
 </div>
 <div id="option-2-24-3" class="section level4">
 <h4>Option 2 (2,4)-3</h4>
@@ -1804,7 +1804,7 @@ p_4^{(2)} = \frac{p_4}{p_2+p_4}\\
 \]</span> Then <span class="math display">\[
 \mathrm{E[Occupancy|Option2]} = \left(\frac{2p_2+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{2p_2^{(2)}+4p_4^{(2)}}{\frac{p_2^{(2)}}{1+p_2^{(2)}}+p_4^{(2)}} + \frac{3p_3}{p_1+2p_2+3p_3+4p_4}\cdot 3 \right)(1+r)
 \]</span></p>
-<p>If we substitute actual probability values (2), we obtain <span class="math inline">\(\mathrm {E[Ocp|O2]}= 3.396462\)</span>.</p>
+<p>If we substitute actual probability values (2), we obtain <span class="math inline">\(\mathrm {E[Ocp|O2]}= 3.3956633\)</span>.</p>
 </div>
 <div id="option-3-34-2" class="section level4">
 <h4>Option 3 (3,4)-2</h4>
@@ -1815,7 +1815,7 @@ p_4^{(3)} = \frac{p_4}{p_3+p_4}\\
 \]</span> Then <span class="math display">\[
 \mathrm{E[Occupancy|Option3]} = \left(\frac{3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{3p_3^{(3)}+4p_4^{(3)}}{p_3^{(3)}+p_4^{(3)}} + \frac{2p_2}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
 \]</span></p>
-<p>If we substitute actual probability values (2), we obtain <span class="math inline">\(\mathrm {E[Ocp|O3]}= 3.6073535\)</span>.</p>
+<p>If we substitute actual probability values (2), we obtain <span class="math inline">\(\mathrm {E[Ocp|O3]}= 3.6065051\)</span>.</p>
 </div>
 <div id="question-1" class="section level4">
 <h4>Question</h4>
@@ -1827,6 +1827,144 @@ F_{13}(p_1, p_2, p_3, p_4) = \mathrm{E[Occupancy|Option1] - E[Occupancy|Option3]
 \]</span></p>
 <p>We can easily show the root is independent on <span class="math inline">\(p_1\)</span>. Thus the boundary must be the same as Fig.5 for any <span class="math inline">\(p_1\)</span>.</p>
 </div>
+</div>
+</div>
+<div id="one-line-of-n-seats" class="section level2">
+<h2>one-line of <span class="math inline">\(n\)</span> seats</h2>
+<div id="定常状態" class="section level3">
+<h3>定常状態</h3>
+<p>一列のシート数が一般の<span class="math inline">\(n\)</span>の場合について検討する。 Transition matrixは <span class="math display">\[
+T_n = \begin{pmatrix}
+  0&amp;p_1&amp;p_2&amp;\cdots&amp;p_{n-2}&amp;p_{n-1}\\
+  0&amp;0&amp;p_1&amp;\cdots&amp;p_{n-3}&amp;p_{n-2}\\
+  \vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;\vdots&amp;\vdots\\
+  0&amp;0&amp;0&amp;\cdots&amp;p_1&amp;p_2\\
+  0&amp;0&amp;0&amp;\cdots&amp;0&amp;p_1\\
+  0&amp;0&amp;0&amp;\cdots&amp;0&amp;0\\
+\end{pmatrix}
++ \begin{pmatrix}
+  0&amp;0&amp;0&amp;\cdots&amp;0&amp;p_n\\
+  0&amp;0&amp;0&amp;\cdots&amp;p_{n-1}&amp;p_n\\ 
+  \vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;\vdots&amp;\vdots\\
+  0&amp;0&amp;p_3&amp;\cdots&amp;p_{n-1}&amp;p_n\\
+  0&amp;p_2&amp;p_3&amp;\cdots&amp;p_{n-1}&amp;p_n\\
+  p_1&amp;p_2&amp;p_3&amp;\cdots&amp;p_{n-1}&amp;p_n
+  \end{pmatrix}
+  =:U_n+D_n
+\]</span> となる。 第一項が空席が十分あり来客が着席できた場合、第二項が空席が足りずにディスパッチして新しい乗り物を提供してから着席した場合である。</p>
+<p>Stationary equationは <span class="math display">\[
+\pi = \pi T_n = \pi U_n + \pi D_n 
+\]</span> で、項別に書くと <span class="math display">\[
+\pi_i = \sum_{j=1}^{i}p_{i-j}\pi_j + p_i\sum_{j=1}^i\pi_{n-j+1}
+\]</span> ただし<span class="math inline">\(p_0=0\)</span>とする。</p>
+<p>ここで <span class="math inline">\(\pi_n=1-\sum_{j=1}^{n-1}\pi_j\)</span> を代入すると右辺第二項は次のように整理できる。 <span class="math display">\[
+\begin{eqnarray}
+p_i\sum_{j=1}^i\pi_{n-j+1}&amp;=&amp;p_i\sum_{j=2}^i\pi_{n-j+1}+p_i\pi_n\\
+  &amp;=&amp; p_i\sum_{j=2}^i\pi_{n-j+1}+p_i\left(1-\sum_{j=1}^{n-1}\pi_j\right)\\
+  &amp;=&amp; p_i-p_i\sum_{j=1}^{n-i}\pi_j
+\end{eqnarray}
+\]</span> これを元の項別の式の右辺に代入し整理すると次の式が得られる。 <span class="math display">\[
+p_i=\pi_i-\sum_{j=1}^{i-1}p_{i-j}\pi_j+p_i\sum_{j=1}^{n-i}\pi_j
+\]</span> 改めて行列表記に戻すと <span class="math display">\[
+\check p=\check\pi\left(I_{n-1}
+-
+\begin{pmatrix}
+  0 &amp; p_1 &amp; p_2 &amp; \ldots &amp; p_{n-2}\\
+  0 &amp; 0 &amp; p_1 &amp; \ldots &amp; p_{n-3}\\
+  \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+  0 &amp; 0 &amp; 0 &amp; \ldots &amp; p_1\\
+  0 &amp; 0 &amp; 0 &amp; \ldots &amp; 0
+\end{pmatrix}
++
+\begin{pmatrix}
+  p_1 &amp; p_2 &amp; \ldots &amp; p_{n-1}\\
+  p_1 &amp; p_2 &amp; \ldots &amp; 0\\
+  \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+  \vdots &amp; p_2 &amp; \ddots &amp; \vdots\\
+  p_1 &amp; 0 &amp; \vdots &amp; 0\\
+\end{pmatrix}
+\right)=:\check\pi(I_{n-1}-U_{n-1}+\tilde D_{n-1})
+\]</span> ただし<span class="math inline">\(\check p=(p_1,p_2,\ldots,p_{n-1}), \check \pi=(\pi_1,\pi_2,\ldots,\pi_{n-1})\)</span>である。 よって右辺の<span class="math inline">\(I_{n-1}-U_{n-1}+\tilde D_{n-1}\)</span>の逆行列を求めれば、両辺に左からかけることで定常状態<span class="math inline">\(\pi\)</span>を得ることができることがわかった。</p>
+</div>
+<div id="期待occupancy" class="section level3">
+<h3>期待Occupancy</h3>
+<p>期待Occupancyは <span class="math display">\[
+\mathrm{E[Occupancy|Disppatch]}=\frac{\mathrm{E[Occupancy When Dispatch]}}{\mathrm{P[Dispatch]}}
+\]</span> であるため、それぞれ上で求めた定常状態<span class="math inline">\(\pi\)</span>を使って次のように計算できる <span class="math display">\[
+\mathrm{P[Dispatch]}=\pi D_n\mathbf 1_n\\
+\mathrm{E[Occupancy When Dispatch]} = \mathrm{diag}(1,2,\ldots,n)
+\pi D_n\mathbf 1_n
+\]</span> ただし <span class="math display">\[
+\mathrm{diag}(1,2,\ldots,n)=\begin{pmatrix}
+1&amp;0&amp;\cdots&amp;0&amp;0\\
+0&amp;2&amp;\cdots&amp;0&amp;0\\
+\vdots&amp;\vdots&amp;\ddots&amp;\vdots&amp;\vdots\\
+0&amp;0&amp; &amp;n-1&amp;0\\
+0&amp;0&amp;\cdots&amp;0&amp;n
+\end{pmatrix}\\
+\mathbf 1_n=\begin{pmatrix}1\\1\\\vdots\\1\end{pmatrix}
+\]</span></p>
+</div>
+<div id="疑問" class="section level3">
+<h3>疑問</h3>
+<ul>
+<li>Single Riderはどれだけ期待Occupancyを向上させるか？</li>
+<li>どのようなPre-Groupingが最も期待Occupancyを向上させるか？
+<ul>
+<li>Pre-Groupingを２つの場合、たとえば<span class="math inline">\(n/2\)</span>未満と<span class="math inline">\(n/2\)</span>以上とに分割する戦略と偶数/奇数で分割する戦略とでどちらが期待Occupancyを向上させるか？</li>
+<li>Pre-Groupingを３つできる場合はどうだろう？</li>
+</ul></li>
+</ul>
+</div>
+<div id="拡張" class="section level3">
+<h3>拡張</h3>
+<p><span class="math inline">\(n\)</span>が十分大きければ連続値とみなして解析することもできるのではないか</p>
+</div>
+</div>
+<div id="シートの列数が2以上" class="section level2">
+<h2>シートの列数が2以上</h2>
+<p>シートの列数が2以上の場合、ゲストに提供する座席は一つに決定しないため単純なマルコフ過程では解析できない。 条件付き確率と動的計画法で期待Occupancyを最大にする提供戦略を計算することはできる。</p>
+<div id="最も単純な場合二列二席" class="section level3">
+<h3>最も単純な場合：二列二席</h3>
+<p>着席状態を<span class="math inline">\((a,b)\)</span>のように２つの数値の組で表現し、１つ目の数値を一列目の着席数、２つ目の数値を二列目の着席数を表すものとする。 状態遷移図は次になる。</p>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-65efaf65fcf8abcff100" style="width:768px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-65efaf65fcf8abcff100">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      label = \"Fig. 6: Two line, two seats. Blue arrows depend on a strategy to adopt\",\n      fontsize = 10,\n      rankdir = \"LR\"\n    ];\n    node[\n      shape = circle,\n      fixedsize = true,\n      fontsize = 10\n    ];\n    edge[\n\t fontsize = 10,\n\t arrowsize = 0.5\n    ];\n    a00[label = \"(0,0)\"];\n    a10[label = \"(1,0)\"];\n    a20[label = \"(2,0)\"];\n    a11[label = \"(1,1)\"];\n    a12[label = \"(1,2)\"];\n    a21[label = \"(2,1)\"];\n    a22[label = \"(2,2)\"];\n    d2[label = \"Dispatch for 2\", shape = square, fixedsize = false];\n    d3[label = \"Dispatch for 3\", shape = square, fixedsize = false];\n    d4[label = \"Dispatch for 4\", shape = square, fixedsize = false];\n    a00 -> a10[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a00 -> a20[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a10 -> a11[label = <A:p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = \"blue\"];\n    a10 -> a20[label = <B:p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = \"blue\"];\n    a10 -> a12[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a20 -> a21[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a20 -> a22[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a11 -> a12[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a11 -> d2[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a12 -> a22[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a12 -> d3[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a21 -> a22[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a21 -> d3[label = <p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a22 -> d4[label = <p<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>+p<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n  }\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>状態<span class="math inline">\((1,0)\)</span>から<span class="math inline">\(p_1\)</span>の遷移が二本引かれており、来客を前の列に案内するか、後ろの列に案内するかの選択肢があることを反映している。 期待Occupancyを高める選択を採用したい。 このためには選択肢Aの行き先<span class="math inline">\((1,1)\)</span>と選択肢Bの行き先<span class="math inline">\((2,0)\)</span>の期待Occupancyを求めて比較すれば良い。 <span class="math inline">\((1,1)\)</span>と<span class="math inline">\((2,0)\)</span>以降の状態は案内の自由度は存在しないため期待Occupancyは条件付き確率で計算できる。</p>
+<p><span class="math display">\[
+\begin{eqnarray}
+\mathrm{E[Occupancy}|s=(2,2)]&amp;=&amp;4\\
+\mathrm{E[Occupancy}|s=(2,1)]&amp;=&amp;p_1\mathrm{E[Occupancy}|s=(2,2)] + p_2\cdot 3 = 4p_1+3p_2\\
+\mathrm{E[Occupancy}|s=(1,2)]&amp;=&amp;p_1\mathrm{E[Occupancy}|s=(2,2)] + p_2\cdot 3 = 4p_1+3p_2\\
+\mathrm{E[Occupancy}|s=(1,1)]&amp;=&amp;p_1\mathrm{E[Occupancy}|s=(1,2)] + p_2\cdot 2 = 4p_1^2+3p_1p_2+2p_2\\
+\mathrm{E[Occupancy}|s=(2,0)]&amp;=&amp;p_1\mathrm{E[Occupancy}|s=(2,1)] + p_2\mathrm{E[Occupancy}|s=(2,2)]=4p_1^2+3p_1p_2+4p_2
+\end{eqnarray}
+\]</span></p>
+<p>以上より選択肢Aの行き先<span class="math inline">\((1,1)\)</span>と選択肢Bの行き先<span class="math inline">\((2,0)\)</span>の期待Occupancyの差は<span class="math inline">\(2p_2\)</span>となり、<span class="math inline">\(p_2&gt;0\)</span>であれば選択肢Bのほうが期待Occupancyを高める選択であり、<span class="math inline">\(p_2=0\)</span>であればどちらも同じと結論できる。</p>
+<p>選択肢Bを取ると仮定するとすべての状態遷移確率は決定され、Stationary equationは <span class="math display">\[
+\begin{eqnarray}
+\pi_{10}&amp;=&amp;p_1\pi_{22}\\
+\pi_{20}&amp;=&amp;p_1\pi_{10}\\
+\pi_{11}&amp;=&amp;0\\
+\pi_{12}&amp;=&amp;p_1\pi_{11}+p_2\pi_{10}\\
+\pi_{21}&amp;=&amp;p_1\pi_{20}\\
+\pi_{22}&amp;=&amp;p_1\pi_{12}+p_1\pi_{21}+p_2\pi_{20}\\
+\end{eqnarray}
+\]</span> その解は <span class="math display">\[
+\begin{eqnarray}
+\pi_{10}&amp;=&amp;p_1/Z\\
+\pi_{20}&amp;=&amp;p_1^2/Z\\
+\pi_{11}&amp;=&amp;0\\
+\pi_{12}&amp;=&amp;p_1p_2/Z\\
+\pi_{21}&amp;=&amp;p_1^3/Z\\
+\pi_{22}&amp;=&amp;1/Z\\
+\end{eqnarray}
+\]</span> ただし <span class="math display">\[
+Z=\frac{1}{2p_1+p_1^3+1}
+\]</span></p>
+<p>これらから期待Occupancyを計算できて <span class="math display">\[
+\mathrm{E[Occupancy]}=\frac{4\pi_{22}+3\pi_{21}p_2+3\pi_{12}p_2+2\pi_{11}p_2}{\pi_{22}+\pi_{21}p_2+\pi_{12}p_2+\pi_{11}p_2}
+=\frac{4+3p_1^3p_2+3p_1p_2^2+2p_1p_2}{1+p_1^3p_2+p_1p_2^2+p_1p_2}
+\]</span></p>
 </div>
 </div>
 <div id="conclusion" class="section level2">
