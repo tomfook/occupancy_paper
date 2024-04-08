@@ -450,13 +450,14 @@ p_3^{(1)} = \frac{p_3}{p_2+p_3}
 $$
 and the occupancy expectation would be
 $$
-\mathrm {E[Occupancy|Option1,Queue1]} = \frac{2p_2^{(1)}+3p_3^{(1)}}{\frac{p_2^{(1)}}{1+p_2^{(1)}}+p_3^{(1)}}
+\mathrm {E[Occupancy|Option1,Queue1]} = \frac{2p_2^{(1)}+3p_3^{(1)}}{\frac{p_2^{(1)}}{1+p_2^{(1)}}+p_3^{(1)}} 
+  = \frac{(2p_2+3p_3)(2p_2+p_3)}{p_2^2+3p_2p_3+p_3^2}
 $$
 For queue 2, we only receive group size 4 therefore $\mathrm{E[Ocp|O1,Q2]}=4$.
 
 We combine them with the arrival guest count ratio.
 $$
-\mathrm{E[Occupancy|Option1]} = \left(\frac{2p_2+3p_3}{p_1+2p_2+3p_3+4p_4}\frac{2p_2^{(1)}+3p_3^{(1)}}{\frac{p_2^{(1)}}{1+p_2^{(1)}}+p_3^{(1)}} + \frac{4p_4}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
+\mathrm{E[Occupancy|Option1]} = \left(\frac{2p_2+3p_3}{p_1+2p_2+3p_3+4p_4}\frac{(2p_2+3p_3)(2p_2+p_3)}{p_2^2+3p_2p_3+p_3^2} + \frac{4p_4}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
 $$
 where $r$ is a single rider effect (1).
 
@@ -479,11 +480,12 @@ For queue 1
 $$
 p_2^{(2)} = \frac{p_2}{p_2+p_4}\\
 p_4^{(2)} = \frac{p_4}{p_2+p_4}\\
-\mathrm {E[Occupancy|Option2,Queue1]} = \frac{2p_2^{(2)}+4p_4^{(2)}}{\frac{p_2^{(2)}}{1+p_2^{(2)}}+p_4^{(2)}}.
+\mathrm {E[Occupancy|Option2,Queue1]} = \frac{2p_2^{(2)}+4p_4^{(2)}}{\frac{p_2^{(2)}}{1+p_2^{(2)}}+p_4^{(2)}}
+  = \frac{(2p_2+4p_4)(2p_2+p_4)}{p_2^2+3p_2p_4+p_4^2}
 $$
 Then
 $$
-\mathrm{E[Occupancy|Option2]} = \left(\frac{2p_2+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{2p_2^{(2)}+4p_4^{(2)}}{\frac{p_2^{(2)}}{1+p_2^{(2)}}+p_4^{(2)}} + \frac{3p_3}{p_1+2p_2+3p_3+4p_4}\cdot 3 \right)(1+r)
+\mathrm{E[Occupancy|Option2]} = \left(\frac{2p_2+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{(2p_2+4p_4)(2p_2+p_4)}{p_2^2+3p_2p_4+p_4^2} + \frac{3p_3}{p_1+2p_2+3p_3+4p_4}\cdot 3 \right)(1+r)
 $$
 
 ```{r exocp_pg_o2}
@@ -505,11 +507,11 @@ For queue 1
 $$
 p_3^{(3)} = \frac{p_3}{p_3+p_4}\\
 p_4^{(3)} = \frac{p_4}{p_3+p_4}\\
-\mathrm {E[Occupancy|Option3,Queue1]} = \frac{3p_3^{(3)}+4p_4^{(3)}}{p_3^{(3)}+p_4^{(3)}}.
+\mathrm {E[Occupancy|Option3,Queue1]} = \frac{3p_3^{(3)}+4p_4^{(3)}}{p_3^{(3)}+p_4^{(3)}} = \frac{3p_3+4p_4}{p_3+p_4}
 $$
 Then
 $$
-\mathrm{E[Occupancy|Option3]} = \left(\frac{3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{3p_3^{(3)}+4p_4^{(3)}}{p_3^{(3)}+p_4^{(3)}} + \frac{2p_2}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
+\mathrm{E[Occupancy|Option3]} = \left(\frac{3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}\frac{3p_3+4p_4}{p_3+p_4} + \frac{2p_2}{p_1+2p_2+3p_3+4p_4}\cdot 4 \right)(1+r)
 $$
 
 ```{r exocp_pg_o3}
@@ -551,7 +553,7 @@ plot_boundary <- function(grid = 0.01, p1_given = 0.1){
     df_p1 <- df %>% filter(p1 == p1_given)
     df_p1 %>%
       filter(best != "SAME") %>%
-      ggplot(aes(p2, p3)) +
+      ggplot(aes(p3, p2)) +
       geom_point(aes(color = best))
 }
 plot_boundary(0.005, 0.1) + labs(title = "Fig. 5: The best option simulated at p1=0.1")
@@ -561,11 +563,24 @@ By simulation, Option 3 looks the best in almost every condition except for low 
 
 The boundary between Option 1 and Option 3 should be at the root of
 $$
-F_{13}(p_1, p_2, p_3, p_4) = \mathrm{E[Occupancy|Option1] - E[Occupancy|Option3]} = 0.
+\mathrm{E[Occupancy|Option1] - E[Occupancy|Option3]} = 0.
 $$
-
-We can easily show the root is independent on $p_1$.
+Since
+$$
+\begin{eqnarray}
+&&\mathrm{E[Occupancy|Option1] - E[Occupancy|Option3]} = 0\\
+&\Leftrightarrow& F_{13}(p_2,p_3):=-5p_2^2p_3^2-4p_2^2p_3(1-p_2-p_3)-5p_2p_3^3-2p_2p_3^2(1-p_2-p_3)+p_3^3(1-p_2-p_3)=0,
+\end{eqnarray}
+$$
+the root is independent on $p_1$.
 Thus the boundary must be the same as Fig.5 for any $p_1$.
+
+If we obtain the highest $p_2$ in the area that Option 1 is optimal, we can adopt the Option 3 for larger $p_2$.
+By the implicit function theorem, the extremum should satisfy the equation
+$$
+\frac{\partial}{\partial p_3}F_{13}(p_2,p_3)=4p_2^3+2p_2^2(-2+p_3)+(3-4p_3)p_3^2-p_2p_3(1+3p_3)=0
+$$
+The root of these equation is approximately $p_2=0.0587, p_3=0.419$.
 
 ## one-line of $n$ seats
 ### 定常状態
@@ -634,10 +649,16 @@ $$
   \vdots & p_2 & \ddots & \vdots\\
   p_1 & 0 & \vdots & 0\\
 \end{pmatrix}
-\right)=:\check\pi(I_{n-1}-U_{n-1}+\tilde D_{n-1})
+\right)=:\check\pi(I_{n-1}-U_{n-1}-D_{n-1}+P_{n-1})
 $$
-ただし$\check p=(p_1,p_2,\ldots,p_{n-1}), \check \pi=(\pi_1,\pi_2,\ldots,\pi_{n-1})$である。
-よって右辺の$I_{n-1}-U_{n-1}+\tilde D_{n-1}$の逆行列を求めれば、両辺に左からかけることで定常状態$\pi$を得ることができることがわかった。
+ただし
+$$
+\check p=(p_1,p_2,\ldots,p_{n-1})\\
+\check \pi=(\pi_1,\pi_2,\ldots,\pi_{n-1})\\
+P_{n-1} = \begin{pmatrix} p_1 & p_2 & \ldots & p_{n-1}\\ p_1 & p_2 & \ldots & p_{n-1} \\ \vdots & \vdots & \ddots & \vdots \\ p_1 & p_2 & \ldots & p_{n-1}\end{pmatrix}
+$$
+である。
+よって右辺の$I_{n-1}-U_{n-1}-D_{n-1}+P_{n-1}$の逆行列を求めて、両辺に左からかけることで定常状態$\pi$を得ることができることがわかった。
 
 ### 期待Occupancy
 期待Occupancyは
@@ -744,7 +765,7 @@ $$
 $$
 \begin{eqnarray}
 \pi_{10}&=&p_1\pi_{22}\\
-\pi_{20}&=&p_1\pi_{10}\\
+\pi_{20}&=&p_1\pi_{10}+p_2(\pi_{12}+\pi_{21})\\
 \pi_{11}&=&0\\
 \pi_{12}&=&p_1\pi_{11}+p_2\pi_{10}\\
 \pi_{21}&=&p_1\pi_{20}\\
@@ -754,36 +775,35 @@ $$
 その解は
 $$
 \begin{eqnarray}
-\pi_{10}&=&p_1/Z\\
-\pi_{20}&=&p_1^2/Z\\
+\pi_{10}&=&p_1(1-p_1p_2)/Z\\
+\pi_{20}&=&(p_1^2+p_1p_2^2)(1-p_1p_2)/Z\\
 \pi_{11}&=&0\\
-\pi_{12}&=&p_1p_2/Z\\
-\pi_{21}&=&p_1^3/Z\\
-\pi_{22}&=&1/Z\\
+\pi_{12}&=&p_1p_2(1-p_1p_2)/Z\\
+\pi_{21}&=&p_1(p_1^2+p_1p_2^2)(1-p_1p_2)/Z\\
+\pi_{22}&=&(1-p_1p_2)/Z\\
 \end{eqnarray}
 $$
 ただし
 $$
-Z=\frac{1}{2p_1+p_1^3+1}
+Z=\frac{1}{p_1^3-p_2^2p_2+p_1^2+p_1+p_2^2+p_1+1}
 $$
 
 これらから期待Occupancyを計算できて
 $$
 \mathrm{E[Occupancy]}=\frac{4\pi_{22}+3\pi_{21}p_2+3\pi_{12}p_2+2\pi_{11}p_2}{\pi_{22}+\pi_{21}p_2+\pi_{12}p_2+\pi_{11}p_2}
-=\frac{4+3p_1^3p_2+3p_1p_2^2+2p_1p_2}{1+p_1^3p_2+p_1p_2^2+p_1p_2}
+=4-\frac{p_1p_2(1-p_1^2p_2)}{1+p_1p_2(1-p_1^2p_2)}
 $$
+ただし$p=p_1=1-p_2$である。
 
-$p=p_1=1-p_2$としてグラフを書くと次の図が得られる。
+$p=p_1=1-p_2$に関してグラフを書くと次の図が得られる。
 
 ```{r two-lines}
 p <- seq(0, 1, by = 0.01)
 fun1 <- function(p) return((-p^2+p+4)/(-p^2+p+2))
 fun2 <- function(p) {
-  p1 <- p
-  p2 <- 1-p
-  denom <- 1+p1^3*p2+p1*p2^2+p1*p2
-  enum <- 4+3*p1^3*p2 + 3*p1*p2^2 + 2*p1*p2
-  return(enum/denom)
+  q <- 1-p
+  ocp <- 4-(p*q*(1-p^2*q))/(1+p*q*(1-p^2*q))
+  return(ocp)
 }
 df <- data.frame(p = p, ocp1 = fun1(p)/2, ocp2 = fun2(p)/4) %>%
   pivot_longer(cols = c(ocp1, ocp2), names_to = "configuration", values_to = "occupancy_per_seat") %>%
@@ -792,14 +812,16 @@ ggplot(df, aes(p, occupancy_per_seat)) +
   geom_line(aes(color = configuration)) +
   labs(
        title = "Fig7. Seat Occupancy vs Arrival Probability of single guest",
-       subtitle = "More lines look less occupancy expectation",
+       subtitle = "More lines look more occupancy expectation",
        y = "Occupancy Expectation Per Seat"
   )
 ```
 
+関数を$p$に関して微分し極値を求めると$p=0.46$のときに最小値`r 3.81966` (席あたりでは `r 3.81966/4`)を取る。
+
 
 ### 眼の前のチャレンジ
-- 列あたり2⃣席の場合は列数を増やすと席数あたり期待Occupancyは減った。列数を増やすと席数あたり期待Occupancyが減るのは一般的に主張できるだろうか？
+- 列あたり2⃣席の場合は列数を1から2に増やすと席数あたり期待Occupancyが増えて極値が$p$に関して左側にシフトした。列数をさらに増やしても同様の傾向は主張できるだろうか？
 - 前の列から案内していくとしたとき、前の列に案内できる空席があるにもかかわらず、後ろの席に案内したほうが期待Occupancyを高める状況はあるだろうか？
 - 5列5席や5列6⃣席のときの最適な案内戦略は？
 - 2列4席の場合の最適なPre-grouping戦略は何になるだろうか？
