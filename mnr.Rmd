@@ -1,0 +1,141 @@
+---
+title: "In case 4 seats - 2 lines"
+author:
+  name: "Fukumoto Tomoya"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(DiagrammeR)
+```
+
+## ４席２列の場合
+### transaction
+
+```{r entire, fig.width=14, fig.height = 10}
+grViz(
+  "digraph dot{
+    graph[
+      rankdir = LR,
+      label = 'Fig.1',
+      fontsize = 15
+    ]
+    node[
+      fixedsize = false
+    ]
+    edge[color = 'black']
+    
+    s44[label = '(4,4)', shape = circle];
+
+    s43[label = '(4,3)', shape = circle];
+
+    s42[label = '(4,2)', shape = circle];
+    s33[label = '(3,3)', shape = circle];
+
+    s41[label = '(4,1)', shape = circle];
+    s32[label = '(3,2)', shape = circle];
+    
+    s40[label = '(4,0)', shape = circle];
+    s31[label = '(3,1)', shape = circle];
+    s22[label = '(2,2)', shape = circle];
+
+    s30[label = '(3,0)', shape = circle];
+    s21[label = '(2,1)', shape = circle];
+
+    s20[label = '(2,0)', shape = circle];
+    s11[label = '(1,1)', shape = circle];
+
+    s10[label = '(1,0)', shape = circle];
+
+    s00[label = '(0,0)', shape = circle];
+
+    d8[label = 'Dispatch 8', shape = square];
+    d7[label = 'Dispatch 7', shape = square];
+    d6[label = 'Dispatch 6', shape = square];
+    d5[label = 'Dispatch 5', shape = square];
+    d4[label = 'Dispatch 4', shape = square];
+    d3[label = 'Dispatch 3', shape = square];
+    d2[label = 'Dispatch 2', shape = square];
+
+    edge[label = '1'] s44 -> d8;
+
+    edge[label = 'p1'] s43 -> s44;
+    edge[label = 'p2+p3+p4'] s43 -> d7;
+
+    edge[label = 'p1'] s42 -> s43;
+    edge[label = 'p2'] s42 -> s44;
+    edge[label = 'p3+p4'] s42 -> d6;
+
+    edge[label = 'p1'] s41 -> s42;
+    edge[label = 'p2'] s41 -> s43;
+    edge[label = 'p3'] s41 -> s44;
+    edge[label = 'p4'] s41 -> d5;
+
+    edge[label = 'p1'] s33 -> s43;
+    edge[label = 'p2+p3+p4'] s33 -> d6;
+
+    edge[label = 'A:p1', color = 'blue'] s32 -> s42;
+    edge[label = 'B:p1', color = 'blue'] s32 -> s33;
+    edge[label = 'p2', color = 'black'] s32 -> s43;
+    edge[label = 'p3+p4'] s32 -> d5;
+
+    edge[label = 'A:p1', color = 'blue'] s31 -> s41;
+    edge[label = 'B:p1', color = 'blue'] s31 -> s32;
+    edge[label = 'p2', color = 'black'] s31 -> s33;
+    edge[label = 'p3', color = 'black'] s31 -> s34;
+    edge[label = 'p4', color = 'black'] s31 -> d4;
+
+    edge[label = 'p1'] s22 -> s32;
+    edge[label = 'p2'] s22 -> s42;
+    edge[label = 'p3+p4'] s22 -> d4;
+
+    edge[label = 'A:p1', color = 'blue'] s21 -> s31;
+    edge[label = 'B:p1', color = 'blue'] s21 -> s22;
+    edge[label = 'A:p2', color = 'green'] s21 -> s41;
+    edge[label = 'B:p2', color = 'green'] s21 -> s32;
+    edge[label = 'p3', color = 'black'] s21 -> s42;
+    edge[label = 'p4', color = 'black'] s21 -> d3;
+
+    edge[label = 'p1'] s40 -> s41;
+    edge[label = 'p2'] s40 -> s42;
+    edge[label = 'p3'] s40 -> s43;
+    edge[label = 'p4'] s40 -> s44;
+
+    edge[label = 'A:p1', color = 'blue'] s30 -> s40;
+    edge[label = 'B:p1', color = 'blue'] s30 -> s31;
+    edge[label = 'p2', color = 'black'] s30 -> s32;
+    edge[label = 'p3', color = 'black'] s30 -> s33;
+    edge[label = 'p4', color = 'black'] s30 -> s43;
+
+    edge[label = 'A:p1', color = 'blue'] s20 -> s30;
+    edge[label = 'B:p1', color = 'blue'] s20 -> s21;
+    edge[label = 'A:p2', color = 'green'] s20 -> s40;
+    edge[label = 'B:p2', color = 'green'] s20 -> s22;
+    edge[label = 'p3', color = 'black'] s20 -> s32;
+    edge[label = 'p4', color = 'black'] s20 -> s40;
+
+    edge[label = 'p1'] s11 -> s21;
+    edge[label = 'p2'] s11 -> s31;
+    edge[label = 'p3'] s11 -> s41;
+    edge[label = 'p4'] s11 -> d2;
+
+    edge[label = 'A:p1', color = 'blue'] s10 -> s20;
+    edge[label = 'B:p1', color = 'blue'] s10 -> s11;
+    edge[label = 'A:p2', color = 'green'] s10 -> s30;
+    edge[label = 'B:p2', color = 'green'] s10 -> s21;
+    edge[label = 'A:p3', color = 'red'] s10 -> s40;
+    edge[label = 'B:p3', color = 'red'] s10 -> s31;
+    edge[label = 'p4', color = 'black'] s10 -> s41;
+    
+    edge[label = 'p1'] s00 -> s10;
+    edge[label = 'p2'] s00 -> s20;
+    edge[label = 'p3'] s00 -> s30;
+    edge[label = 'p4'] s00 -> s40;
+
+    }
+  "
+)
+```
+
+
