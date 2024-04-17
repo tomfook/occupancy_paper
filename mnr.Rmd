@@ -144,7 +144,7 @@ Policy Pij_k は 状態 $(i.j)$ のときに$k$人のグループが来たとき
 Policy Pij_kが `TRUE` とは前の列に案内すること、 `FALSE` は後ろの列に案内することを意味する。
 
 ```{r loadsim, cache = TRUE}
-df <- readRDS("mnr_sim20240415.obj")
+df <- readRDS("mnr_sim20240417.obj")
 df_policy <- df %>%
     mutate(policy = map(sim, ~.x$policy)) %>%
     select(-sim) %>%
@@ -157,7 +157,7 @@ df_policy <- df %>%
 ```
 
 
-```{r plotsim, fig.width=10, fig.height=10, cache = TRUE}
+```{r plotsim, fig.width=10, fig.height=10}
 df_policy %>%
   filter(p1==0.1) %>%
   ggplot(aes(p2, p3)) +
@@ -176,7 +176,7 @@ Policy P10_3, P20_2, P21_2, P30_1, P31_1, P32_1 はすべての条件でTRUEな�
 
 P10_1, P10_2, P21_1について細かく見る。
 
-```{r plotsim_policy, fig.width=10, fig.height=10, cache = TRUE}
+```{r plotsim_policy, fig.width=10, fig.height=10}
 
 df_policy %>% 
   filter(policy_name == "p10_1") %>%
