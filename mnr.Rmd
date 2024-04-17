@@ -139,3 +139,66 @@ grViz(
 ```
 
 
+### Simulation
+Policy Pij_k は 状態 $(i.j)$ のときに$k$人のグループが来たときにどの列へ案内するかという方策を指す。
+Policy Pij_kが `TRUE` とは前の列に案内すること、 `FALSE` は後ろの列に案内することを意味する。
+
+```{r loadsim, cache = TRUE}
+df <- readRDS("mnr_sim20240415.obj")
+df_policy <- df %>%
+    mutate(policy = map(sim, ~.x$policy)) %>%
+    select(-sim) %>%
+    unnest(policy) %>%
+    mutate(
+  	 policy_name = names(policy),
+  	 policy_value = map_lgl(policy, ~.x)
+    )%>%
+  select(-policy)
+```
+
+
+```{r plotsim, fig.width=10, fig.height=10, cache = TRUE}
+df_policy %>%
+  filter(p1==0.1) %>%
+  ggplot(aes(p2, p3)) +
+  geom_point(aes(color = policy_value)) +
+  facet_wrap(~policy_name, ncol=3) +
+  labs(
+       title = "Simulation at p1=0.1 in each policy"
+       )
+```
+
+Policy P10_3, P20_2, P21_2, P30_1, P31_1, P32_1 はすべての条件でTRUEなので、この方策は常に前の列へ案内すると固定して問題ない。
+それ以外の P10_1, P10_2, P20_1, P21_1 は後ろの列に案内するほうが望ましい条件が存在する。
+
+また (P10_2, P20_1), (P21_2, P31_1) のペアは対応しており全く同じ条件で最適方策が切り替わる。
+これはこの条件で席を案内したあとに得られる状態が全く同じなので当然である。
+
+P10_1, P10_2, P21_1について細かく見る。
+
+```{r plotsim_policy, fig.width=10, fig.height=10, cache = TRUE}
+
+df_policy %>% 
+  filter(policy_name == "p10_1") %>%
+  filter(p1 %in% (0:10/10)) %>%
+  ggplot(aes(p2, p3)) +
+  geom_point(aes(color = policy_value)) +
+  facet_wrap(~paste("p1=",p1)) +
+  labs(title = "Simulation of Policy P10_1")
+
+df_policy %>% 
+  filter(policy_name == "p10_2") %>%
+  filter(p1 %in% (0:10/10)) %>%
+  ggplot(aes(p2, p3)) +
+  geom_point(aes(color = policy_value)) +
+  facet_wrap(~paste("p1=",p1)) +
+  labs(title = "Simulation of Policy P10_2")
+
+df_policy %>% 
+  filter(policy_name == "p21_1") %>%
+  filter(p1 %in% (0:10/10)) %>%
+  ggplot(aes(p2, p3)) +
+  geom_point(aes(color = policy_value)) +
+  facet_wrap(~paste("p1=",p1)) +
+  labs(title = "Simulation of Policy P21_1")
+```
