@@ -1,5 +1,5 @@
 ---
-title: "General Framework for Seat Occupancy Expectation"
+title: "A study of Seat Occupancy Expectation"
 author:
   name: "Fukumoto Tomoya"
 output: html_document
@@ -240,7 +240,7 @@ Logically we could solve any other situation having one line seat in the same ma
 But it does not mean we can solve such a problem easily.
 
 ## Actual setting: one-line of four seats
-As an example, we consider a situation
+As an actual problem, we consider a situation
 
 - one line of seats
 - four seats in a line
@@ -582,124 +582,16 @@ $$
 $$
 The root of these equation is approximately $p_2=0.0587, p_3=0.419$.
 
-## one-line of $n$ seats
-### 定常状態
-一列のシート数が一般の$n$の場合について検討する。
-Transition matrixは
-$$
-T_n = \begin{pmatrix}
-  0&p_1&p_2&\cdots&p_{n-2}&p_{n-1}\\
-  0&0&p_1&\cdots&p_{n-3}&p_{n-2}\\
-  \vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
-  0&0&0&\cdots&p_1&p_2\\
-  0&0&0&\cdots&0&p_1\\
-  0&0&0&\cdots&0&0\\
-\end{pmatrix}
-+ \begin{pmatrix}
-  0&0&0&\cdots&0&p_n\\
-  0&0&0&\cdots&p_{n-1}&p_n\\ 
-  \vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
-  0&0&p_3&\cdots&p_{n-1}&p_n\\
-  0&p_2&p_3&\cdots&p_{n-1}&p_n\\
-  p_1&p_2&p_3&\cdots&p_{n-1}&p_n
-  \end{pmatrix}
-  =:U_n+D_n
-$$
-となる。
-第一項が空席が十分あり来客が着席できた場合、第二項が空席が足りずにディスパッチして新しい乗り物を提供してから着席した場合である。
 
-Stationary equationは
-$$
-\pi = \pi T_n = \pi U_n + \pi D_n 
-$$
-で、項別に書くと
-$$
-\pi_i = \sum_{j=1}^{i}p_{i-j}\pi_j + p_i\sum_{j=1}^i\pi_{n-j+1}
-$$
-ただし$p_0=0$とする。
+## Multi Seat Lines
+In case the number of lines of seats is more than two, we have to decide which line we provide to guests.
+Thus, Markov process is not appropriate for the situation.
+Dynamic Programming applied to conditional probability provides us to decide the best strategy to optimize the occupancy expectation.
 
-ここで $\pi_n=1-\sum_{j=1}^{n-1}\pi_j$ を代入すると右辺第二項は次のように整理できる。
-$$
-\begin{eqnarray}
-p_i\sum_{j=1}^i\pi_{n-j+1}&=&p_i\sum_{j=2}^i\pi_{n-j+1}+p_i\pi_n\\
-  &=& p_i\sum_{j=2}^i\pi_{n-j+1}+p_i\left(1-\sum_{j=1}^{n-1}\pi_j\right)\\
-  &=& p_i-p_i\sum_{j=1}^{n-i}\pi_j
-\end{eqnarray}
-$$
-これを元の項別の式の右辺に代入し整理すると次の式が得られる。
-$$
-p_i=\pi_i-\sum_{j=1}^{i-1}p_{i-j}\pi_j+p_i\sum_{j=1}^{n-i}\pi_j
-$$
-改めて行列表記に戻すと
-$$
-\check p=\check\pi\left(I_{n-1}
--
-\begin{pmatrix}
-  0 & p_1 & p_2 & \ldots & p_{n-2}\\
-  0 & 0 & p_1 & \ldots & p_{n-3}\\
-  \vdots & \vdots & \vdots & \ddots & \vdots \\
-  0 & 0 & 0 & \ldots & p_1\\
-  0 & 0 & 0 & \ldots & 0
-\end{pmatrix}
-+
-\begin{pmatrix}
-  p_1 & p_2 & \ldots & p_{n-1}\\
-  p_1 & p_2 & \ldots & 0\\
-  \vdots & \vdots & \ddots & \vdots\\
-  \vdots & p_2 & \ddots & \vdots\\
-  p_1 & 0 & \vdots & 0\\
-\end{pmatrix}
-\right)=:\check\pi(I_{n-1}-U_{n-1}-D_{n-1}+P_{n-1})
-$$
-ただし
-$$
-\check p=(p_1,p_2,\ldots,p_{n-1})\\
-\check \pi=(\pi_1,\pi_2,\ldots,\pi_{n-1})\\
-P_{n-1} = \begin{pmatrix} p_1 & p_2 & \ldots & p_{n-1}\\ p_1 & p_2 & \ldots & p_{n-1} \\ \vdots & \vdots & \ddots & \vdots \\ p_1 & p_2 & \ldots & p_{n-1}\end{pmatrix}
-$$
-である。
-よって右辺の$I_{n-1}-U_{n-1}-D_{n-1}+P_{n-1}$の逆行列を求めて、両辺に左からかけることで定常状態$\pi$を得ることができることがわかった。
+### Simplest case: two lines of two seats
+We express a state as a pair of number $(a,b)$ where $a$ means the number of people having seats on the first line and $b$ is on the two line.
+By using this, transaction of states is visualized below.
 
-### 期待Occupancy
-期待Occupancyは
-$$
-\mathrm{E[Occupancy|Disppatch]}=\frac{\mathrm{E[Occupancy When Dispatch]}}{\mathrm{P[Dispatch]}}
-$$
-であるため、それぞれ上で求めた定常状態$\pi$を使って次のように計算できる
-$$
-\mathrm{P[Dispatch]}=\pi D_n\mathbf 1_n\\
-\mathrm{E[Occupancy When Dispatch]} = \mathrm{diag}(1,2,\ldots,n)
-\pi D_n\mathbf 1_n
-$$
-ただし
-$$
-\mathrm{diag}(1,2,\ldots,n)=\begin{pmatrix}
-1&0&\cdots&0&0\\
-0&2&\cdots&0&0\\
-\vdots&\vdots&\ddots&\vdots&\vdots\\
-0&0& &n-1&0\\
-0&0&\cdots&0&n
-\end{pmatrix}\\
-\mathbf 1_n=\begin{pmatrix}1\\1\\\vdots\\1\end{pmatrix}
-$$
-
-### 疑問
-- Single Riderはどれだけ期待Occupancyを向上させるか？
-- どのようなPre-Groupingが最も期待Occupancyを向上させるか？
-  - Pre-Groupingを２つの場合、たとえば$n/2$未満と$n/2$以上とに分割する戦略と偶数/奇数で分割する戦略とでどちらが期待Occupancyを向上させるか？
-  - Pre-Groupingを３つできる場合はどうだろう？
-
-### 拡張
-$n$が十分大きければ連続値とみなして解析することもできるのではないか。
-来場者数の分布の連続に拡張する必要があるが、正で有界な値域を取る一般の分布では解析が難しそうなので、何か仮定を置く必要がありそうだが、どのような仮定を採用するべきだろうか？
-
-## シートの列数が2以上
-シートの列数が2以上の場合、ゲストに提供する座席は一つに決定しないため単純なマルコフ過程では解析できない。
-条件付き確率と動的計画法で期待Occupancyを最大にする提供戦略を計算することはできる。
-
-### 最も単純な場合：二列二席
-着席状態を$(a,b)$のように２つの数値の組で表現し、１つ目の数値を一列目の着席数、２つ目の数値を二列目の着席数を表すものとする。
-状態遷移図は次になる。
 ```{r 2line_2seats, fig.width = 8}
 grViz("
   digraph dot{
@@ -744,24 +636,27 @@ grViz("
   }
   ")
 ```
-状態$(1,0)$から$p_1$の遷移が二本あり、それぞれが来客を前の列に案内するか後ろの列に案内するかという選択肢が存在することを表している。
-期待Occupancyを高める選択を採用したい。
-このためには選択肢Aの行き先$(1,1)$と選択肢Bの行き先$(2,0)$の期待Occupancyを求めて比較すれば良い。
-$(1,1)$と$(2,0)$以降の状態は案内の自由度は存在しないため期待Occupancyは条件付き確率で計算できる。
+Blue arrows for $p_1$ from state $(1,0)$ express an option to guide arrival guest to the first line or the second line.
+Of course we should adopt the option to make greater occupancy expectation.
+The best strategy is decided by comparing occupancy expectation of a state $(1,1)$ where option A takes us, with a state $(2,0)$ for option B.
+We can calculate occupancy expectations of $(1,1)$ and $(2,0)$ because path to dispatch from these state is decided.
+
+We use a notation $V(s)$ for an occupancy expectation of a state $s$.
 
 $$
 \begin{eqnarray}
-\mathrm{E[Occupancy}|s=(2,2)]&=&4\\
-\mathrm{E[Occupancy}|s=(2,1)]&=&p_1\mathrm{E[Occupancy}|s=(2,2)] + p_2\cdot 3 = 4p_1+3p_2\\
-\mathrm{E[Occupancy}|s=(1,2)]&=&p_1\mathrm{E[Occupancy}|s=(2,2)] + p_2\cdot 3 = 4p_1+3p_2\\
-\mathrm{E[Occupancy}|s=(1,1)]&=&p_1\mathrm{E[Occupancy}|s=(1,2)] + p_2\cdot 2 = 4p_1^2+3p_1p_2+2p_2\\
-\mathrm{E[Occupancy}|s=(2,0)]&=&p_1\mathrm{E[Occupancy}|s=(2,1)] + p_2\mathrm{E[Occupancy}|s=(2,2)]=4p_1^2+3p_1p_2+4p_2
+V((2,2)) &&&=&  4\\
+V((2,1)) &=& p_1V((2,2)) + p_2\cdot 3 &=& 4p_1 + 3p_2\\
+V((1,2)) &=& p_1V((2,2)) + p_2\cdot 3 &=& 4p_1+3p_2\\
+V((1,1)) &=& p_1V((1,2)) + p_2\cdot 2 &=& 4p_1^2+3p_1p_2+2p_2\\
+V((2,0)) &=& p_1V((2,1)) + p_2V((2,2)) &=& 4p_1^2+3p_1p_2+4p_2
 \end{eqnarray}
 $$
 
-以上より選択肢Aの行き先$(1,1)$と選択肢Bの行き先$(2,0)$の期待Occupancyの差は$2p_2$となり、$p_2>0$であれば選択肢Bのほうが期待Occupancyを高める選択であり、$p_2=0$であればどちらも同じと結論できる。
+Because $V((2,0))-V((1,1))=2p_2$, option B is optimal when $p_2>0$.
 
-選択肢Bを取ると仮定するとすべての状態遷移確率は決定され、Stationary equationは
+If we use option B, the state transition matrix is decided and stationary equation is
+
 $$
 \begin{eqnarray}
 \pi_{10}&=&p_1\pi_{22}\\
@@ -769,10 +664,10 @@ $$
 \pi_{11}&=&0\\
 \pi_{12}&=&p_1\pi_{11}+p_2\pi_{10}\\
 \pi_{21}&=&p_1\pi_{20}\\
-\pi_{22}&=&p_1\pi_{12}+p_1\pi_{21}+p_2\pi_{20}\\
+\pi_{22}&=&p_1\pi_{12}+p_1\pi_{21}+p_2\pi_{20}.
 \end{eqnarray}
 $$
-その解は
+Its solution is
 $$
 \begin{eqnarray}
 \pi_{10}&=&p_1(1-p_1p_2)/Z\\
@@ -783,20 +678,19 @@ $$
 \pi_{22}&=&(1-p_1p_2)/Z\\
 \end{eqnarray}
 $$
-ただし
+where
 $$
-Z=\frac{1}{p_1^3-p_2^2p_2+p_1^2+p_1+p_2^2+p_1+1}
+Z=\frac{1}{p_1^3-p_2^2p_2+p_1^2+p_1+p_2^2+p_1+1}.
 $$
 
-これらから期待Occupancyを計算できて
+Then occupancy expectation of whole system can be calculated
 $$
 \mathrm{E[Occupancy]}=\frac{4\pi_{22}+3\pi_{21}p_2+3\pi_{12}p_2+2\pi_{11}p_2}{\pi_{22}+\pi_{21}p_2+\pi_{12}p_2+\pi_{11}p_2}
 =4-\frac{p_1p_2(1-p_1^2p_2)}{1+p_1p_2(1-p_1^2p_2)}
 $$
-ただし$p=p_1=1-p_2$である。
+where $p=p_1=1-p_2$.
 
-$p=p_1=1-p_2$に関してグラフを書くと次の図が得られる。
-
+We visualize the occupancy expectation to $p$.
 ```{r two-lines}
 p <- seq(0, 1, by = 0.01)
 fun1 <- function(p) return((-p^2+p+4)/(-p^2+p+2))
@@ -817,15 +711,205 @@ ggplot(df, aes(p, occupancy_per_seat)) +
   )
 ```
 
-関数を$p$に関して微分し極値を求めると$p=0.46$のときに最小値`r 3.81966` (席あたりでは `r 3.81966/4`)を取る。
+The minimum value is `r 3.81966`(`r 3.81966/4` per seat) for $\hat p=0.46$ where $\frac{\partial}{\partial p} E[Ocp]=0$
 
+## Two lines of four seats
+As an actual problem, we consider a situation
 
-### 眼の前のチャレンジ
-- 列あたり2⃣席の場合は列数を1から2に増やすと席数あたり期待Occupancyが増えて極値が$p$に関して左側にシフトした。列数をさらに増やしても同様の傾向は主張できるだろうか？
-- 前の列から案内していくとしたとき、前の列に案内できる空席があるにもかかわらず、後ろの席に案内したほうが期待Occupancyを高める状況はあるだろうか？
-- 5列5席や5列6⃣席のときの最適な案内戦略は？
-- 2列4席の場合の最適なPre-grouping戦略は何になるだろうか？
-- これらの戦略は来場者数のグループサイズ統計に対してロバストだろうか？
+- two line of seats
+- four seats in a line
+
+This corresponds to the seat configuration of Despicable Me: Minion Mayhem.
+
+## State transitions
+```{r entire, fig.width=10, fig.height = 8}
+grViz(
+  "digraph dot{
+    graph[
+      rankdir = LR,
+      label = 'Fig.8',
+      fontsize = 15
+    ]
+    node[
+      fixedsize = false
+    ]
+    edge[color = 'black']
+    
+    s44[label = '(4,4)', shape = circle];
+
+    s43[label = '(4,3)', shape = circle];
+
+    s42[label = '(4,2)', shape = circle];
+    s33[label = '(3,3)', shape = circle];
+
+    s41[label = '(4,1)', shape = circle];
+    s32[label = '(3,2)', shape = circle];
+    
+    s40[label = '(4,0)', shape = circle];
+    s31[label = '(3,1)', shape = circle];
+    s22[label = '(2,2)', shape = circle];
+
+    s30[label = '(3,0)', shape = circle];
+    s21[label = '(2,1)', shape = circle];
+
+    s20[label = '(2,0)', shape = circle];
+    s11[label = '(1,1)', shape = circle];
+
+    s10[label = '(1,0)', shape = circle];
+
+    s00[label = '(0,0)', shape = circle];
+
+    d8[label = 'Dispatch 8', shape = square];
+    d7[label = 'Dispatch 7', shape = square];
+    d6[label = 'Dispatch 6', shape = square];
+    d5[label = 'Dispatch 5', shape = square];
+    d4[label = 'Dispatch 4', shape = square];
+    d3[label = 'Dispatch 3', shape = square];
+    d2[label = 'Dispatch 2', shape = square];
+
+    edge[label = '1'] s44 -> d8;
+
+    edge[label = 'p1'] s43 -> s44;
+    edge[label = 'p2+p3+p4'] s43 -> d7;
+
+    edge[label = 'p1'] s42 -> s43;
+    edge[label = 'p2'] s42 -> s44;
+    edge[label = 'p3+p4'] s42 -> d6;
+
+    edge[label = 'p1'] s41 -> s42;
+    edge[label = 'p2'] s41 -> s43;
+    edge[label = 'p3'] s41 -> s44;
+    edge[label = 'p4'] s41 -> d5;
+
+    edge[label = 'p1'] s33 -> s43;
+    edge[label = 'p2+p3+p4'] s33 -> d6;
+
+    edge[label = 'A:p1', color = 'blue'] s32 -> s42;
+    edge[label = 'B:p1', color = 'blue'] s32 -> s33;
+    edge[label = 'p2', color = 'black'] s32 -> s43;
+    edge[label = 'p3+p4'] s32 -> d5;
+
+    edge[label = 'A:p1', color = 'blue'] s31 -> s41;
+    edge[label = 'B:p1', color = 'blue'] s31 -> s32;
+    edge[label = 'p2', color = 'black'] s31 -> s33;
+    edge[label = 'p3', color = 'black'] s31 -> s34;
+    edge[label = 'p4', color = 'black'] s31 -> d4;
+
+    edge[label = 'p1'] s22 -> s32;
+    edge[label = 'p2'] s22 -> s42;
+    edge[label = 'p3+p4'] s22 -> d4;
+
+    edge[label = 'A:p1', color = 'blue'] s21 -> s31;
+    edge[label = 'B:p1', color = 'blue'] s21 -> s22;
+    edge[label = 'A:p2', color = 'green'] s21 -> s41;
+    edge[label = 'B:p2', color = 'green'] s21 -> s32;
+    edge[label = 'p3', color = 'black'] s21 -> s42;
+    edge[label = 'p4', color = 'black'] s21 -> d3;
+
+    edge[label = 'p1'] s40 -> s41;
+    edge[label = 'p2'] s40 -> s42;
+    edge[label = 'p3'] s40 -> s43;
+    edge[label = 'p4'] s40 -> s44;
+
+    edge[label = 'A:p1', color = 'blue'] s30 -> s40;
+    edge[label = 'B:p1', color = 'blue'] s30 -> s31;
+    edge[label = 'p2', color = 'black'] s30 -> s32;
+    edge[label = 'p3', color = 'black'] s30 -> s33;
+    edge[label = 'p4', color = 'black'] s30 -> s43;
+
+    edge[label = 'A:p1', color = 'blue'] s20 -> s30;
+    edge[label = 'B:p1', color = 'blue'] s20 -> s21;
+    edge[label = 'A:p2', color = 'green'] s20 -> s40;
+    edge[label = 'B:p2', color = 'green'] s20 -> s22;
+    edge[label = 'p3', color = 'black'] s20 -> s32;
+    edge[label = 'p4', color = 'black'] s20 -> s40;
+
+    edge[label = 'p1'] s11 -> s21;
+    edge[label = 'p2'] s11 -> s31;
+    edge[label = 'p3'] s11 -> s41;
+    edge[label = 'p4'] s11 -> d2;
+
+    edge[label = 'A:p1', color = 'blue'] s10 -> s20;
+    edge[label = 'B:p1', color = 'blue'] s10 -> s11;
+    edge[label = 'A:p2', color = 'green'] s10 -> s30;
+    edge[label = 'B:p2', color = 'green'] s10 -> s21;
+    edge[label = 'A:p3', color = 'red'] s10 -> s40;
+    edge[label = 'B:p3', color = 'red'] s10 -> s31;
+    edge[label = 'p4', color = 'black'] s10 -> s41;
+    
+    edge[label = 'p1'] s00 -> s10;
+    edge[label = 'p2'] s00 -> s20;
+    edge[label = 'p3'] s00 -> s30;
+    edge[label = 'p4'] s00 -> s40;
+
+    }
+  "
+)
+```
+
+### Transfer matrix
+We define a state vector is below
+$$
+s = \left(s_{10},s_{20},s_{11},s_{30},s_{21},s_{40},s_{31},s_{22},s_{41},s_{32},s_{42},s_{33},s_{41},s_{44}\right)
+$$
+
+Then
+
+$$
+T = U + D
+$$
+
+$$
+U = \begin{pmatrix}
+0 & \pi_{10}^{1A} & \pi_{10}^{1B} & \pi_{10}^{2A} & \pi_{10}^{2B} & \pi_{10}^{3A} & \pi_{10}^{3B} & 0 & p_4 & 0 & 0& 0 & 0 & 0 \\
+0 & 0 &	0 & \pi_{20}^{1A} & \pi_{20}^{1B} & \pi_{20}^{2A} & 0 & \pi_{20}^{2B} & 0 & p_3 & p_4 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & p_1 & 0 & p_2 & 0 & p_3 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & \pi_{30}^{1A} & \pi_{30}^{1B} & 0 & 0 & p_2 & 0 & p_3 & p_4 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & \pi_{21}^{1A} & \pi_{21}^{1B} & \pi_{21}^{2A} & \pi_{21}^{2B} & p_3 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & p_1 & 0 & p_2 & 0 & p_3 & p_4\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \pi_{31}^{1A} & \pi_{31}^{1B} & 0 & p_2 & p_3 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & p_1 & p_2 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & p_1 & 0 & p_2 & p_3\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \pi_{32}^{1A} & \pi_{32}^{1B} & p_2 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & p_1 & p_2\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & p_1 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & p_1\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\end{pmatrix}
+$$
+
+$$
+D = \begin{pmatrix}
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & p_3 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & p_3 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 0 & p_3 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & p_2 & 0 & p_3 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & p_2 & 0 & p_3 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+p_1 & p_2 & 0 & p_3 & 0 & p_4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\end{pmatrix}
+$$
+
+where $\pi_{ij}^{kX}$ is a policy to take an option $X$ in a state $(i,j)$ for arrival group size $k$. 
+In other words $\pi_{ij}^{kX} = p_k$ if we take option $X$ else $0$.
+
+There are a lot of options to provide guest different seats.
+
+Even for such complex situation, we can execute the same strategy.
+
+1. Calculate occupancy expectations for each state
+2. Select an option directed a state having greater occupancy expectations
+3. Evaluate the occupancy expectations of whole system
+
+When statistics of arrival group size is fixed, we obtain optimal strategy to maximize occupancy expectations.
+
 
 ## Conclusion
 We have introduced the framework to evaluate seat occupancy expectations from arrival group size statistics, seat configuration, and grouping strategy.
@@ -835,8 +919,4 @@ The case of five or more seats in a line would be calculated in future work.
 We only evaluate the expectation.
 But more analysis would make more useful knowledge,
 The relationship between the best grouping strategy and arrival probabilities is interesting because arrival probabilities can be changed over time in an actual setting and we want to know the stability of our grouping strategy.
-
-The strongest constraint in the study was the one-line seat configuration.
-We can not apply the Markov chain model for multiple-line seat configuration.
-Thus we need a different model to analyze.
 
