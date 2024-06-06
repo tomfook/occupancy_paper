@@ -17,35 +17,34 @@ library(modelr)
 ```
 
 ## Introduction
-One of the most important issues for theme park operation is raising guestcounts of attractions.
-Since guest counts can be decomposed by the dispatch count of vehicles and seat occupancy, we usually focus on these two numbers.
+One of the most important issues for theme park operations is to raise guest counts of attractions.
+Since guest counts is decomposed by the dispatch count of vehicles and seat occupancy, we usually focus on them.
 The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
-We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the configuration of seats, queue formation, and grouping strategy.
-This framework will help us to optimize queue formation and grouping strategy.
+We revealed that the expectation value of seat occupancy is derivable from statistics of group size of arrival guests, the configuration of seats, queue formation, and grouping strategy.
+This framework will help us to identify an optimal queue formation and grouping strategy.
 The model is so general that the framework will be applied to any attractions.
 
 ## Modeling and Framework
 ### Problem
 
-For ride attractions, grouping operation is deeply related to seat occupancy.
-The attraction crew forms a group to dispatch a vehicle from arriving guests so as not to break a friendship.
-That crew is called a grouper.
+For ride attractions, attraction crews form a group of arrival guests to match the vehicle's capacity.
+The operation is called a grouping operation and the crew is called a grouper.
+The grouping operation is the most important factor in deciding seat occupancy.
+Guests arrive at an attraction as a group of friends.
+A grouper should form a dispatch group so as not to break the friend groups.
 Guests come again and again.
 A grouper guides former arrival guests first.
 Grouper can not choose a size of friend group to come next and even expect it.
 
 Almost all seat arrangements of a vehicle are designed to be a rectangle.
-This means that seats are set in a row, and one or more rows are lined up.
-Grouping operation is to gather people to have a seat in the same row.
+This means that seats are set in a line, and one or more lines are lined up.
+Grouping operation is to gather people to have a seat in the same line.
 And of course the friend group should be in the same group and sit next to each other.
 
 The grouping problem is how to maximize guest experience to fill seats with guest groups.
-Grouper asks for the size of the group and selects a row to guide.
-The grouping strategy is to select an optimal row when the size of group comes.
-
-
+Grouper asks for the size of the group and selects a line to guide.
+The grouping strategy is to select an optimal line when the size of group comes.
 Therefore there exists an upper bound of seat occupancy in each attraction.
-
 The upper bound would depend on statistics of group size of arrival guests and a pattern of seat configuration.
 If we have a knowledge of the upper bound of an attraction, we can evaluate its efficiency of grouping operation and whether seat occupancy can improve or not.
 
@@ -54,7 +53,7 @@ If we have a knowledge of the upper bound of an attraction, we can evaluate its 
 Our problem can be handled as a state-action-reward model.
 
 - **state**: the pattern of the seats filled by guests
-- **action**: decision on which row to guide arrival guests and to dispatch a vehicle or not
+- **action**: decision on which line to guide arrival guests and to dispatch a vehicle or not
 - **reward**: the number of guests who take a seat when a vehicle is dispatched
 
 To treat this model, we define a number of variables for state and transition
@@ -84,7 +83,7 @@ grViz(
     edge[label = '<I>x@_{t}</I>'] a1 -> a2 ;
       a2[label = 'Dispatch\n or not?', shape = square];
     edge[label = ''] a2 -> a3;
-      a3[label = 'Which row\n to guid?', shape = square];
+      a3[label = 'Which line\n to guid?', shape = square];
     edge[label = ''] a3 -> a4;
       a4[label = '<I>s</I>@_{<I>t</I>+1}=<I>&sigma;</I>&prime;', shape = circle];
 
@@ -528,9 +527,6 @@ exocp_pg_o3 <- function(p1,p2,p3,p4){
 
 If we substitute actual probability values (2), we obtain $\mathrm {E[Ocp|O3]}= `r exocp_pg_o3(1/10,3/10,3/10,3/10)`$.
 
-#### Question
-If our arrival probability was changed, the best pre-grouping option would be changed.
-Where is the boundary?
 
 ```{r exocp_pg_boundary_sim}
 plot_boundary <- function(grid = 0.01, p1_given = 0.1){
@@ -722,7 +718,7 @@ As an actual problem, we consider a situation
 This corresponds to the seat configuration of Despicable Me: Minion Mayhem.
 
 ## State transitions
-```{r entire, fig.width=10, fig.height = 8}
+```{r entire, fig.width=9.5, fig.height = 8}
 grViz(
   "digraph dot{
     graph[
@@ -900,15 +896,15 @@ $$
 where $\pi_{ij}^{kX}$ is a policy to take an option $X$ in a state $(i,j)$ for arrival group size $k$. 
 In other words $\pi_{ij}^{kX} = p_k$ if we take option $X$ else $0$.
 
-There are a lot of options to provide guest different seats.
+There are a lot of options to provide guests with different seats.
 
-Even for such complex situation, we can execute the same strategy.
+Even in such a complex situation, we can execute the same strategy.
 
 1. Calculate occupancy expectations for each state
-2. Select an option directed a state having greater occupancy expectations
-3. Evaluate the occupancy expectations of whole system
+2. Select an option directed to a state having greater occupancy expectations
+3. Evaluate the occupancy expectations of the whole system
 
-When statistics of arrival group size is fixed, we obtain optimal strategy to maximize occupancy expectations.
+When statistics of arrival group size are fixed, we obtain an optimal strategy to maximize occupancy expectations.
 
 
 ## Conclusion
