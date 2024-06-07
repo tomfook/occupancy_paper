@@ -18,7 +18,7 @@ library(modelr)
 
 ## Introduction
 One of the most important issues for theme park operations is to raise guest counts of attractions.
-Since guest counts is decomposed by the dispatch count of vehicles and seat occupancy, we usually focus on them.
+The guest count is decomposed by the dispatch count of vehicles and seat occupancy.
 The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
 We revealed that the expectation value of seat occupancy is derivable from statistics of group size of arrival guests, the configuration of seats, queue formation, and grouping strategy.
 This framework will help us to identify an optimal queue formation and grouping strategy.
@@ -64,8 +64,8 @@ To treat this model, we define a number of variables for state and transition
 
 After a vehicle is dispatched, a new vacant vehicle will come and the state will be initialized as $\sigma_0$.
 
-To make analysis easy, we only dispatch a vehicle when the seats are not enough for new arrivals.
-Thus we judge whether to dispatch or not before giving seats to a guest.
+To make analysis easy, we automatically dispatch a vehicle only when the seats are not enough for new arrivals.
+Thus we judge whether to dispatch or not before giving seat to a guest.
 
 
 ```{r markov, fig.width = 5, fig.height = 2}
@@ -353,7 +353,7 @@ $$
 \pi = \begin{pmatrix}0\\\frac{p_2'}{1+p_2'}\\p_3'\\\frac{p_2'^2}{1+p_2'}+p_4'\\\end{pmatrix}.
 $$
 $$
-\mathrm{E}[Ocp|s_t\neq1] = \frac{2p_2'+3p_3'+4p_4'}{\frac{p_2'}{1+p_2'}+p_3'+p_4'}
+\mathrm{E}[\mathrm{Occupancy}|s_t\neq1] = \frac{2p_2'+3p_3'+4p_4'}{\frac{p_2'}{1+p_2'}+p_3'+p_4'}
 $$
 
 Actually, we have guests of group size 1 in $p_1$.
@@ -366,7 +366,7 @@ Single guests will take their seats if a vacant seat is left before dispatch.
 Thus we just add them to occupancy expectations.
 
 $$
-\mathrm{E}[Ocp Single] = \mathrm{E}[Ocp|s_t\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
+\mathrm{E}[\mathrm{Occupancy Single}] = \mathrm{E}[\mathrm{Occupancy}|s_t\neq1](1+r) = \frac{2p_2+3p_3+4p_4}{\frac{(1-p_1)p_2}{1-p_1+p_2}+p_3+p_4}\frac{2p_1+2p_2+3p_3+4p_4}{p_1+2p_2+3p_3+4p_4}
 $$
 
 To compare with the original queues and queues having isolated single-rider queues, we assume the arrival probability
@@ -396,8 +396,8 @@ eocp <- ocp(1/10,3/10,3/10,3/10)
 eocp_sg <- ocp(0,1/3,1/3,1/3)*(2*1/10+2*3/10+3*3/10+4*3/10)/(1/10+2*3/10+3*3/10+4*3/10)
 ```
 $$
-E[Ocp] = `r eocp`\\
-E[OcpSingle] = `r eocp_sg`
+E[\mathrm{Occupancy}] = `r eocp`\\
+E[\mathrm{OccupancySingle}] = `r eocp_sg`
 $$
 
 We can expect `r eocp_sg-eocp` improvement in occupancy by using the single rider queue.
