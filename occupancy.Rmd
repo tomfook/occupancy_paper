@@ -1,5 +1,5 @@
 ---
-title: "A study of Seat Occupancy Expectation"
+title: "A study of Seat Occupancy Expectation for Ride Attractions"
 author:
   name: "Fukumoto Tomoya"
 output: html_document
@@ -17,8 +17,8 @@ library(modelr)
 ```
 
 ## Introduction
-One of the most important issues for theme park operations is to raise guest counts of attractions.
-The guest count is decomposed by the dispatch count of vehicles and seat occupancy.
+One of the most important issues for theme park operations is to raise guest counts of ride attractions.
+The guest count of ride attractions is decomposed by the dispatch count of vehicles and seat occupancy.
 The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
 We revealed that the expectation value of seat occupancy is derivable from statistics of group size of arrival guests, the configuration of seats, queue formation, and grouping strategy.
 This framework will help us to identify an optimal queue formation and grouping strategy.
