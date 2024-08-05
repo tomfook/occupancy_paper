@@ -204,12 +204,12 @@ $$
 
 The probability of dispatch is
 $$
-P[\mathrm{Dispatch}]=a_1p_2+a_2(p_1+p_2) = \frac{-p^2+p+2}{p+2}
+P[\mathrm{Dispatch}]=A_1p_2+A_2(p_1+p_2) = \frac{-p^2+p+2}{p+2}
 $$
 
 And the numerator is
 $$
-\mathrm{E}[\mathrm{OccupancyWhenDispatch}]=1\cdot a_1p_2 + 2\cdot a_2(p_1+p_2) = \frac{-p^2+p+4}{p+2}
+\mathrm{E}[\mathrm{OccupancyWhenDispatch}]=1\cdot A_1p_2 + 2\cdot A_2(p_1+p_2) = \frac{-p^2+p+4}{p+2}
 $$
 
 Thus our goal is
