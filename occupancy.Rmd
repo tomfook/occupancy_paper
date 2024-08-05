@@ -26,28 +26,29 @@ The model is so general that the framework will be applied to any attractions.
 
 ## Modeling and Framework
 ### Problem
+For ride attractions, attraction crews form a group from arrival guests to satisfy the vehicle's capacity.
+This operation is called a grouping and the crew is called a grouper.
+The grouping operation decides seat occupancy.
 
-For ride attractions, attraction crews form a group of arrival guests to match the vehicle's capacity.
-The operation is called a grouping operation and the crew is called a grouper.
-The grouping operation is the most important factor in deciding seat occupancy.
-Guests arrive at an attraction as a group of friends.
-A grouper should form a dispatch group so as not to break the friend groups.
+Some guests arrive at an attraction with friends.
+A grouper should form a group so as not to break the friend groups.
+
 Guests come again and again.
 A grouper guides former arrival guests first.
-Grouper can not choose a size of friend group to come next and even expect it.
+And grouper can not expect a size of friend group to come next.
 
-Almost all seat arrangements of a vehicle are designed to be a rectangle.
+Almost all design of seat arrangement of a vehicle is a rectangle.
 This means that seats are set in a line, and one or more lines are lined up.
-Grouping operation is to gather people to have a seat in the same line.
-And of course the friend group should be in the same group and sit next to each other.
+A people grouped by a grouper have a seat in the same line.
+Then the friend group will be in the same line and sit next to each other.
 
-The grouping problem is how to maximize guest experience to fill seats with guest groups.
-Grouper asks for the size of the group and selects a line to guide.
-The grouping strategy is to select an optimal line when the size of group comes.
-Therefore there exists an upper bound of seat occupancy in each attraction.
-The upper bound would depend on statistics of group size of arrival guests and a pattern of seat configuration.
+The grouping problem is how to maximize guest experience to fill seats with guests.
+Grouper asks for size of a friend group and selects a line to guide.
+
+The grouping strategy is a manual to select a line for a size of arrival group.
+An upper bound for seat occupancy exists in each grouping strategies.
+And the upper bound would also depend on statistics of group size of arrival guests and a pattern of seat configuration.
 If we have a knowledge of the upper bound of an attraction, we can evaluate its efficiency of grouping operation and whether seat occupancy can improve or not.
-
 
 ### Mathematical Modeling
 Our problem can be handled as a state-action-reward model.
@@ -585,7 +586,11 @@ Thus, Markov process is not appropriate for the situation.
 Dynamic Programming applied to conditional probability provides us to decide the best strategy to optimize the occupancy expectation.
 
 ### Simplest case: two lines of two seats
-We express a state as a pair of number $(a,b)$ where $a$ means the number of people having seats on the first line and $b$ is on the two line.
+We express a state as a pair of number $(i,j)$ where $i$ means the number of people having seats on the first line and $j$ is on the two line.
+This means 
+$$
+\sigma = (i,j) \in \Sigma = \{1,2,\ldots,N\}\times\{1,2,\ldots,N\}.
+$$
 By using this, transaction of states is visualized below.
 
 ```{r 2line_2seats, fig.width = 8}
