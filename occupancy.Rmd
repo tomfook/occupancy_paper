@@ -186,13 +186,13 @@ $$
 This probability vector is called a stationary distribution.
 The stationary distribution is an eigenvector corresponding to eigenvalues 1 of $T$.
 
-We empirically know that it is very fast to approach the stationary distribution.
+We empirically know that state probabilities from any state quickly converge to the stationary distribution.
 So we can expect we observe the states with a stationary distribution in most of the time.
 This means that the expectation of seat occupancy from the stationary distribution is a reasonable estimation.
 
 By easy calculation, we can get the stationary distribution as
 $$
-A = \left(0, \frac{p}{p+2}, \frac{2}{p+2}\right)
+A = \left(0, \frac{p}{p+1}, \frac{1}{p+1}\right)
 $$
 where $p=p_1=1-p_2$.
 
@@ -204,22 +204,22 @@ $$
 
 The probability of dispatch is
 $$
-P[\mathrm{Dispatch}]=A_1p_2+A_2(p_1+p_2) = \frac{-p^2+p+2}{p+2}
+P[\mathrm{Dispatch}]=A_1p_2+A_2(p_1+p_2) = \frac{-p^2+p+1}{p+1}
 $$
 
 And the numerator is
 $$
-\mathrm{E}[\mathrm{OccupancyWhenDispatch}]=1\cdot A_1p_2 + 2\cdot A_2(p_1+p_2) = \frac{-p^2+p+4}{p+2}
+\mathrm{E}[\mathrm{OccupancyWhenDispatch}]=1\cdot A_1p_2 + 2\cdot A_2(p_1+p_2) = \frac{-p^2+p+2}{p+1}
 $$
 
 Thus our goal is
 $$
-\mathrm E\left[ \mathrm{ Seat Occupancy } | \mathrm { Dispatch } \right] = \frac{-p^2+p+4}{-p^2+p+2} = 2-\frac{p(1-p)}{p(1-p)+2}.
+\mathrm E\left[ \mathrm{ Seat Occupancy } | \mathrm { Dispatch } \right] = \frac{-p^2+p+2}{-p^2+p+1} = 2-\frac{p(1-p)}{p(1-p)+1}.
 $$
 
 ```{r simplest_occupancy}
 p <- seq(0, 1, by = 0.01)
-fun <- function(p) return((-p^2+p+4)/(-p^2+p+2))
+fun <- function(p) return((-p^2+p+2)/(-p^2+p+1))
 df <- data.frame(p = p, seat_occupancy = fun(p))
 ggplot(df) +
   geom_line(aes(p, seat_occupancy)) +
@@ -233,7 +233,7 @@ ggplot(df) +
 
 We can see the expectation of seat occupancy has the greatest value of 2 in $p=0,p=1$.
 This is obvious because in this case the arrival group size is fixed with 1 or 2.
-In the most uncertain case, $p=1/2$ our expectation is the least $17/9\sim1.89$
+In the most uncertain case, $p=1/2$ our expectation is the least $9/5=1.8$
 
 We completely solved the problem.
 Logically we could solve any other situation having one line seat in the same manner.
