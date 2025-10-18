@@ -1,0 +1,128 @@
+---
+title: "Markov N row"
+author:
+  name: "福本知也"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(DiagrammeR)
+library(ggplot2)
+```
+
+## Introduction
+
+１列の座席の場合、マルコフ過程で満席率が計算できる。
+１列の座席数が一般$n$の場合にどのような解析ができるか？
+
+## Model
+1 column/n row
+
+## Analysis
+Transition matrix 
+
+$$
+T_n = \begin{pmatrix}
+  0&p_1&p_2&\cdots&p_{n-2}&p_{n-1}\\
+  0&0&p_1&\cdots&p_{n-3}&p_{n-2}\\
+  \vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+  0&0&0&\cdots&p_1&p_2\\
+  0&0&0&\cdots&0&p_1\\
+  0&0&0&\cdots&0&0\\
+\end{pmatrix}
++ \begin{pmatrix}
+  0&0&0&\cdots&0&p_n\\
+  0&0&0&\cdots&p_{n-1}&p_n\\
+  \vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+  0&0&p_3&\cdots&p_{n-1}&p_n\\
+  0&p_2&p_3&\cdots&p_{n-1}&p_n\\
+  p_1&p_2&p_3&\cdots&p_{n-1}&p_n
+\end{pmatrix}
+=:U_n+D_n
+$$
+
+第一項が空席が十分あり到着グループがそのまま座れた場合、第二項は空席が足りずにディスパッチして新しい乗り物を準備してから座った場合
+
+Stationary equation
+$$
+\pi = \pi T_n = \pi U_n + \pi D_n \ \ldots(1)
+$$
+
+$$
+\pi_i=\sum_{j=1}^{i-1}p_{i-j}\pi_j+p_i\sum_{i=1}^i\pi_{n-j+1}
+$$
+where $p_0=0$.
+
+$\pi_n=1-\sum_{j=1}^{n-1}\pi_j$ を代入する
+$$
+\begin{eqnarray}
+p_i\sum_{j=1}^i\pi_{n-j+1}&=&p_i\sum_{j=2}^i\pi_{n-j+1}+p_i\pi_n\\
+  &=& p_i\sum_{j=2}^i\pi_{n-j+1}+p_i\left(1-\sum_{j=1}^{n-1}\pi_j\right)\\
+  &=& p_i - p_i\sum_{j=1}^{n-i}\pi_j\\
+\end{eqnarray}
+$$
+すなわち
+$$
+\pi_i=\sum_{j=1}^{i-1}p_{i-j}\pi_j+p_i-p_i\sum_{j=1}^{n-i}\pi_j
+$$
+整理して
+$$
+p_i=\pi_i+p_i\sum_{j=1}^{n-i}\pi_j-\sum_{j=1}^{i-1}p_{i-j}\pi_j 
+$$
+$n-i>i$のとき右辺は
+$$
+(\pi_1, \pi_2,\ldots,\pi_{n-1})\begin{pmatrix}p_i-p_{i-1}\\p_i-p_{i-2}\\\vdots\\p_i-p_1\\1+p_i\\p_i\\\vdots\\p_i\\0\\\vdots\\0\end{pmatrix}
+$$
+となり、$n-i\leq i$のときは
+$$
+(\pi_1,\pi_2,\ldots,\pi_{n-1})\begin{pmatrix}p_i-p_{i-1}\\p_i-p_{i-2}\\\vdots\\p_i-p_{n-i}\\-p_{n-i+1}\\-p_{n-i+2}\\\vdots\\1-p_i\\-p_{i+1}\\\vdots\\-p_1\\0\\\vdots\\0\end{pmatrix}
+$$
+つまり行列表記にすると
+$$
+\check p=\check\pi\left(I_{n-1}+
+  \begin{pmatrix}
+    p_1 & p_2 & \ldots & p_{n-1}\\
+    p_1 & p_2 & \ldots & 0\\
+    \vdots & \vdots & \ddots & \vdots\\
+    \vdots & p_2 & \ddots & \vdots\\
+    p_1 & 0 & \vdots & 0\\
+  \end{pmatrix}
+  -
+  \begin{pmatrix}
+    0 & p_1 & p_2 & \ldots & p_{n-2}\\
+    0 & 0 & p_1 & \ldots & p_{n-3}\\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & 0 & \ldots & p_1\\
+    0 & 0 & 0 & \ldots & 0
+  \end{pmatrix}
+  \right) =: \check\pi ( I_{n-1} + \tilde D - \check U) \ \ldots (2)
+$$
+ただし
+$\check p = (p_1,p_2,\cdots,p_{n-1}), \check\pi=(\pi_1,\pi_2,\cdots,\pi_{n-1})$
+である。
+
+この右辺の行列の逆行列を求められれば定常状態 $\pi$ が求まる。
+
+ディスパッチ確率は
+$$
+P[\mathrm{ Dispatch}] = \pi D_n \mathbf 1_n
+$$
+ただし
+$$
+\mathbf 1_n = \begin{pmatrix}1\\1\\\vdots\\1\end{pmatrix}
+$$
+よって期待occupancyは
+$$
+\mathrm{E[Occupancy]} = \frac{\pi D_n\begin{pmatrix}1\\2\\\vdots\\n\end{pmatrix}}{\pi D_n\mathbf1_n}
+$$
+
+ここで
+$$
+\begin{eqnarray}
+\pi D_n &=& \pi(I_n-U_n) \\
+  &=& \pi(I_n-[\check U_n]) = [p-\pi\tilde D, \sum_{i=1}^np_{n-i}\pi_i] \\
+\end{eqnarray}
+$$
+
+
