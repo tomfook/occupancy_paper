@@ -13,35 +13,35 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## Introduction
-One of the most important issue for theme park operation is raising guestcounts of attractions.
-Since guestcounts can be decomposed by dispatch count and seat occupancy, we separately focus on these two numbers.
-The aim of this study is to establish a mathematical framework to expect seat occupancy of ride attractions.
-We revealed that seat occupancy is derivable by statistics of group size of arrival guests, the configuration of seats, queue formation and grouping strategy.
+One of the most important issues for theme park operation is raising guestcounts at attractions.
+Since guest counts can be decomposed into dispatch count and seat occupancy, we focus on these two factors separately.
+The aim of this study is to establish a mathematical framework to predict seat occupancy of ride attractions.
+We revealed that seat occupancy can be derived from statistics of group sizes of arriving guests, the configuration of seats, queue formation, and grouping strategy.
 This framework will help us to optimize queue formation and grouping strategy.
-Because the model is general, that is, the model is not dependent on any actual attraction, the framework can be applied to any attractions.
+Because the model is general, that is, not dependent on any specific attraction, the framework can be applied to any attraction.
 
 ## Modeling and Framework
 ### Problem
 For ride attractions, grouping operation is deeply related to seat occupancy.
-Attraction crew forms a group to dispatch a vehicle from arrival guests not to break a friend group.
-That crew is called a grouper.
-Guests come again and again.
-A grouper guides former arrival guest first.
-Grouper can not choose a size of friend group to come next and even expect it.
+Attraction crew members form a group to dispatch a vehicle from arriving guests without breaking up friend groups.
+Such crew members are called groupers.
+Guests arrive continuously.
+A grouper guides earlier-arriving guests first.
+Groupers cannot choose or predict the size of the next friend group to arrive.
 
-Almost all seat arrangement of vehicle is designed to be a rectangle pattern.
-This means that seats are set in a row, and one or more rows are line up.
-Grouping operation is to gather people to have a seat in the same row.
-And of course friend group should be in the same group and sit next to each other.
+Almost all vehicle seat arrangements are designed in a rectangle pattern.
+This means that seats are arranged in row, with one or more rows lined up.
+The grouping operation involves gathering people to sit in the same row.
+Of course, friend groups should remain together in the same group and sit next to each other.
 
-Grouping problem is how to maximize guest experience to fill seats with guest group.
-Grouper ask a size of group and select a row to guide.
-Grouping strategy is to select an optimal row when a size of group come.
+The grouping problem is how to maximize guest experience while filling seats with guest groups.
+Groupers ask the size of each group and select a row to guide them to.
+The grouping strategy is to select an optimal row when a group of a given size arrives.
 
-Therefore there exists an upper bound of seat occupancy in each attractions.
+Therefore, there exists an upper bound on seat occupancy for each attractions.
 
-The upper bound would depend on statistics of group size of arrival guest and a pattern of seats configuration.
-If we have a knowledge of upper bound of an attraction, we can evaluate its efficiency of grouping operation and whether the seat occupancy can improve or not.
+The upper bound depends on statistics of group sizes of arriving guests and the pattern of seat configuration.
+If we have a knowledge of the upper bound of an attraction, we can evaluate the efficiency of its grouping operation and whether the seat occupancy can improve.
 
 ### Mathematical Modeling
 Our problem can be handled as a state-action-reward model.
