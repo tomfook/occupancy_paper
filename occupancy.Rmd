@@ -98,13 +98,23 @@ In this single-row case with first-come-first-served seating, the state can be s
 If the row has $n$ seats, the state space becomes $\Sigma = \{0, 1, 2, \ldots, n\}$, where each state $\sigma \in \Sigma$ represents the number of filled seats.
 Thus $s_i \in \{0, 1, \ldots, n\}$ denotes the number of filled seats after the $i$-th group has been seated.
 
-Since friend groups must sit together in the same row and cannot be split, groups of size $k > n$ cannot exist in this single-row model.
-Therefore, we assume $p_k = 0$ for all $k > n$.
+Since friend groups must sit together in the same row and cannot be split, groups of size $k > n$ cannot be seated in a single-row configuration.
+Therefore, $p_k = 0$ for all $k > n$ is a necessary consequence of this physical constraint.
 
-In that case, our model can be treated as a simple **Markov chain model**.
-The expected seat occupancy can be calculated from the transition probability $P[x_i=k]=p_k$. 
-To do this, we need to derive the state probability distribution $P[a_i=n]$ from $p_k$, since the expected occupancy can be easily calculated from $p_k$ and $P[a_i=n]$.
-This expectation value should be the upper bound of seat occupancy.
+In this single-row case, our model can be treated as a simple **Markov chain model**.
+
+### Stationary state probability distribution
+Under mild conditions, a finite-state Markov chain converges to a unique stationary distribution.
+For our model with finite state space $\Sigma = \{0, 1, \ldots, n\}$ and typical arrival distributions, these conditions are satisfied, guaranteeing the existence of a stationary state.
+
+We define the **stationary state probability vector** as:
+$$
+\pi = (\pi_0, \pi_1, \ldots, \pi_{n})^T
+$$
+where $\pi_j = \lim_{i \to \infty} P[s_i = j]$ for $j \in \{0, 1, \ldots, n\}$ represents the long-run probability that exactly $j$ seats are filled when a grouping decision is made.
+
+Given the arrival distribution $p_k = P[x_i=k]$, we can derive the stationary distribution $\pi$ through the three steps outlined below.
+Once $\pi$ is obtained, we can calculate the expected seat occupancy, which represents the theoretical upper bound under the FIFO constraint.
 
 ### Steps to solve the problem
 We solve this in three steps:
@@ -201,14 +211,17 @@ $$
 since $p_1+p_2=1$.  
 
 #### Stationary State
-If state probability is given by $A_i$ then next step $A_{i+1}=A_iT$.
-We can calculate state probability in each step.
-If we continue to calculate and state converge, state probability should be a sufficient equation
+Let $\mathbf{p}^{(i)}$ denote the state probability distribution after $i$ transitions from an arbitrary initial distribution.
+The evolution of the probability distribution follows:
 $$
-A=AT
+\mathbf{p}^{(i+1)} = \mathbf{p}^{(i)} T
 $$
-This means stationary state is eigenvector corresponding eigenvalues 1 of $T$.
-So we obtain stationary state by calculating eigenvector of $T$.
+As $i \to \infty$, the distribution converges to the stationary distribution $\pi$, which satisfies:
+$$
+\pi = \pi T
+$$
+This means the stationary state $\pi$ is the left eigenvector corresponding to eigenvalue 1 of $T$.
+We obtain the stationary state by calculating this eigenvector of $T$.
 
 #### Expectation value of seat occupancy
 
@@ -238,9 +251,9 @@ $$
 To approach this problem, we assume $p_1=p, p_2=p_3=p_4=(1-p)/3$.
 This is the simplest model with only two parameters: the probability of single guests and the distribution of group sizes.
 We assume that each group size (2, 3, 4) has equal probability.
-Then by an equation $Tx=x$, we can obtain the stationary state
+Then by an equation $T\pi=\pi$, we can obtain the stationary state
 $$
-x = \frac{1}{6(p+1)(2p^2-p+2)}\begin{pmatrix}
+\pi = \frac{1}{6(p+1)(2p^2-p+2)}\begin{pmatrix}
   2p^2+2p+5\\
   2p^3+2p^2+5p\\
   4p^3+4p^2-2p+3\\

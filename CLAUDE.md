@@ -94,6 +94,28 @@ When working with mathematical content in this repository, maintain the followin
 - When multiple transition paths lead to same state, use summation over all paths
 - Prefer rigorous formulations (e.g., indicator functions, explicit summations) over ambiguous case-by-case definitions
 
+### Vector and Scalar Notation
+- **Use bold face to distinguish vectors from scalars only when the same letter is used for both types**:
+  - Use `\mathbf{p}^{(i)}` (bold vector) when $p_k$ (scalar) already exists in the document
+  - Use $\pi$ (regular) for stationary distribution since it is always a vector in context
+  - Use $\pi_j$ (regular) for scalar elements of vector $\pi$
+- **Rationale**: Bold face should serve a practical purpose (avoiding confusion), not be applied mechanically to all vectors
+- **Example**: In this repository, `\mathbf{1}` is used for the all-ones vector, but $\pi$ remains regular since there's no scalar $\pi$ to confuse it with
+
+### State Definition in Markov Chain Models
+- **Carefully define observation timing** when specifying state space:
+  - For n-seat single row: state space is $\{0, 1, \ldots, n-1\}$, **not** $\{0, 1, \ldots, n\}$
+  - State $n$ (full occupancy) is not included because the vehicle is immediately dispatched
+  - The state represents "number of filled seats when the next group arrives"
+- **State space size matches transition matrix dimensions**: n seats → n states → n×n matrix
+- **Explain why certain states are excluded**: Due to immediate dispatch, not modeling assumptions
+
+### Stationary Distribution in Markov Chains
+- **Explicitly state that stationary distribution exists** under appropriate conditions
+- **Mention conditions briefly** (e.g., "finite state space and typical arrival distributions ensure irreducibility and aperiodicity")
+- **Omit formal proofs** but provide reference to standard textbooks (e.g., Norris, 1997)
+- **Justification**: Existence of stationary distribution is a mathematical prerequisite, not an empirical assumption
+
 ## Research Context
 
 This work was developed for theme park operation planning to optimize attraction throughput. The framework is general enough to apply to any ride attraction with rectangular seat configurations.
