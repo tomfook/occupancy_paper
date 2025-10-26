@@ -50,11 +50,13 @@ Our problem can be handled as a state-action-reward model.
 - **action**: decision which row to seat arriving guests and whether to dispatch a vehicle
 - **reward**: the number of guests who take a seat when a vehicle is dispatched
 
-To handle this model, we define several variables for state and transition
+To handle this model, we define several variables for state and transition:
 
-- the size of $i$-th arriving group is a random variable $x_i \in \mathbb N$.
-- the seats filled pattern after the $i$th group has seats $s_i$.
-- the set of pattern of seats filled $\sigma \in \Sigma$.
+- $n$: the number of seats in a row (for multi-row configurations, $n_i$ denotes seats in row $i$)
+- $x_i \in \mathbb{N}$: the size of the $i$-th arriving group
+- $\Sigma$: the set of all possible seat occupancy states
+- $\sigma \in \Sigma$: a seat occupancy state (pattern representing which seats are filled)
+- $s_i \in \Sigma$: the seat occupancy state after the $i$-th group has been seated
 
 After a vehicle is dispatched, a new vacant vehicle will come.
 This means the state will be initialized as $\sigma_0$.
@@ -91,6 +93,14 @@ The assumption means the probability that a group of size $k$ arrives is indepen
 
 ## Simple case: Markov chain
 If the seat layout is a single row, we have only two options: seat the group or dispatch the vehicle, since we cannot choose which specific seats to provide.
+
+In this single-row case with first-come-first-served seating, the state can be simplified to the number of filled seats.
+If the row has $n$ seats, the state space becomes $\Sigma = \{0, 1, 2, \ldots, n\}$, where each state $\sigma \in \Sigma$ represents the number of filled seats.
+Thus $s_i \in \{0, 1, \ldots, n\}$ denotes the number of filled seats after the $i$-th group has been seated.
+
+Since friend groups must sit together in the same row and cannot be split, groups of size $k > n$ cannot exist in this single-row model.
+Therefore, we assume $p_k = 0$ for all $k > n$.
+
 In that case, our model can be treated as a simple **Markov chain model**.
 The expected seat occupancy can be calculated from the transition probability $P[x_i=k]=p_k$. 
 To do this, we need to derive the state probability distribution $P[a_i=n]$ from $p_k$, since the expected occupancy can be easily calculated from $p_k$ and $P[a_i=n]$.
@@ -108,15 +118,16 @@ Suppose a group of size $k$ arrives.
 If the number of empty seats is greater than or equal to $k$, the group is seated.
 If it is less than $k$, the crew dispatches the current vehicle and the group is seated in a new vehicle.
 
-- If $s_i\geq x_i$ then $s_{i+1}=s_i+x_i$ 
-- If $s_i>x_i$ then $s_{i+1}=x_i$
+- If $s_i + x_i \leq n$ then $s_{i+1}=s_i+x_i$ 
+- If $s_i + x_i > n$ then $s_{i+1}=x_i$
 
 This means the state probability can be described by the previous state and arrival distribution.
 Since the arrival distribution is independent of the current state, the transition probabilities are
 $$
 \begin{eqnarray}
 T_{jk}&=&P[s_{i+1}=k|s_{i}=j]\\
-  &=&\begin{cases}p_{j-k}P[s_{i}=j]&(j-k>0)\\ p_{k}P[s_{i}=j]&(j-k\leq0)\end{cases}\\
+  &=& \sum_{x=1}^{n} p_x \left[ \mathbb{1}_ {[j+x=k, j+x \leq n]}
+  + \mathbb{1}_ {[x=k, j+x > n]} \right]
 \end{eqnarray}
 $$
 We call such a matrix the **transition matrix**.
