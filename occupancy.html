@@ -1599,14 +1599,14 @@ Operation Planning<br><h4 class="date">2018-08-20</h4>
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>One of the most important issues for theme park operation is raising guestcounts at attractions. Since guest counts can be decomposed into dispatch count and seat occupancy, we focus on these two factors separately. The aim of this study is to establish a mathematical framework to predict seat occupancy of ride attractions. We revealed that seat occupancy can be derived from statistics of group sizes of arriving guests, the configuration of seats, queue formation, and grouping strategy. This framework will help us to optimize queue formation and grouping strategy. Because the model is general, that is, not dependent on any specific attraction, the framework can be applied to any attraction.</p>
+<p>One of the most important issues in theme park operation is increasing guest counts at attractions. Since guest counts can be decomposed into dispatch count and seat occupancy, we focus on these two factors separately. The aim of this study is to establish a mathematical framework to predict seat occupancy of ride attractions. We revealed that seat occupancy can be derived from statistics of group sizes of arriving guests, the configuration of seats, queue formation, and grouping strategy. This framework will help us to optimize queue formation and grouping strategy. Because the model is general, that is, not dependent on any specific attraction, the framework can be applied to any attraction.</p>
 </div>
 <div id="modeling-and-framework" class="section level2">
 <h2>Modeling and Framework</h2>
 <div id="problem" class="section level3">
 <h3>Problem</h3>
-<p>For ride attractions, grouping operation is deeply related to seat occupancy. Attraction crew members form a group to dispatch a vehicle from arriving guests without breaking up friend groups. Such crew members are called groupers. Guests arrive continuously. A grouper guides earlier-arriving guests first. Groupers cannot choose or predict the size of the next friend group to arrive.</p>
-<p>Almost all vehicle seat arrangements are designed in a rectangle pattern. This means that seats are arranged in row, with one or more rows lined up. The grouping operation involves gathering people to sit in the same row. Of course, friend groups should remain together in the same group and sit next to each other.</p>
+<p>For ride attractions, grouping operation is deeply related to seat occupancy. Attraction crew members form a group to dispatch a vehicle from arriving guests without breaking up friend groups. Such crew members are called groupers. Guests arrive continuously. Groupers guide guests who arrived earlier first. Groupers cannot choose or predict the size of the next friend group to arrive.</p>
+<p>Almost all vehicle seat arrangements are designed in a rectangle pattern. This means seats are arranged in rows, with multiple rows lined up. The grouping operation involves seating guest groups in the same row. Friend groups must remain together in the same row and sit consecutively.</p>
 <p>The grouping problem is how to maximize guest experience while filling seats with guest groups. Groupers ask the size of each group and select a row to guide them to. The grouping strategy is to select an optimal row when a group of a given size arrives.</p>
 <p>Therefore, there exists an upper bound on seat occupancy for each attractions.</p>
 <p>The upper bound depends on statistics of group sizes of arriving guests and the pattern of seat configuration. If we have a knowledge of the upper bound of an attraction, we can evaluate the efficiency of its grouping operation and whether the seat occupancy can improve.</p>
@@ -1616,50 +1616,50 @@ Operation Planning<br><h4 class="date">2018-08-20</h4>
 <p>Our problem can be handled as a state-action-reward model.</p>
 <ul>
 <li><strong>state</strong>: the seats pattern filled by guests</li>
-<li><strong>action</strong>: decision which row to guide arrival guests and to dispatch a vehicle or not</li>
+<li><strong>action</strong>: decision which row to seat arriving guests and whether to dispatch a vehicle</li>
 <li><strong>reward</strong>: the number of guests who take a seat when a vehicle is dispatched</li>
 </ul>
-<p>To treat this model, we define a numbers of variables for state and transition</p>
+<p>To handle this model, we define several variables for state and transition</p>
 <ul>
-<li>the size of <span class="math inline">\(i\)</span>th arrival group is a probability variable <span class="math inline">\(x_i \in \mathbb N\)</span>.</li>
+<li>the size of <span class="math inline">\(i\)</span>-th arriving group is a random variable <span class="math inline">\(x_i \in \mathbb N\)</span>.</li>
 <li>the seats filled pattern after the <span class="math inline">\(i\)</span>th group has seats <span class="math inline">\(s_i\)</span>.</li>
 <li>the set of pattern of seats filled <span class="math inline">\(\sigma \in \Sigma\)</span>.</li>
 </ul>
 <p>After a vehicle is dispatched, a new vacant vehicle will come. This means the state will be initialized as <span class="math inline">\(\sigma_0\)</span>.</p>
 <!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-6f10550d59930b2ec40f" style="width:480px;height:192px;"></div>
-<script type="application/json" data-for="htmlwidget-6f10550d59930b2ec40f">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n      a2[label = \"Which row\n to guid?\", shape = square];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a3[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n      edge[label = \"\"] a3 -> a4;\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-<p>We assume that the situation is stationary. The assumption induces the probability that a size <span class="math inline">\(k\)</span> group arrives is independent on time <span class="math inline">\(P[x_i=k]=p_k\)</span> .</p>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-58036169a01e9208063f" style="width:480px;height:192px;"></div>
+<script type="application/json" data-for="htmlwidget-58036169a01e9208063f">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n      a2[label = \"Which row\n to seat?\", shape = square];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a3[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n      edge[label = \"\"] a3 -> a4;\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>We assume that the situation is stationary. The assumption means the probability that a group of size <span class="math inline">\(k\)</span> arrives is independent of time <span class="math inline">\(P[x_i=k]=p_k\)</span> .</p>
 </div>
 </div>
 <div id="simple-case-markov-chain" class="section level2">
 <h2>Simple case: Markov chain</h2>
-<p>If the seat layout is one line, then our option is giving seats or dispatch a vehicle because we can not choose which seats we provide. In that case, our model can be treated as a simple <strong>Markov chain model</strong>. Then the expectation of seat occupancies is calculated from a transition probability <span class="math inline">\(P[x_i=k]=p_k\)</span>. and how to derive the probability having each state <span class="math inline">\(P[a_i=n]\)</span> from <span class="math inline">\(p_k\)</span> because the expectation value can be easily calculated by <span class="math inline">\(p_k\)</span> and <span class="math inline">\(P[a_i=n]\)</span>. This expectation value should be the upper bound of seat occupancy.</p>
+<p>If the seat layout is a single row, we have only two options: seat the group or dispatch the vehicle, since we cannot choose which specific seats to provide. In that case, our model can be treated as a simple <strong>Markov chain model</strong>. The expected seat occupancy can be calculated from the transition probability <span class="math inline">\(P[x_i=k]=p_k\)</span>. To do this, we need to derive the state probability distribution <span class="math inline">\(P[a_i=n]\)</span> from <span class="math inline">\(p_k\)</span>, since the expected occupancy can be easily calculated from <span class="math inline">\(p_k\)</span> and <span class="math inline">\(P[a_i=n]\)</span>. This expectation value should be the upper bound of seat occupancy.</p>
 <div id="steps-to-solve-the-problem" class="section level3">
 <h3>Steps to solve the problem</h3>
-<p>We</p>
+<p>We solve this in three steps:</p>
 <ol style="list-style-type: decimal">
-<li>Give a transition matrix from the number of seats and size of arrival group.</li>
+<li>Construct a transition matrix based on the number of seats and the distribution of group sizes.</li>
 <li>Identify the stationary state.</li>
-<li>Calculate the expectation value of occupancy from stationary probability.</li>
+<li>Calculate the expected seat occupancy from the stationary probability distribution.</li>
 </ol>
 <div id="setting-a-transition-matrix" class="section level4">
 <h4>Setting a transition matrix</h4>
-<p>Suppose that a group sized <span class="math inline">\(k\)</span> has arrived. In case the number of empty seats is greater than <span class="math inline">\(k\)</span>, they will take their seats. If it’s less than <span class="math inline">\(k\)</span>, the crew dispatch the vehicle and the group will take their seats of new vehicle.</p>
+<p>Suppose a group of size <span class="math inline">\(k\)</span> arrives. If the number of empty seats is greater than or equal to <span class="math inline">\(k\)</span>, the group is seated. If it is less than <span class="math inline">\(k\)</span>, the crew dispatches the current vehicle and the group is seated in a new vehicle.</p>
 <ul>
-<li><span class="math inline">\(s_i&lt;x_i\)</span> then <span class="math inline">\(s_{i+1}=s_i+x_i\)</span></li>
-<li><span class="math inline">\(s_i&gt;x_i\)</span> then <span class="math inline">\(s_{i+1}=x_i\)</span></li>
+<li>If <span class="math inline">\(s_i\geq x_i\)</span> then <span class="math inline">\(s_{i+1}=s_i+x_i\)</span></li>
+<li>If <span class="math inline">\(s_i&gt;x_i\)</span> then <span class="math inline">\(s_{i+1}=x_i\)</span></li>
 </ul>
-<p>This means that the probability of having a state can be described by the previous state and arrival probability. Because arrival probability is independent on state, these probabilities are <span class="math display">\[
+<p>This means the state probability can be described by the previous state and arrival distribution. Since the arrival distribution is independent of the current state, the transition probabilities are <span class="math display">\[
 \begin{eqnarray}
 T_{jk}&amp;=&amp;P[s_{i+1}=k|s_{i}=j]\\
   &amp;=&amp;\begin{cases}p_{j-k}P[s_{i}=j]&amp;(j-k&gt;0)\\ p_{k}P[s_{i}=j]&amp;(j-k\leq0)\end{cases}\\
 \end{eqnarray}
-\]</span> And we call a matrix which elements are these probabilities as <strong>transition matrix</strong>.</p>
-<p>We show an example in the simplest case, which has only two seats. In this case, seat occupancy can take states from zero to two <span class="math inline">\(s_i=0, 1, 2\)</span>.</p>
+\]</span> We call such a matrix the <strong>transition matrix</strong>.</p>
+<p>We show an example with the simplest case: two seats. In this case, the seat occupancy can be in states <span class="math inline">\(s_i=0, 1, 2\)</span>.</p>
 <p>Markov state and transition in this situation will be described in Fig.2.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-58913f696e1e9036f22a" style="width:384px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-58913f696e1e9036f22a">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case(two seats). \nRed means dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n#  digraph dot{\n#    graph[\n#      rankdir = LR,\n#      label = \"Fig.2: Simplest Case(two seats). \nRed means dispatch\",\n#      fontsize = 10,\n#      layout = dot,\n#      ordering = out,\n#    ];\n#    node[\n#      shape = circle,\n#      fixedsize = true\n#    ];\n#    a0[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>=0>];\n#    a1[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>=1>];\n#    a2[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>=2>];\n#    b0[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i+1<\/SUB><\/FONT><\/I>=0>];\n#    b1[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i+1<\/SUB><\/FONT><\/I>=1>];\n#    b2[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i+1<\/SUB><\/FONT><\/I>=2>];\n#    a0 -> b1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n#    a0 -> b2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n#    a1 -> b2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n#    a1 -> b2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n#    a2 -> b2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n#    a2 -> b1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n#    {rank = min; a0;a1;a2;}\n#    {rank = max; b0;b1;b2;}\n#  } \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-b4962574ce60022c8430" style="width:384px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-b4962574ce60022c8430">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case(two seats). \nRed means dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n#  digraph dot{\n#    graph[\n#      rankdir = LR,\n#      label = \"Fig.2: Simplest Case(two seats). \nRed means dispatch\",\n#      fontsize = 10,\n#      layout = dot,\n#      ordering = out,\n#    ];\n#    node[\n#      shape = circle,\n#      fixedsize = true\n#    ];\n#    a0[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>=0>];\n#    a1[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>=1>];\n#    a2[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>=2>];\n#    b0[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i+1<\/SUB><\/FONT><\/I>=0>];\n#    b1[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i+1<\/SUB><\/FONT><\/I>=1>];\n#    b2[label = <<I>a<FONT POINT-SIZE=\"8\"><SUB>i+1<\/SUB><\/FONT><\/I>=2>];\n#    a0 -> b1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n#    a0 -> b2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n#    a1 -> b2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n#    a1 -> b2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n#    a2 -> b2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n#    a2 -> b1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n#    {rank = min; a0;a1;a2;}\n#    {rank = max; b0;b1;b2;}\n#  } \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>As an element <span class="math inline">\(T_{jk}\)</span> means probability to move from state <span class="math inline">\(s_i=j\)</span> to state <span class="math inline">\(s_{i+1}=k\)</span>, we can define transition matrix <span class="math display">\[
 T=\begin{pmatrix}
   0 &amp; p_1 &amp; p_2 \\
@@ -1687,10 +1687,10 @@ A=AT
 <li>four seats in the line</li>
 </ul>
 <p>This situation matches the seats configuration of Harry Potter and the Forbidden Journey.</p>
-<p>We</p>
 <div id="transition-matrix" class="section level3">
 <h3>Transition Matrix</h3>
-<p>If we make only one line, we have to group guests in arrival order. Thus our grouping strategy can be decided automatically. <span class="math display">\[
+<p>With only a single row, guest must be seated in arrival order. Therefore, the grouping startegy is determined automatically.</p>
+<p><span class="math display">\[
 T=\begin{pmatrix}
   p_4 &amp; p_3+p_4&amp; p_2+p_4&amp;p_1+p_4\\
   p_1&amp;0&amp;0&amp;0\\
@@ -1701,7 +1701,7 @@ T=\begin{pmatrix}
 </div>
 <div id="single-queue" class="section level3">
 <h3>Single Queue</h3>
-<p>To approach this problem, we assume <span class="math inline">\(p_1=p, p_2=p_3=p_4=q/3\)</span>. This is the simplest model which has only two parameters, single guest ratio and grouped guest. And each group guests come to an attraction in the same possibility. Then by an equation <span class="math inline">\(Tx=x\)</span>, we can obtain the stationary state <span class="math display">\[
+<p>To approach this problem, we assume <span class="math inline">\(p_1=p, p_2=p_3=p_4=(1-p)/3\)</span>. This is the simplest model with only two parameters: the probability of single guests and the distribution of group sizes. We assume that each group size (2, 3, 4) has equal probability. Then by an equation <span class="math inline">\(Tx=x\)</span>, we can obtain the stationary state <span class="math display">\[
 x = \frac{1}{6(p+1)(2p^2-p+2)}\begin{pmatrix}
   2p^2+2p+5\\
   2p^3+2p^2+5p\\
@@ -1709,10 +1709,10 @@ x = \frac{1}{6(p+1)(2p^2-p+2)}\begin{pmatrix}
   6p^3-2p^2+p+4
   \end{pmatrix}
 \]</span></p>
-<p>The probability of dispatch <span class="math display">\[
+<p>The dispatch probability is <span class="math display">\[
 p_D=\frac{-28p^4+24p^3+6p^2-8p+33}{18(p+1)(2p^2-p+2)}
 \]</span></p>
-<p>The expected occupancy <span class="math display">\[
+<p>The expected occupancy rate is <span class="math display">\[
 \begin{eqnarray}
 \mathrm E[Ocp] &amp;=&amp; \frac{1}{p_D}\frac{3-2p}{4}\\
   &amp;=&amp; \frac{9(p+1)(3-2p)(2p^2-p+2)}{2(-28p^4+24p^3+6p^2-8p+33)}
@@ -1720,16 +1720,16 @@ p_D=\frac{-28p^4+24p^3+6p^2-8p+33}{18(p+1)(2p^2-p+2)}
 \]</span></p>
 <p>We substitute concrete values to the parameters. In case of <span class="math inline">\(p=1/20\)</span>, <span class="math display">\[
 \pi = \begin{pmatrix}\pi_0\\\pi_1\\\pi_2\\\pi_3\end{pmatrix}= \begin{pmatrix}0.415\\ 0.021\\ 0.236\\ 0.329\end{pmatrix}
-\]</span> and dispatch transition is <span class="math display">\[
+\]</span> and the dispatch transition matrix is <span class="math display">\[
 T_D = \begin{pmatrix}
   p_4&amp;p_3+2p_4&amp;p_2+2p_4&amp;p_1+2p_4\\
   0&amp;0&amp;0&amp;0\\
-  0&amp;0&amp;0&amp;p_2\\\
+  0&amp;0&amp;0&amp;p_2\\
   0&amp;0&amp;p_3&amp;p_3
   \end{pmatrix}
 \]</span> thus <span class="math display">\[
 p_D = \mathbf 1^\mathrm{T}T\pi=0.8827
-\]</span> Then we obtain the expected occupancy is <span class="math display">\[
+\]</span> Therefore, the expected occupancy is <span class="math display">\[
 \mathrm E[Ocp] = \begin{pmatrix}
   p_4&amp;p_3+\frac54p_4&amp;p_2+\frac12p_3+\frac32p_4&amp;p_1+\frac34p_2+\frac34p_3+\frac74p_4\\
 \end{pmatrix}\begin{pmatrix}\pi_0\\\pi_1\\\pi_2\\\pi_3\end{pmatrix}
@@ -1738,7 +1738,7 @@ p_D = \mathbf 1^\mathrm{T}T\pi=0.8827
 </div>
 <div id="with-single-rider-queue" class="section level3">
 <h3>With Single-Rider Queue</h3>
-<p>If we have a single-rider queue, the parameters should be modified as <span class="math display">\[
+<p>If a single-rider queue is available, the parameters should be modified as <span class="math display">\[
 p_1=0, p_2=p_3=p_4=1/3
 \]</span> Then we can obtain the stationary state as <span class="math display">\[
 \pi=\begin{pmatrix}0.417\\0\\0.25\\0.333\end{pmatrix}
@@ -1746,15 +1746,13 @@ p_1=0, p_2=p_3=p_4=1/3
 D = 0.9167
 \]</span> and the expectation of occupancy <span class="math display">\[
 \mathrm E[Ocp]=0.818
-\]</span> Finally, we adjust a single-rider effect as <span class="math display">\[
+\]</span> Finally, we adjust for the single-rider effect: <span class="math display">\[
 \mathrm E[Ocp_S]=\mathrm E[Ocp](1+p_s)=0.859
-\]</span> where <span class="math inline">\(p_s\)</span> is a single-rider availability assumed by 0.05.</p>
+\]</span> where <span class="math inline">\(p_s\)</span> is a single-rider proportion, assumed by 0.05.</p>
 </div>
 <div id="pre-grouping" class="section level3">
 <h3>Pre-grouping</h3>
-<ul>
-<li>we separate guests by its group size (2,4) and 3 before grouping</li>
-</ul>
+<p>We pre-group guests by merging groups of size 2 or 4 together, keeping groups of size 3 separate.</p>
 <p>If group size is only 3, expected occupancy will be 0.75.</p>
 <p>In case of group size 2 or 4, we set each probability as <span class="math inline">\(p, 1-p\)</span>.</p>
 <p>Transition matrix <span class="math display">\[
