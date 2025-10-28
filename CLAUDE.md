@@ -16,11 +16,6 @@ This is a research repository focused on mathematical modeling of seat occupancy
   - Includes mathematical derivations and examples using Harry Potter attraction configuration (4 seats per row)
   - Contains R code for generating diagrams and calculations
 
-- `planning.Rmd` - Research planning document (in Japanese)
-  - Outlines future research directions for multi-row scenarios
-  - Discusses dynamic programming approaches for complex seat configurations
-  - Addresses robustness and meta-strategy considerations
-
 - `*.html` - Rendered output files from R Markdown documents
 
 ## Working with R Markdown
@@ -31,7 +26,6 @@ To render an R Markdown file to HTML:
 ```r
 # In R or RStudio
 rmarkdown::render("occupancy.Rmd")
-rmarkdown::render("planning.Rmd")
 ```
 
 Or using command line with knitr:
@@ -142,9 +136,6 @@ When working with mathematical content in this repository, maintain the followin
   - What effect is being adjusted for?
   - Why was it excluded from the base model?
   - How does the adjustment formula work?
-- **Example** (from occupancy.Rmd:251-254):
-  - ❌ "We assume $p_1=p, p_2=p_3=p_4=(1-p)/3$."
-  - ✅ "We introduce a single-parameter model by setting $p_1=p$ and $p_2=p_3=p_4=(1-p)/3$. This represents the simplest scenario where single guests arrive with probability $p$, and all multi-person groups are equally likely."
 
 ## English Writing Style
 
@@ -153,21 +144,12 @@ When writing or revising English text in research documents, maintain the follow
 ### Tone and Formality
 - Use **formal academic tone** appropriate for research papers
 - Prefer present tense for describing the model and results
-- Examples:
-  - ❌ "a new vehicle will come"
-  - ✅ "a new vehicle arrives"
 
 ### Active vs. Passive Voice
 - **Use active voice with "we"** for author actions: "We define...", "We assume...", "We solve..."
 - **Use passive voice** for general processes: "the vehicle is dispatched", "the matrix is constructed"
 - **Use active voice** for describing actors in the model: "Guests arrive", "Groupers guide..."
 - **Mixed usage is appropriate** when each choice serves its purpose
-
-### Common Grammar and Style Corrections
-- "a knowledge" → "knowledge" (uncountable noun)
-- "each + plural" → "each + singular" ("each attraction", not "each attractions")
-- "rectangle pattern" → "rectangular pattern" (use adjective form for shapes)
-- "assumed by X" → "assumed to be X" (correct preposition)
 
 ## Research Context
 
