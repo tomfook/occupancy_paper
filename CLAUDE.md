@@ -116,6 +116,52 @@ When working with mathematical content in this repository, maintain the followin
 - **Omit formal proofs** but provide reference to standard textbooks (e.g., Norris, 1997)
 - **Justification**: Existence of stationary distribution is a mathematical prerequisite, not an empirical assumption
 
+### Integrating Equations with Text
+- **Use connecting phrases** when introducing equations:
+  - "i.e." or "that is" for restating in mathematical form
+  - ":" (colon) for defining or presenting results
+  - "where" for explaining variables after an equation
+- **Include quantifiers explicitly**: "for all $i$", "for each $k \in \{1,\ldots,n\}$"
+- **Example**:
+  - ❌ "The probability is independent of time $P[x_i=k]=p_k$."
+  - ✅ "The probability is independent of time, i.e., $P[x_i=k]=p_k$ for all $i$."
+
+### Introducing Parameters and Adjustments
+- **Always explain why** when introducing new parameters or simplifying assumptions:
+  - What does the parameter represent?
+  - Why is this parameterization useful?
+  - What special cases does it capture?
+- **Before applying adjustments or corrections**, explain:
+  - What effect is being adjusted for?
+  - Why was it excluded from the base model?
+  - How does the adjustment formula work?
+- **Example** (from occupancy.Rmd:251-254):
+  - ❌ "We assume $p_1=p, p_2=p_3=p_4=(1-p)/3$."
+  - ✅ "We introduce a single-parameter model by setting $p_1=p$ and $p_2=p_3=p_4=(1-p)/3$. This represents the simplest scenario where single guests arrive with probability $p$, and all multi-person groups are equally likely."
+
+## English Writing Style
+
+When writing or revising English text in research documents, maintain the following standards:
+
+### Tone and Formality
+- Use **formal academic tone** appropriate for research papers
+- Prefer present tense for describing the model and results
+- Examples:
+  - ❌ "a new vehicle will come"
+  - ✅ "a new vehicle arrives"
+
+### Active vs. Passive Voice
+- **Use active voice with "we"** for author actions: "We define...", "We assume...", "We solve..."
+- **Use passive voice** for general processes: "the vehicle is dispatched", "the matrix is constructed"
+- **Use active voice** for describing actors in the model: "Guests arrive", "Groupers guide..."
+- **Mixed usage is appropriate** when each choice serves its purpose
+
+### Common Grammar and Style Corrections
+- "a knowledge" → "knowledge" (uncountable noun)
+- "each + plural" → "each + singular" ("each attraction", not "each attractions")
+- "rectangle pattern" → "rectangular pattern" (use adjective form for shapes)
+- "assumed by X" → "assumed to be X" (correct preposition)
+
 ## Research Context
 
 This work was developed for theme park operation planning to optimize attraction throughput. The framework is general enough to apply to any ride attraction with rectangular seat configurations.
