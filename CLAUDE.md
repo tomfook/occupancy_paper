@@ -103,12 +103,19 @@ When working with mathematical content in this repository, maintain the followin
 - **Example**: In this repository, `\mathbf{1}` is used for the all-ones vector, but $\pi$ remains regular since there's no scalar $\pi$ to confuse it with
 
 ### State Definition in Markov Chain Models
-- **Carefully define observation timing** when specifying state space:
-  - For n-seat single row: state space is $\{0, 1, \ldots, n-1\}$, **not** $\{0, 1, \ldots, n\}$
-  - State $n$ (full occupancy) is not included because the vehicle is immediately dispatched
-  - The state represents "number of filled seats when the next group arrives"
-- **State space size matches transition matrix dimensions**: n seats → n states → n×n matrix
-- **Explain why certain states are excluded**: Due to immediate dispatch, not modeling assumptions
+- **Carefully define observation timing** when specifying state space.
+- Two valid interpretations exist:
+  - **Interpretation A (adopted in this repository)**: State represents the number of filled seats immediately after a group has been seated
+    - State space: $\{0, 1, \ldots, n\}$ (n+1 states)
+    - State $n$ (full occupancy) is included
+    - n seats → n+1 states → (n+1)×(n+1) transition matrix
+  - **Interpretation B**: State represents the number of filled seats when the next group arrives
+    - State space: $\{0, 1, \ldots, n-1\}$ (n states)
+    - State $n$ is excluded (vehicle is immediately dispatched)
+    - n seats → n states → n×n matrix
+- **Both interpretations are mathematically valid** and yield the same expected occupancy rate.
+- **This repository uses Interpretation A** for its intuitive state transition visualization.
+- **Always explicitly state** which interpretation you are using and the observation timing.
 
 ### Stationary Distribution in Markov Chains
 - **Explicitly state that stationary distribution exists** under appropriate conditions

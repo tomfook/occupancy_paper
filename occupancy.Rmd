@@ -95,7 +95,10 @@ This stationarity assumption means that the probability of a group of size $k$ a
 If the seat layout is a single row, we have only two options: seat the group or dispatch the vehicle, since we cannot choose which specific seats to provide.
 
 In this single-row case with first-come-first-served seating, the state can be simplified to the number of filled seats.
-If the row has $n$ seats, the state space becomes $\Sigma = \{0, 1, 2, \ldots, n\}$, where each state $\sigma \in \Sigma$ represents the number of filled seats.
+If the row has $n$ seats, the state space becomes $\Sigma = \{0, 1, 2, \ldots, n\}$.
+Each state $\sigma \in \Sigma$ represents the number of filled seats **immediately after a group has been seated and before the next group arrives**.
+State $n$ (full occupancy) is included in the state space.
+From this state, any arriving group triggers an immediate dispatch, since no seats remain available, and the group is seated in a new empty vehicle.
 Thus $s_i \in \{0, 1, \ldots, n\}$ denotes the number of filled seats after the $i$-th group has been seated.
 
 Since friend groups must sit together in the same row and cannot be split, groups of size $k > n$ cannot be seated in a single-row configuration.
