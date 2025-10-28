@@ -5,7 +5,7 @@ author:
   affiliation: "Operation Planning"
 date: "2018-08-20"
 output: html_document
-#abstract: "hogehoge is important issue for us. We established a mathematical framework to expect seat occupancy of ride attractions. Our model is based on Markov chain model. Since our model is general, we can aplly to any attraction."
+#abstract: "Maximizing seat occupancy is an important issue for theme park operations. We established a mathematical framework to predict seat occupancy of ride attractions. Our model is based on Markov chain theory. Since our model is general, we can apply it to any attraction."
 ---
 
 ```{r setup, include=FALSE}
@@ -29,7 +29,7 @@ Guests arrive continuously.
 Groupers guide guests who arrived earlier first.
 Groupers cannot choose or predict the size of the next friend group to arrive.
 
-Almost all vehicle seat arrangements are designed in a rectangle pattern.
+Almost all vehicle seat arrangements are arranged in a rectangular pattern.
 This means seats are arranged in rows, with multiple rows lined up.
 The grouping operation involves seating guest groups in the same row.
 Friend groups must remain together in the same row and sit consecutively.
@@ -38,10 +38,10 @@ The grouping problem is how to maximize guest experience while filling seats wit
 Groupers ask the size of each group and select a row to guide them to.
 The grouping strategy is to select an optimal row when a group of a given size arrives.
 
-Therefore, there exists an upper bound on seat occupancy for each attractions.
+Therefore, there exists an upper bound on seat occupancy for each attraction.
 
 The upper bound depends on statistics of group sizes of arriving guests and the pattern of seat configuration.
-If we have a knowledge of the upper bound of an attraction, we can evaluate the efficiency of its grouping operation and whether the seat occupancy can improve.
+If we understand the upper bound for an attraction, we can evaluate the efficiency of its grouping operation and determine whether the seat occupancy can be improved.
 
 ### Mathematical Modeling
 Our problem can be handled as a state-action-reward model.
@@ -58,7 +58,7 @@ To handle this model, we define several variables for state and transition:
 - $\sigma \in \Sigma$: a seat occupancy state (pattern representing which seats are filled)
 - $s_i \in \Sigma$: the seat occupancy state after the $i$-th group has been seated
 
-After a vehicle is dispatched, a new vacant vehicle will come.
+After a vehicle is dispatched, a new empty vehicle arrives.
 This means the state will be initialized as $\sigma_0$.
 
 <!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
@@ -89,7 +89,7 @@ grViz(
 ```
 
 We assume that the situation is stationary.
-The assumption means the probability that a group of size $k$ arrives is independent of time $P[x_i=k]=p_k$ .
+This stationarity assumption means that the probability of a group of size $k$ arriving is independent of time, i.e., $P[x_i=k]=p_k$ for all $i$.
 
 ## Simple case: Markov chain
 If the seat layout is a single row, we have only two options: seat the group or dispatch the vehicle, since we cannot choose which specific seats to provide.
@@ -235,7 +235,7 @@ This situation matches the seats configuration of Harry Potter and the Forbidden
 
 ### Transition Matrix 
 With only a single row, guest must be seated in arrival order.
-Therefore, the grouping startegy is determined automatically.
+Therefore, the grouping strategy is determined automatically.
 
 $$
 T=\begin{pmatrix}
@@ -248,9 +248,8 @@ $$
  
 ### Single Queue   
 
-To approach this problem, we assume $p_1=p, p_2=p_3=p_4=(1-p)/3$.
-This is the simplest model with only two parameters: the probability of single guests and the distribution of group sizes.
-We assume that each group size (2, 3, 4) has equal probability.
+To approach this problem, we introduce a single-parameter model by setting $p_1=p$ and $p_2=p_3=p_4=(1-p)/3$.
+This represents the simplest scenario where single guests arrive with probability $p$, and all multi-person groups (sizes 2, 3, 4) are equally likely, each with probability $(1-p)/3$.
 Then by an equation $T\pi=\pi$, we can obtain the stationary state
 $$
 \pi = \frac{1}{6(p+1)(2p^2-p+2)}\begin{pmatrix}
@@ -318,11 +317,13 @@ and the expectation of occupancy
 $$
 \mathrm E[Ocp]=0.818
 $$
-Finally, we adjust for the single-rider effect: 
+
+The above analysis excludes single riders from the main queue.
+However, single riders can fill remaining empty seats, increasing effective occupancy.
+If the proportion of available single riders is $p_s$ (assumed to be 0.05), the adjusted expected occupancy becomes:
 $$
 \mathrm E[Ocp_S]=\mathrm E[Ocp](1+p_s)=0.859
 $$
-where $p_s$ is a single-rider proportion, assumed by 0.05.
 
 ### Pre-grouping
 We pre-group guests by merging groups of size 2 or 4 together, keeping groups of size 3 separate.
