@@ -16,20 +16,20 @@ knitr::opts_chunk$set(echo = FALSE)
 One of the most important issues in theme park operation is increasing guest counts at attractions.
 Since guest counts can be decomposed into dispatch count and seat occupancy, we focus on these two factors separately.
 The aim of this study is to establish a mathematical framework to predict seat occupancy of ride attractions.
-We revealed that seat occupancy can be derived from statistics of group sizes of arriving guests, the configuration of seats, queue formation, and grouping strategy.
+We show that seat occupancy can be derived from statistics of group sizes of arriving guests, the configuration of seats, queue formation, and grouping strategy.
 This framework will help us to optimize queue formation and grouping strategy.
 Because the model is general, that is, not dependent on any specific attraction, the framework can be applied to any attraction.
 
 ## Modeling and Framework
 ### Problem
 For ride attractions, grouping operation is deeply related to seat occupancy.
-Attraction crew members form a group to dispatch a vehicle from arriving guests without breaking up friend groups.
+Attraction crew members organize arriving guests into groups for dispatch without separating frieds who arrived together.
 Such crew members are called groupers.
 Guests arrive continuously.
 Groupers guide guests who arrived earlier first.
 Groupers cannot choose or predict the size of the next friend group to arrive.
 
-Almost all vehicle seat arrangements are arranged in a rectangular pattern.
+Almost all vehicle seat are arranged in a rectangular pattern.
 This means seats are arranged in rows, with multiple rows lined up.
 The grouping operation involves seating guest groups in the same row.
 Friend groups must remain together in the same row and sit consecutively.
@@ -47,7 +47,7 @@ If we understand the upper bound for an attraction, we can evaluate the efficien
 Our problem can be handled as a state-action-reward model.
 
 - **state**:  the seats pattern filled by guests
-- **action**: decision which row to seat arriving guests and whether to dispatch a vehicle
+- **action**: the decision regarding which row to assign to arriving guests and whether to dispatch a vehicle
 - **reward**: the number of guests who take a seat when a vehicle is dispatched
 
 To handle this model, we define several variables for state and transition:
@@ -59,7 +59,7 @@ To handle this model, we define several variables for state and transition:
 - $s_i \in \Sigma$: the seat occupancy state after the $i$-th group has been seated
 
 After a vehicle is dispatched, a new empty vehicle arrives.
-This means the state will be initialized as $\sigma_0$.
+This means the state return to the initial state $\sigma_0$ (an empty vehicle).
 
 <!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
 
@@ -92,7 +92,7 @@ We assume that the situation is stationary.
 This stationarity assumption means that the probability of a group of size $k$ arriving is independent of time, i.e., $P[x_i=k]=p_k$ for all $i$.
 
 ## Simple case: Markov chain
-If the seat layout is a single row, we have only two options: seat the group or dispatch the vehicle, since we cannot choose which specific seats to provide.
+For a single-row layout, only two actions are possible when a group arrives: seat the group in the remaining empty seats or dispatch the vehicle and seat them in a new vehicle. Row selection is not applicable since there is only one row.
 
 In this single-row case with first-come-first-served seating, the state can be simplified to the number of filled seats.
 If the row has $n$ seats, the state space becomes $\Sigma = \{0, 1, 2, \ldots, n\}$.
@@ -149,7 +149,7 @@ We show an example with the simplest case: two seats.
 In this case, the seat occupancy can be in states $s_i=0, 1, 2$.
 
 
-Markov state and transition in this situation will be described in Fig.2.
+Fig.2 shows the Markov states and transitions in this situation.
 ```{r twoseattransition, fig.width = 4}
 grViz("
   digraph dot{
@@ -174,36 +174,9 @@ grViz("
     a2 -> a1[label = '<I>p</I>@_{1}', color = red];
     a2 -> a2[label = '<I>p</I>@_{2}', color = red];
   }
-#  digraph dot{
-#    graph[
-#      rankdir = LR,
-#      label = 'Fig.2: Simplest Case(two seats). \nRed means dispatch',
-#      fontsize = 10,
-#      layout = dot,
-#      ordering = out,
-#    ];
-#    node[
-#      shape = circle,
-#      fixedsize = true
-#    ];
-#    a0[label = '<I>a@_{i}</I>=0'];
-#    a1[label = '<I>a@_{i}</I>=1'];
-#    a2[label = '<I>a@_{i}</I>=2'];
-#    b0[label = '<I>a@_{i+1}</I>=0'];
-#    b1[label = '<I>a@_{i+1}</I>=1'];
-#    b2[label = '<I>a@_{i+1}</I>=2'];
-#    a0 -> b1[label = '<I>p</I>@_{1}'];
-#    a0 -> b2[label = '<I>p</I>@_{2}'];
-#    a1 -> b2[label = '<I>p</I>@_{1}'];
-#    a1 -> b2[label = '<I>p</I>@_{2}', color = red];
-#    a2 -> b2[label = '<I>p</I>@_{2}', color = red];
-#    a2 -> b1[label = '<I>p</I>@_{1}', color = red];
-#    {rank = min; a0;a1;a2;}
-#    {rank = max; b0;b1;b2;}
-#  } 
 ")
 ```
-As an element $T_{jk}$ means probability to move from state $s_i=j$ to state $s_{i+1}=k$, we can define transition matrix
+Since each element $T_{jk}$ represents the probability of moving from state $s_i=j$ to state $s_{i+1}=k$, we can define the transition matrix as
 $$
 T=\begin{pmatrix}
   0 & p_1 & p_2 \\
@@ -226,18 +199,124 @@ $$
 This means the stationary state $\pi$ is the left eigenvector corresponding to eigenvalue 1 of $T$.
 We obtain the stationary state by calculating this eigenvector of $T$.
 
+**Example: Two-seat case**
+
+For the two-seat case introduced in Fig.2, we solve for the stationary distribution using the transition matrix:
+$$
+T=\begin{pmatrix}
+0 & p_1 & p_2 \\
+0 & 0 & 1\\
+0 & p_1 & p_2
+\end{pmatrix}
+$$
+
+From the eigenvector equation $\pi^T T=\pi^T$, we obtain the system:
+$$
+\begin{cases}
+0 &=& \pi_0 \\
+p_1(\pi_0 + \pi_2) &=& \pi_1 \\
+p_2(\pi_0 + \pi_2) + \pi_1 &=& \pi_2
+\end{cases}
+$$
+
+Solving this system with the normalization constraint $\pi_0 + \pi_1 + \pi_2 = 1$, we obtain:
+$$
+\pi = \begin{pmatrix}0 \\ \frac{p_1}{1+p_1} \\ \frac{1}{1+p_1}\end{pmatrix}
+$$
+
+Note that $\pi_0=0$ means the vehicle is never empty in the stationary state, as guests arrive continuously.
+
 #### Expectation value of seat occupancy
+Once the stationary distribution $\pi$ is obtained, we can calculate the expected seat occupancy rate.
+
+When a vehicle is dispatched from state $s_i=j$, the number of occupied seats is $j$.
+The dispatch occurs when the next arriving group of size $x_i$ cannot fit in the remaining seats, i.e., when $j + x_i > n$.
+
+The probability of dispatch from state $j$ is:
+$$
+p_D(j) = \sum_{k=n-j+1}^{n} p_k
+$$
+
+The overall dispatch probability is:
+$$
+p_D = \sum_{j=0}^{n} \pi_j p_D(j)
+$$
+
+The expected occupancy rate is then:
+$$
+\mathrm{E}[Ocp] = \frac{1}{p_D} \sum_{j=0}^{n} \pi_j \cdot \frac{j}{n} \cdot p_D(j)
+$$
+
+**Example: Two seat case (continued)**
+
+Using the stationary distribution derived in the previous section, we calculate the dispatch probabilities from each state:
+- From state 0: $p_D(0) = p_1 + p_2 = 1$ (always dispatch, but $\pi_0=0$ so no contribution)
+- From state 1: $p_D(1) = p_2$ (dispatch only when a group of size 2 arrives)
+- From state 2: $p_D(2) = p_1 + p_2 = 1$ (always dispatch)
+
+The overall dispatch probability is:
+$$
+p_D = 0 \cdot 1 + \frac{p_1}{1+p_1} \cdot p_2 + \frac{1}{1+p_1} \cdot 1 = \frac{1 + p_1 p_2}{1+p_1}
+$$
+
+The expected occupancy rate is:
+$$
+\begin{eqnarray}
+\mathrm{E}[Ocp] &=& \frac{1}{p_D}\left(\frac{0}{2} \cdot 1 \cdot 0 + \frac{1}{2} \cdot p_2 \cdot \frac{p_1}{1+p_1} + \frac{2}{2} \cdot 1 \cdot \frac{1}{1+p_1}\right)\\
+&=& \frac{1}{2p_D}\left(\frac{p_1(1-p_1)}{1+p_1} + \frac{2}{1+p_1}\right)\\
+&=& \frac{p_1 - p_1^2 + 2}{2(1+p_1 - p_1^2)}
+\end{eqnarray}
+$$
+
+For example, when $p_1 = 0.5$ (equal probability for single guests and pairs), the expected occupancy is:
+$$
+\mathrm{E}[Ocp] = 0.9
+$$
+
+Fig.3 shows how the expected occupancy varies with $p_1$ for the two-seat case.
+
+```{r twoseatoccupancy, fig.width = 6, fig.height = 4}
+library(ggplot2)
+
+# Calculate expected occupancy as a function of p_1
+p1 <- seq(0, 1, by = 0.01)
+E_Ocp <- (p1 - p1^2 + 2) / (2 * (1 + p1 - p1^2))
+df <- data.frame(p1 = p1, E_Ocp = E_Ocp)
+
+# Create annotation data
+annotation_df <- data.frame(
+  p1 = c(0, 0.5, 1),
+  E_Ocp = c(1, 0.9, 1),
+  label = c("p[1]==0*': '*E*'[Ocp]=1'",
+	    "p[1]==0.5*': '*E*'[Ocp]=0.9'",
+	    "p[1]==1*': '*E*'[Ocp]=1'")
+)
+
+ggplot(df, aes(x = p1, y = E_Ocp)) +
+  geom_line(color = "blue", linewidth = 1) +
+  geom_hline(yintercept = 0.9, linetype = "dashed", color = "red", alpha = 0.5) +
+  geom_vline(xintercept = 0.5, linetype = "dashed", color = "red", alpha = 0.5) +
+  geom_point(data = annotation_df, aes(x = p1, y = E_Ocp), color = c("darkgreen", "red", "darkgreen"), size = 3) +
+  geom_text(data = annotation_df[2,], aes(label = label), parse = TRUE, hjust = 1, vjust = -0.5, size = 3.5) +
+  labs(x = expression(p[1]), y = "Expected Occupancy Rate", title = "Fig.3: Expected Occupancy vs Single Guest Probability (Two-Seat Case)") +
+  ylim(0.9, 1.0)
+```
+
+The plot reveals that expected occupancy reaches its minimum value of 0.9 at $p_1=0.5$, and approaches 1.0 (perfect occupancy) at both extremes ($p_1 \to 0$ and $p_1 \to 1$).
+This makes intuitive sense: when only one group size occurs ($p_1=0$ or $p_1=1$), all groups fit perfectly into the two-seat configuration.
+			
+
 
 ## Actual setting: one line of four seats
-As an example, we calculate seat occupancy in a situation of
+As an example, we calculate seat occupancy in the following configuration:
 
-- one line of seats
-- four seats in the line
+- a single row of seats
+- four seats per row
 
 This situation matches the seats configuration of Harry Potter and the Forbidden Journey.
 
 ### Transition Matrix 
-With only a single row, guest must be seated in arrival order.
+With only a single row, guests must be seated in arrival order.
 Therefore, the grouping strategy is determined automatically.
 
 $$
@@ -251,7 +330,7 @@ $$
  
 ### Single Queue   
 
-To approach this problem, we introduce a single-parameter model by setting $p_1=p$ and $p_2=p_3=p_4=(1-p)/3$.
+To obtain an explicit solution, we introduce a single-parameter model by setting $p_1=p$ and $p_2=p_3=p_4=(1-p)/3$.
 This represents the simplest scenario where single guests arrive with probability $p$, and all multi-person groups (sizes 2, 3, 4) are equally likely, each with probability $(1-p)/3$.
 Then by an equation $T\pi=\pi$, we can obtain the stationary state
 $$
@@ -277,7 +356,7 @@ $$
 $$
 
 
-We substitute concrete values to the parameters.
+We substitute concrete values into the parameters.
 In case of $p=1/20$, 
 $$
 \pi = \begin{pmatrix}\pi_0\\\pi_1\\\pi_2\\\pi_3\end{pmatrix}= \begin{pmatrix}0.415\\ 0.021\\ 0.236\\ 0.329\end{pmatrix}
@@ -331,9 +410,9 @@ $$
 ### Pre-grouping
 We pre-group guests by merging groups of size 2 or 4 together, keeping groups of size 3 separate.
 
-If group size is only 3, expected occupancy will be 0.75.
+When all arriving groups consist of exactly 3 guests (i.e., $p_3=1$), the expected occupancy is 0.75.
 
-In case of group size 2 or 4, we set each probability as $p, 1-p$.
+For the case where only groups of size 2 or 4 arrive, we denote their probabilitiees as $p_2=p$ and $p_4=1-p$.
 
 Transition matrix
 $$
