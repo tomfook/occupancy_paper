@@ -23,13 +23,13 @@ Because the model is general, that is, not dependent on any specific attraction,
 ## Modeling and Framework
 ### Problem
 For ride attractions, grouping operation is deeply related to seat occupancy.
-Attraction crew members organize arriving guests into groups for dispatch without separating frieds who arrived together.
+Attraction crew members organize arriving guests into groups for dispatch without separating friends who arrived together.
 Such crew members are called groupers.
 Guests arrive continuously.
 Groupers guide guests who arrived earlier first.
 Groupers cannot choose or predict the size of the next friend group to arrive.
 
-Almost all vehicle seat are arranged in a rectangular pattern.
+Almost all vehicle seats are arranged in a rectangular pattern.
 This means seats are arranged in rows, with multiple rows lined up.
 The grouping operation involves seating guest groups in the same row.
 Friend groups must remain together in the same row and sit consecutively.
@@ -59,7 +59,7 @@ To handle this model, we define several variables for state and transition:
 - $s_i \in \Sigma$: the seat occupancy state after the $i$-th group has been seated
 
 After a vehicle is dispatched, a new empty vehicle arrives.
-This means the state return to the initial state $\sigma_0$ (an empty vehicle).
+This means the state returns to the initial state $\sigma_0$ (an empty vehicle).
 
 <!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
 
@@ -112,7 +112,7 @@ For our model with finite state space $\Sigma = \{0, 1, \ldots, n\}$ and typical
 
 We define the **stationary state probability vector** as:
 $$
-\pi = (\pi_0, \pi_1, \ldots, \pi_{n})^T
+\pi = (\pi_0, \pi_1, \ldots, \pi_{n})
 $$
 where $\pi_j = \lim_{i \to \infty} P[s_i = j]$ for $j \in \{0, 1, \ldots, n\}$ represents the long-run probability that exactly $j$ seats are filled when a grouping decision is made.
 
@@ -126,7 +126,7 @@ We solve this in three steps:
 2. Identify the stationary state.
 3. Calculate the expected seat occupancy from the stationary probability distribution.
 
-#### Setting a transition matrix
+#### Constructing a transition matrix
 Suppose a group of size $k$ arrives.
 If the number of empty seats is greater than or equal to $k$, the group is seated.
 If it is less than $k$, the crew dispatches the current vehicle and the group is seated in a new vehicle.
@@ -143,9 +143,9 @@ T_{jk}&=&P[s_{i+1}=k|s_{i}=j]\\
   + \mathbb{1}_ {[x=k, j+x > n]} \right]
 \end{eqnarray}
 $$
-We call such a matrix the **transition matrix**.
+We call matrix $T$ the **transition matrix**.
 
-We show an example with the simplest case: two seats.
+We demonstrate an example with the simplest case: two seats.
 In this case, the seat occupancy can be in states $s_i=0, 1, 2$.
 
 
@@ -155,7 +155,7 @@ grViz("
   digraph dot{
     graph[
       rankdir = LR,
-      label = 'Fig.2: The Simplest Case(two seats). \nRed means dispatch',
+      label = 'Fig.2: The Simplest Case (two seats). \nRed arrows indicate dispatch',
       fontsize = 10,
       layout = neato,
       ordering = out,
@@ -184,7 +184,7 @@ T=\begin{pmatrix}
   0 & p_1 & p_2
   \end{pmatrix},
 $$
-since $p_1+p_2=1$.  
+since $p_1+p_2=1$ for the two-seat case.
 
 #### Stationary State
 Let $\mathbf{p}^{(i)}$ denote the state probability distribution after $i$ transitions from an arbitrary initial distribution.
@@ -210,7 +210,7 @@ T=\begin{pmatrix}
 \end{pmatrix}
 $$
 
-From the eigenvector equation $\pi^T T=\pi^T$, we obtain the system:
+From the eigenvector equation $\pi T=\pi$, we obtain the system:
 $$
 \begin{cases}
 0 &=& \pi_0 \\
@@ -221,12 +221,12 @@ $$
 
 Solving this system with the normalization constraint $\pi_0 + \pi_1 + \pi_2 = 1$, we obtain:
 $$
-\pi = \begin{pmatrix}0 \\ \frac{p_1}{1+p_1} \\ \frac{1}{1+p_1}\end{pmatrix}
+\pi = \begin{pmatrix}0 & \frac{p_1}{1+p_1} & \frac{1}{1+p_1}\end{pmatrix}
 $$
 
-Note that $\pi_0=0$ means the vehicle is never empty in the stationary state, as guests arrive continuously.
+Note that $\pi_0=0$ means that in the stationary state, the vehicle is never empty when a grouping decision is made, as guests arrive continuously.
 
-#### Expectation value of seat occupancy
+#### Expected Seat Occupancy
 Once the stationary distribution $\pi$ is obtained, we can calculate the expected seat occupancy rate.
 
 When a vehicle is dispatched from state $s_i=j$, the number of occupied seats is $j$.
@@ -247,9 +247,10 @@ $$
 \mathrm{E}[Ocp] = \frac{1}{p_D} \sum_{j=0}^{n} \pi_j \cdot \frac{j}{n} \cdot p_D(j)
 $$
 
-**Example: Two seat case (continued)**
+**Example: Two-seat case (continued)**
 
 Using the stationary distribution derived in the previous section, we calculate the dispatch probabilities from each state:
+
 - From state 0: $p_D(0) = p_1 + p_2 = 1$ (always dispatch, but $\pi_0=0$ so no contribution)
 - From state 1: $p_D(1) = p_2$ (dispatch only when a group of size 2 arrives)
 - From state 2: $p_D(2) = p_1 + p_2 = 1$ (always dispatch)
@@ -262,11 +263,12 @@ $$
 The expected occupancy rate is:
 $$
 \begin{eqnarray}
-\mathrm{E}[Ocp] &=& \frac{1}{p_D}\left(\frac{0}{2} \cdot 1 \cdot 0 + \frac{1}{2} \cdot p_2 \cdot \frac{p_1}{1+p_1} + \frac{2}{2} \cdot 1 \cdot \frac{1}{1+p_1}\right)\\
+\mathrm{E}[Ocp] &=& \frac{1}{p_D}\left(\frac{1}{2} \cdot p_2 \cdot \frac{p_1}{1+p_1} + \frac{2}{2} \cdot 1 \cdot \frac{1}{1+p_1}\right) \quad (\text{since } \pi_0=0)\\
 &=& \frac{1}{2p_D}\left(\frac{p_1(1-p_1)}{1+p_1} + \frac{2}{1+p_1}\right)\\
 &=& \frac{p_1 - p_1^2 + 2}{2(1+p_1 - p_1^2)}
 \end{eqnarray}
 $$
+Simplifying by substituting $p_2=1-p_1$ and the expression for $p_D$ from above.
 
 For example, when $p_1 = 0.5$ (equal probability for single guests and pairs), the expected occupancy is:
 $$
@@ -275,7 +277,7 @@ $$
 
 Fig.3 shows how the expected occupancy varies with $p_1$ for the two-seat case.
 
-```{r twoseatoccupancy, fig.width = 6, fig.height = 4}
+```{r twoseatoccupancy, fig.width = 7, fig.height = 4}
 library(ggplot2)
 
 # Calculate expected occupancy as a function of p_1
@@ -302,20 +304,19 @@ ggplot(df, aes(x = p1, y = E_Ocp)) +
   ylim(0.9, 1.0)
 ```
 
-The plot reveals that expected occupancy reaches its minimum value of 0.9 at $p_1=0.5$, and approaches 1.0 (perfect occupancy) at both extremes ($p_1 \to 0$ and $p_1 \to 1$).
+The plot reveals that the expected occupancy reaches its minimum value of 0.9 at $p_1=0.5$, and approaches 1.0 (perfect occupancy) at both extremes ($p_1 \to 0$ and $p_1 \to 1$).
 This makes intuitive sense: when only one group size occurs ($p_1=0$ or $p_1=1$), all groups fit perfectly into the two-seat configuration.
-			
 
 
-## Actual setting: one line of four seats
+## Practical Example: Single Row of Four Seats
 As an example, we calculate seat occupancy in the following configuration:
 
 - a single row of seats
 - four seats per row
 
-This situation matches the seats configuration of Harry Potter and the Forbidden Journey.
+This situation matches the seat configuration of Harry Potter and the Forbidden Journey.
 
-### Transition Matrix 
+### Transition Matrix
 With only a single row, guests must be seated in arrival order.
 Therefore, the grouping strategy is determined automatically.
 
@@ -328,11 +329,11 @@ T=\begin{pmatrix}
   \end{pmatrix}
 $$
  
-### Single Queue   
+### Single Queue Case
 
 To obtain an explicit solution, we introduce a single-parameter model by setting $p_1=p$ and $p_2=p_3=p_4=(1-p)/3$.
 This represents the simplest scenario where single guests arrive with probability $p$, and all multi-person groups (sizes 2, 3, 4) are equally likely, each with probability $(1-p)/3$.
-Then by an equation $T\pi=\pi$, we can obtain the stationary state
+Then from the equation $\pi T=\pi$, we can obtain the stationary state
 $$
 \pi = \frac{1}{6(p+1)(2p^2-p+2)}\begin{pmatrix}
   2p^2+2p+5\\
@@ -350,7 +351,7 @@ $$
 The expected occupancy rate is
 $$
 \begin{eqnarray}
-\mathrm E[Ocp] &=& \frac{1}{p_D}\frac{3-2p}{4}\\
+\mathrm{E}[Ocp] &=& \frac{1}{p_D}\frac{3-2p}{4}\\
   &=& \frac{9(p+1)(3-2p)(2p^2-p+2)}{2(-28p^4+24p^3+6p^2-8p+33)}
   \end{eqnarray}
 $$
@@ -359,9 +360,10 @@ $$
 We substitute concrete values into the parameters.
 In case of $p=1/20$, 
 $$
-\pi = \begin{pmatrix}\pi_0\\\pi_1\\\pi_2\\\pi_3\end{pmatrix}= \begin{pmatrix}0.415\\ 0.021\\ 0.236\\ 0.329\end{pmatrix}
+\pi = \begin{pmatrix}\pi_0 & \pi_1 & \pi_2 & \pi_3\end{pmatrix}= \begin{pmatrix}0.415 & 0.021 & 0.236 & 0.329\end{pmatrix}.
 $$
-and the dispatch transition matrix is
+
+To calculate the dispatch probability, we define the dispatch transition matrix $T_D$, which contains only the transition probabilities that result in vehicle dispatch:
 $$
 T_D = \begin{pmatrix}
   p_4&p_3+2p_4&p_2+2p_4&p_1+2p_4\\
@@ -372,69 +374,87 @@ T_D = \begin{pmatrix}
 $$
 thus
 $$
-p_D = \mathbf 1^\mathrm{T}T\pi=0.8827
+p_D = \pi T_D \mathbf{1}=0.8827
 $$
 Therefore, the expected occupancy is
 $$
-\mathrm E[Ocp] = \begin{pmatrix}
-  p_4&p_3+\frac54p_4&p_2+\frac12p_3+\frac32p_4&p_1+\frac34p_2+\frac34p_3+\frac74p_4\\
-\end{pmatrix}\begin{pmatrix}\pi_0\\\pi_1\\\pi_2\\\pi_3\end{pmatrix}
+\mathrm{E}[Ocp] = \pi \begin{pmatrix}
+  p_4 \\
+  p_3+\frac54p_4\\
+  p_2+\frac12p_3+\frac32p_4\\
+  p_1+\frac34p_2+\frac34p_3+\frac74p_4\\
+\end{pmatrix}
   =0.8213
 $$
 
-### With Single-Rider Queue
-If a single-rider queue is available, the parameters should be modified as
+### Single-Rider Queue Case
+A single-rider queue is a separate queue for guests arriving alone. This system allows single riders to bypass the main queue and fill remaining empty seats in vehicles that are about to be dispatched.
+By separating single riders from the main queue, we can analyze the main queue occupancy independently and then account for the contribution of single riders.
+
+In this analysis, we set $p_1=0$ for the main queue, as single riders use the dedicated queue.
+The arrival probabilities for the main queue become:
 $$
-p_1=0, p_2=p_3=p_4=1/3
+p_1=0, p_2=p_3=p_4=1/3.
 $$
-Then we can obtain the stationary state as
+
+Then we can obtain the stationary state as:
 $$
-\pi=\begin{pmatrix}0.417\\0\\0.25\\0.333\end{pmatrix}
+\pi=\begin{pmatrix}0.417 & 0 & 0.25 & 0.333\end{pmatrix}.
 $$
+
 Using this, we can easily calculate the dispatch probability
 $$
-D = 0.9167
+p_D = 0.9167
 $$
-and the expectation of occupancy
+and the expected occupancy
 $$
-\mathrm E[Ocp]=0.818
+\mathrm{E}[Ocp]=0.818
 $$
 
-The above analysis excludes single riders from the main queue.
-However, single riders can fill remaining empty seats, increasing effective occupancy.
+To obtain the overall expected occupancy, we account for single riders filling remaining empty seats.
 If the proportion of available single riders is $p_s$ (assumed to be 0.05), the adjusted expected occupancy becomes:
 $$
-\mathrm E[Ocp_S]=\mathrm E[Ocp](1+p_s)=0.859
+\mathrm{E}[Ocp_S]=\mathrm{E}[Ocp](1+p_s)=0.859
 $$
 
-### Pre-grouping
-We pre-group guests by merging groups of size 2 or 4 together, keeping groups of size 3 separate.
+### Pre-grouping Case
 
-When all arriving groups consist of exactly 3 guests (i.e., $p_3=1$), the expected occupancy is 0.75.
+Pre-grouping is a strategy where we combine arriving groups before seating them.
+For a four-seat configuration, we can consider three different pre-grouping strategies based on which group size to keep separate.
 
-For the case where only groups of size 2 or 4 arrive, we denote their probabilitiees as $p_2=p$ and $p_4=1-p$.
+#### Case A: Separating Size-2 Groups
+(To be analyzed)
 
-Transition matrix
+#### Case B: Separating Size-3 Groups
+We keep groups of size 3 separate and merge groups of size 2 and 4 together.
+
+When all arriving groups consist of exactly 3 guests (i.e., $p_3=1$), the expected occupancy is 0.75, since each vehicle always carries exactly 3 out of 4 seats filled.
+
+For the case where only groups of size 2 or 4 arrive, we denote their probabilities as $p_2=p$ and $p_4=1-p$.
+
+The transition matrix is:
 $$
 T = \begin{pmatrix} 1-p&1\\p&0\end{pmatrix}
 $$
 
-Stationary state
+Stationary state:
 $$
-\pi = \frac{1}{1+p}\begin{pmatrix}1\\p\end{pmatrix}
-$$
-
-Expected Dispatch
-$$
-\mathrm E[D]=\frac{-p^2+p+1}{p+1}
+\pi = \frac{1}{1+p}\begin{pmatrix}1 & p\end{pmatrix}
 $$
 
-The expected Occupancy
+Dispatch probability:
 $$
-\mathrm E[Ocp]=\frac{p^2-p+2}{2(-p^2+p+1)}
+p_D=\frac{-p^2+p+1}{p+1}
 $$
-In case $p=1/2$, expected occupancy is minimum 0.9.
+
+The expected occupancy is:
+$$
+\mathrm{E}[Ocp]=\frac{p^2-p+2}{2(-p^2+p+1)}
+$$
+In the case $p=1/2$, the expected occupancy reaches its minimum value of 0.9.
+
+#### Case C: Separating Size-4 Groups
+(To be analyzed)
 
 
 ## Conclusion
-- change 

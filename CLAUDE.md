@@ -98,6 +98,13 @@ When working with mathematical content in this repository, maintain the followin
 - When multiple transition paths lead to same state, use summation over all paths
 - Prefer rigorous formulations (e.g., indicator functions, explicit summations) over ambiguous case-by-case definitions
 
+**LaTeX Notation Consistency**:
+- **Use consistent LaTeX commands** throughout the document:
+  - Expectation operator: Always use `\mathrm{E}[...]` with braces (not `\mathrm E[...]`)
+  - Variables: Maintain consistent naming (e.g., always use $p_D$ for dispatch probability, not $D$)
+  - Matrix notation: Use `\begin{pmatrix}...\end{pmatrix}` consistently
+- **Check for typos in mathematical symbols** during revision
+
 ### Vector and Scalar Notation
 - **Use bold face to distinguish vectors from scalars only when the same letter is used for both types**:
   - Use `\mathbf{p}^{(i)}` (bold vector) when $p_k$ (scalar) already exists in the document
@@ -105,6 +112,13 @@ When working with mathematical content in this repository, maintain the followin
   - Use $\pi_j$ (regular) for scalar elements of vector $\pi$
 - **Rationale**: Bold face should serve a practical purpose (avoiding confusion), not be applied mechanically to all vectors
 - **Example**: In this repository, `\mathbf{1}` is used for the all-ones vector, but $\pi$ remains regular since there's no scalar $\pi$ to confuse it with
+
+**Vector Orientation Consistency**:
+- **Use row vector notation consistently** for probability distributions throughout the document
+- For stationary distribution: $\pi = (\pi_0, \pi_1, \ldots, \pi_n)$ (row vector)
+- Markov chain equation: $\pi = \pi T$ (row vector × matrix)
+- When computing inner products: use $\pi v$ (row × column) or make transpose explicit with $\pi^T$
+- **Rationale**: Row vector notation is standard in Markov chain literature and maintains consistency across all calculations
 
 ### State Definition in Markov Chain Models
 - **Carefully define observation timing** when specifying state space.
@@ -137,6 +151,20 @@ When working with mathematical content in this repository, maintain the followin
   - ❌ "The probability is independent of time $P[x_i=k]=p_k$."
   - ✅ "The probability is independent of time, i.e., $P[x_i=k]=p_k$ for all $i$."
 
+### Explaining Calculation Steps
+- **Add explanatory text after multi-step derivations** to clarify non-obvious substitutions
+- **Simplify expressions by omitting zero terms** but add brief notes (e.g., "since $\pi_0=0$")
+- **Example**:
+  ```latex
+  \begin{eqnarray}
+  \mathrm{E}[Ocp] &=& ... \\
+  &=& ... \\
+  &=& ...
+  \end{eqnarray}
+  $$
+  Simplifying by substituting $p_2=1-p_1$ and the expression for $p_D$ from above.
+  ```
+
 ### Introducing Parameters and Adjustments
 - **Always explain why** when introducing new parameters or simplifying assumptions:
   - What does the parameter represent?
@@ -146,6 +174,15 @@ When working with mathematical content in this repository, maintain the followin
   - What effect is being adjusted for?
   - Why was it excluded from the base model?
   - How does the adjustment formula work?
+
+**Logical Flow for Model Extensions**:
+- **Explain the modeling strategy upfront** before introducing parameter changes
+- **Example**: For single-rider queue analysis:
+  1. First explain the purpose and mechanism of the system
+  2. Then explain why certain parameters are set (e.g., $p_1=0$)
+  3. Perform the analysis
+  4. Complete the model logically (e.g., accounting for single riders filling empty seats)
+- **Avoid presenting adjustments as afterthoughts**; frame them as logical completions of the model
 
 ## English Writing Style
 
@@ -160,6 +197,14 @@ When writing or revising English text in research documents, maintain the follow
 - **Use passive voice** for general processes: "the vehicle is dispatched", "the matrix is constructed"
 - **Use active voice** for describing actors in the model: "Guests arrive", "Groupers guide..."
 - **Mixed usage is appropriate** when each choice serves its purpose
+
+### Terminology Consistency
+- **Maintain consistent terminology** for key concepts throughout the document:
+  - Use "expected occupancy" (not "expectation of occupancy")
+  - Use "arrival probabilities" or "group size probabilities" (more specific than "parameters")
+  - Use "dispatch probability" consistently with variable $p_D$
+  - Use "stationary state" or "stationary distribution" consistently
+- **Create a glossary of key terms** when starting a document to ensure consistency
 
 ## Research Context
 
