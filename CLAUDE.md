@@ -13,8 +13,10 @@ This is a research repository focused on mathematical modeling of seat occupancy
 - `occupancy.Rmd` - Main research paper: "General Framework for Seat Occupancy Expectation"
   - Establishes Markov chain model for predicting seat occupancy
   - Analyzes simple cases (single row of seats)
-  - Includes mathematical derivations and examples using Harry Potter attraction configuration (4 seats per row)
-  - Contains R code for generating diagrams and calculations
+  - Includes complete mathematical derivations with examples:
+    - Simplest case: 2-seat configuration with analytical solutions and visualization
+    - Practical case: 4-seat configuration (Harry Potter attraction)
+  - Contains R code for generating diagrams, calculations, and visualizations
 
 - `*.html` - Rendered output files from R Markdown documents
 
@@ -38,6 +40,14 @@ Rscript -e "rmarkdown::render('occupancy.Rmd')"
 The documents use:
 - `knitr` - For document rendering and R code chunk execution
 - `DiagrammeR` - For creating Markov chain state diagrams (using GraphViz)
+- `ggplot2` - For creating data visualizations and analytical plots
+
+### Visualization Guidelines
+
+When creating visualizations in R Markdown:
+- **Prefer ggplot2** for data-driven plots (line plots, scatter plots, statistical visualizations)
+- Use DiagrammeR for structural diagrams (state diagrams, flowcharts)
+- ggplot2 provides consistent styling, better customization, and publication-quality graphics
 
 ## Mathematical Framework
 
