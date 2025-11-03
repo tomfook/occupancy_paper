@@ -1629,8 +1629,8 @@ Operation Planning<br><h4 class="date">2018-08-20</h4>
 </ul>
 <p>After a vehicle is dispatched, a new empty vehicle arrives. This means the state returns to the initial state <span class="math inline">\(\sigma_0\)</span> (an empty vehicle).</p>
 <!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-d88909548e7c78715cdf" style="width:480px;height:192px;"></div>
-<script type="application/json" data-for="htmlwidget-d88909548e7c78715cdf">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n      a2[label = \"Which row\n to seat?\", shape = square];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a3[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n      edge[label = \"\"] a3 -> a4;\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-114ba41b793b3acd4593" style="width:480px;height:192px;"></div>
+<script type="application/json" data-for="htmlwidget-114ba41b793b3acd4593">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n      a2[label = \"Which row\n to seat?\", shape = square];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a3[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n      edge[label = \"\"] a3 -> a4;\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>We assume that the situation is stationary. This stationarity assumption means that the probability of a group of size <span class="math inline">\(k\)</span> arriving is independent of time, i.e., <span class="math inline">\(P[x_i=k]=p_k\)</span> for all <span class="math inline">\(i\)</span>.</p>
 </div>
 </div>
@@ -1672,8 +1672,8 @@ T_{jk}&amp;=&amp;P[s_{i+1}=k|s_{i}=j]\\
 \]</span> We call matrix <span class="math inline">\(T\)</span> the <strong>transition matrix</strong>.</p>
 <p>We demonstrate an example with the simplest case: two seats. In this case, the seat occupancy can be in states <span class="math inline">\(s_i=0, 1, 2\)</span>.</p>
 <p>Fig.2 shows the Markov states and transitions in this situation.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-42469bccd83dfeba4bb3" style="width:384px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-42469bccd83dfeba4bb3">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case (two seats). \nRed arrows indicate dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e2a586212cd1871f7756" style="width:384px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-e2a586212cd1871f7756">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case (two seats). \nRed arrows indicate dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Since each element <span class="math inline">\(T_{jk}\)</span> represents the probability of moving from state <span class="math inline">\(s_i=j\)</span> to state <span class="math inline">\(s_{i+1}=k\)</span>, we can define the transition matrix as <span class="math display">\[
 T=\begin{pmatrix}
   0 &amp; p_1 &amp; p_2 \\
@@ -1830,31 +1830,103 @@ p_D = 0.9167
 <div id="pre-grouping-case" class="section level3">
 <h3>Pre-grouping Case</h3>
 <p>Pre-grouping is a strategy where we combine arriving groups before seating them. For a four-seat configuration, we can consider three different pre-grouping strategies based on which group size to keep separate.</p>
+<p>In this analysis, single riders (size 1) are handled separately through a dedicated single-rider queue, as described in the Single-Rider Queue Case above. Therefore, we focus on pre-grouping strategies for groups of sizes 2, 3, and 4, with the normalization <span class="math inline">\(p_2 + p_3 + p_4 = 1\)</span>.</p>
 <div id="case-a-separating-size-2-groups" class="section level4">
 <h4>Case A: Separating Size-2 Groups</h4>
-<p>(To be analyzed)</p>
+<p>We keep groups of size 2 separate and merge groups of size 3 and 4 together.</p>
+<p>When all arriving groups consist of exactly 2 guests (i.e., <span class="math inline">\(p_2=1\)</span>), each vehicle is filled with two groups of size 2, resulting in perfect occupancy of 1.0.</p>
+<p>For the case where only groups of size 3 or 4 arrive, we denote their probabilities as <span class="math inline">\(p_3=p\)</span> and <span class="math inline">\(p_4=1-p\)</span>.</p>
+<p>The state space is <span class="math inline">\(\{3, 4\}\)</span>, representing the size of the waiting group. The transition matrix is: <span class="math display">\[
+T = \begin{pmatrix}p &amp; 1-p \\ p &amp; 1-p\end{pmatrix}
+\]</span></p>
+<p>Stationary state: <span class="math display">\[
+\pi = \begin{pmatrix}p &amp; 1-p\end{pmatrix}
+\]</span></p>
+<p>Dispatch probability: <span class="math display">\[
+p_D=1
+\]</span></p>
+<p>The expected occupancy for the merged queue (sizes 3 and 4 only) is: <span class="math display">\[
+\mathrm{E}[Ocp_{3,4}]=\frac{4-p}{4}
+\]</span></p>
+<p>The overall expected occupancy, accounting for both queues, is: <span class="math display">\[
+\mathrm{E}[Ocp] = p_2 \cdot 1 + (p_3 + p_4) \cdot \frac{4-p}{4} = p_2 + \frac{3}{4}p_3 + p_4
+\]</span> where <span class="math inline">\(p = \frac{p_3}{p_3+p_4}\)</span>.</p>
+<p>For example, if <span class="math inline">\(p_2=p_3=p_4=1/3\)</span>, then <span class="math inline">\(p=1/2\)</span> and: <span class="math display">\[
+\mathrm{E}[Ocp] = \frac{1}{3} + \frac{3}{4} \cdot \frac{1}{3} + \frac{1}{3} = \frac{11}{12} \approx 0.917
+\]</span></p>
 </div>
 <div id="case-b-separating-size-3-groups" class="section level4">
 <h4>Case B: Separating Size-3 Groups</h4>
 <p>We keep groups of size 3 separate and merge groups of size 2 and 4 together.</p>
 <p>When all arriving groups consist of exactly 3 guests (i.e., <span class="math inline">\(p_3=1\)</span>), the expected occupancy is 0.75, since each vehicle always carries exactly 3 out of 4 seats filled.</p>
 <p>For the case where only groups of size 2 or 4 arrive, we denote their probabilities as <span class="math inline">\(p_2=p\)</span> and <span class="math inline">\(p_4=1-p\)</span>.</p>
-<p>The transition matrix is: <span class="math display">\[
-T = \begin{pmatrix} 1-p&amp;1\\p&amp;0\end{pmatrix}
+<p>The state space is <span class="math inline">\(\{2, 4\}\)</span>, representing the number of filled seats immediately after a group has been seated. The transition matrix is: <span class="math display">\[
+T = \begin{pmatrix} 0 &amp; 1 \\ p &amp; 1-p\end{pmatrix}
 \]</span></p>
 <p>Stationary state: <span class="math display">\[
-\pi = \frac{1}{1+p}\begin{pmatrix}1 &amp; p\end{pmatrix}
+\pi = \frac{1}{1+p}\begin{pmatrix}p &amp; 1\end{pmatrix}
 \]</span></p>
 <p>Dispatch probability: <span class="math display">\[
 p_D=\frac{-p^2+p+1}{p+1}
 \]</span></p>
-<p>The expected occupancy is: <span class="math display">\[
-\mathrm{E}[Ocp]=\frac{p^2-p+2}{2(-p^2+p+1)}
-\]</span> In the case <span class="math inline">\(p=1/2\)</span>, the expected occupancy reaches its minimum value of 0.9.</p>
+<p>The expected occupancy for the merged queue (sizes 2 and 4 only) is: <span class="math display">\[
+\mathrm{E}[Ocp_{2,4}]=\frac{-p^2+p+2}{2(-p^2+p+1)}
+\]</span></p>
+<p>The overall expected occupancy, accounting for both queues, is: <span class="math display">\[
+\mathrm{E}[Ocp] = p_3 \cdot \frac{3}{4} + (p_2 + p_4) \cdot \mathrm{E}[Ocp_{2,4}]
+\]</span> where <span class="math inline">\(p=\frac{p_2}{p_2+p_4}\)</span>.</p>
+<p>In the case <span class="math inline">\(p=1/2\)</span> (merged queue only), the expected occupancy reaches its minimum value of 0.9.</p>
+<p>For example, if <span class="math inline">\(p_2=p_3=p_4=1/3\)</span>, then <span class="math inline">\(p=1/2\)</span> and: <span class="math display">\[
+\mathrm{E}[Ocp] = \frac{1}{3} \cdot \frac{3}{4} + \frac{2}{3} \cdot 0.9 = \frac{1}{4} + 0.6 = 0.85
+\]</span></p>
 </div>
 <div id="case-c-separating-size-4-groups" class="section level4">
 <h4>Case C: Separating Size-4 Groups</h4>
-<p>(To be analyzed)</p>
+<p>We keep groups of size 4 separate and merge groups of size 2 and 3 together.</p>
+<p>When all arriving groups consist of exactly 4 guests (i.e., <span class="math inline">\(p_4=1\)</span>), each vehicle is filled perfectly, resulting in occupancy of 1.0.</p>
+<p>For the case where only groups of size 2 or 3 arrive, we denote their probabilities as <span class="math inline">\(p_2=p\)</span> and <span class="math inline">\(p_3=1-p\)</span>.</p>
+<p>The state space is <span class="math inline">\(\{2, 3, 4\}\)</span>, representing the number of filled seats immediately after a group has been seated. The transition matrix is: <span class="math display">\[
+T = \begin{pmatrix}
+0 &amp; 1-p &amp; p \\
+p &amp; 1-p &amp; 0 \\
+p &amp; 1-p &amp; 0
+\end{pmatrix}
+\]</span></p>
+<p>Stationary state: <span class="math display">\[
+\pi = \begin{pmatrix}\frac{p}{1+p} &amp; 1-p &amp; \frac{p^2}{1+p}\end{pmatrix}
+\]</span></p>
+<p>Dispatch probability: <span class="math display">\[
+p_D=\frac{1+p-p^2}{1+p}
+\]</span></p>
+<p>The expected occupancy for the merged queue (sizes 2 and 3 only) is: <span class="math display">\[
+\mathrm{E}[Ocp_{2,3}]=\frac{3+2p-p^2}{4(1+p-p^2)}
+\]</span></p>
+<p>The overall expected occupancy, accounting for both queues, is: <span class="math display">\[
+\mathrm{E}[Ocp] = p_4 \cdot 1 + (p_2+p_3) \cdot \mathrm{E}[Ocp_{2,3}]
+\]</span> where <span class="math inline">\(p = \frac{p_2}{p_2+p_3}\)</span>.</p>
+<p>In the case <span class="math inline">\(p=1/2\)</span> (merged queue only), the expected occupancy is 0.75.</p>
+<p>For example, if <span class="math inline">\(p_2=p_3=p_4=1/3\)</span>, then <span class="math inline">\(p=1/2\)</span> and: <span class="math display">\[
+\mathrm{E}[Ocp] = \frac{1}{3} \cdot 1 + \frac{2}{3} \cdot 0.75 = \frac{1}{3} + 0.5 = \frac{5}{6} \approx 0.833
+\]</span></p>
+</div>
+<div id="comparison-of-pre-grouping-strategies" class="section level4">
+<h4>Comparison of Pre-grouping Strategies</h4>
+<p>We compare the expected occupancy rates across different queueing strategies for the four-seat configuration with <span class="math inline">\(p_2=p_3=p_4=1/3\)</span>.</p>
+<p><strong>Single Queue Case</strong> (<span class="math inline">\(p=0\)</span> in the parameterization): <span class="math display">\[
+\mathrm{E}[Ocp] = \frac{9}{11} \approx 0.818
+\]</span></p>
+<p><strong>Case A</strong> (Separating Size-2): <span class="math display">\[
+\mathrm{E}[Ocp] = \frac{11}{12} \approx 0.917
+\]</span></p>
+<p><strong>Case B</strong> (Separating Size-3): <span class="math display">\[
+\mathrm{E}[Ocp] = 0.85
+\]</span></p>
+<p><strong>Case C</strong> (Separating Size-4): <span class="math display">\[
+\mathrm{E}[Ocp] = \frac{5}{6} \approx 0.833
+\]</span></p>
+<p><strong>Analysis</strong>: Among the three pre-grouping strategies, Case A achieves the highest expected occupancy (0.917), representing a substantial improvement of approximately 0.10 (or 12% relative improvement) over the Single Queue Case (0.818). Case B and Case C also outperform the Single Queue Case.</p>
+<p>These results demonstrate that the choice of pre-grouping strategy significantly impacts seat occupancy. For attractions with similar group size distributions, implementing a pre-grouping system that separates size-2 groups can provide substantial operational benefits. The framework established here allows operators to evaluate the optimal pre-grouping strategy for any given group size distribution.</p>
+<p>Note: These occupancy rates exclude single riders, who are handled through a separate queue. In practice, single riders can fill remaining empty seats, providing an additional improvement factor as shown in the Single-Rider Queue Case.</p>
 </div>
 </div>
 </div>

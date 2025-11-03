@@ -16,6 +16,11 @@ This is a research repository focused on mathematical modeling of seat occupancy
   - Includes complete mathematical derivations with examples:
     - Simplest case: 2-seat configuration with analytical solutions and visualization
     - Practical case: 4-seat configuration (Harry Potter attraction)
+  - Pre-grouping Case analysis (Case A, B, C):
+    - Case A: Separating size-2 groups (optimal for balanced distributions)
+    - Case B: Separating size-3 groups
+    - Case C: Separating size-4 groups
+    - Comparison section with unified evaluation at $p_2=p_3=p_4=1/3$
   - Contains R code for generating diagrams, calculations, and visualizations
 
 - `*.html` - Rendered output files from R Markdown documents
@@ -183,6 +188,70 @@ When working with mathematical content in this repository, maintain the followin
   3. Perform the analysis
   4. Complete the model logically (e.g., accounting for single riders filling empty seats)
 - **Avoid presenting adjustments as afterthoughts**; frame them as logical completions of the model
+
+## Analyzing Multiple Strategies (Pre-grouping Cases)
+
+When comparing multiple operational strategies (e.g., different queue configurations):
+
+### Structural Consistency
+- **Use identical structure** for all cases being compared:
+  1. Strategy description
+  2. Trivial case analysis (single group size)
+  3. Mixed queue analysis with parameterization
+  4. State space definition
+  5. Transition matrix
+  6. Stationary state
+  7. Dispatch probability
+  8. Expected occupancy formulas (partial and overall)
+  9. Unified numerical example
+
+### Unified Evaluation
+- **Choose a reference distribution** for numerical comparison (e.g., $p_2=p_3=p_4=1/3$)
+- **Apply the same distribution** to all strategies
+- **Present results together** in a dedicated Comparison section
+- Avoid embedding comparisons within individual case analyses
+
+### Multiple Queue Models
+When analyzing systems with separate queues (e.g., size-2 queue + size-3,4 queue):
+- **Analyze each queue independently** first
+- **Calculate partial occupancy** for each queue: $\mathrm{E}[Ocp_{subset}]$
+- **Compute overall occupancy** as weighted average:
+  $$\mathrm{E}[Ocp_{total}] = \sum_{\text{queues}} (\text{queue probability}) \cdot \mathrm{E}[Ocp_{\text{queue}}]$$
+- **Clearly distinguish** between partial and overall metrics in notation
+
+### Explicit Exclusions
+- **State excluded factors explicitly** (e.g., "single riders are handled separately")
+- **Explain why exclusion is justified** (e.g., "provides pure comparison of strategies")
+- **Add notes in comparison section** reminding readers of exclusions
+- **Cross-reference** to sections where excluded factors are analyzed
+
+## Transition Matrix Validation
+
+Before accepting any transition matrix $T$:
+
+### Mathematical Checks
+1. **Row sum = 1**: Each row must sum to 1 (probability distribution)
+   - For all $i$: $\sum_j T_{ij} = 1$
+2. **Non-negative entries**: All elements $T_{ij} \geq 0$
+3. **Correct dimensions**: If state space has $m$ elements, $T$ is $m \times m$
+
+### Logical Checks
+- **Trace through transitions**: For each state $i$ and each possible arrival group size, verify the destination state
+- **Dispatch logic**: Verify that transitions causing dispatch lead to correct new states
+- **State order consistency**: Ensure row/column order matches the stated state space order
+
+### Common Errors
+- **Forgetting dispatch transitions**: When state $j$ + group size $k$ exceeds capacity
+- **Wrong state after dispatch**: Should transition to state representing the newly arrived group
+- **Inconsistent state ordering**: Matrix order must match explicitly stated state space order (e.g., $\{2,4\}$ not $\{4,2\}$)
+
+### Example Verification
+For state space $\{2, 4\}$ with $p_2=p, p_4=1-p$:
+$$
+T = \begin{pmatrix}0 & 1 \\ p & 1-p\end{pmatrix}
+$$
+- Row 1 (state 2): $0 + 1 = 1$ ✓
+- Row 2 (state 4): $p + (1-p) = 1$ ✓
 
 ## English Writing Style
 
