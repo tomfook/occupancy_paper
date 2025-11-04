@@ -316,20 +316,58 @@ As an example, we calculate seat occupancy in the following configuration:
 
 This situation matches the seat configuration of Harry Potter and the Forbidden Journey.
 
+### State Space Definition
+In the two-seat case analyzed earlier, we observed that the stationary probability of state 0 (completely empty vehicle) was $\pi_0=0$. 
+This reflects the reality that under continuous guest arrivals in the stationary regime, we never observe a completely empty vehicle waiting for the next group.
+
+Therefore, for the four-seat analysis, we exclude state 0 and define the state space as $\Sigma = \{1,2,3,4\}$, where each state represents the number of filled seats immediately after a group has been seated.
+
 ### Transition Matrix
 With only a single row, guests must be seated in arrival order.
 Therefore, the grouping strategy is determined automatically.
 
 $$
-T=\begin{pmatrix}
-  p_4 & p_3+p_4& p_2+p_4&p_1+p_4\\
-  p_1&0&0&0\\
-  p_2&p_1&0&p_2\\
-  p_3&p_2&p_1+p_3&p_3
-  \end{pmatrix}
+T = \begin{pmatrix}
+0 & p_1 & p_2 & p_3+p_4\\
+0 & 0 & p_1 + p_3 & p_2+p_4\\
+0 & p_2 & p_3 & p_1+p_4\\
+p_1 & p_2 & p_3 & p_4
+\end{pmatrix}
 $$
+
+### Stationary Distribution
+
+For the general four-parameter model $(p_1, p_2, p_3, p_4)$ with $p_1 + p_2 + p_3 + p_4 = 1$, solving the eigenvector equation $\pi T = \pi$ yields:
+
+$$
+\pi = (\pi_1, \pi_2, \pi_3, \pi_4)
+$$
+
+where
+$$
+\begin{align}
+\pi_1 &= \frac{p_1(-p_1 p_2 - p_2 p_3 - p_3 + 1)}{Z}\\
+\pi_2 &= \frac{-p_1^2 p_3 + p_1^2 + p_1 p_2^2 + p_1 p_2 - p_2 p_3 + p_2 p_4 + p_2}{Z}\\
+\pi_3 &= \frac{p_1^3 + p_1^2 p_3 + 2p_1 p_2 + p_1 + p_2 p_3 + p_4}{Z}\\
+\pi_4 &= \frac{-p_1 p_2 - p_2 p_3 - p_3 + 1}{Z}
+\end{align}
+$$
+
+and
+$$
+\begin{align}
+Z = &\, p_1^3 - p_1^2 p_2 + p_1^2 + p_1 p_2^2 - p_1 p_2 p_3 + 2p_1 p_2 - p_1 p_3 + 2p_1\\
+  &\, - p_2 p_3 + p_2 p_4 + p_2 - p_3 + p_4 + 1
+\end{align}
+$$
+
+While this solution is exact, the complexity of the expressions makes analytical interpretation difficult.
+To gain deeper insight into the relationship between arrival patterns and occupancy rates, we introduce a simplified single-parameter model later in this analysis.
+
+### Expected Occupancy
+(to be analyzed)
  
-### Single Queue Case
+### Single-Parameter Model
 
 To obtain an explicit solution, we introduce a single-parameter model by setting $p_1=p$ and $p_2=p_3=p_4=(1-p)/3$.
 This represents the simplest scenario where single guests arrive with probability $p$, and all multi-person groups (sizes 2, 3, 4) are equally likely, each with probability $(1-p)/3$.

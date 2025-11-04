@@ -74,6 +74,101 @@ The research models seat occupancy as a **Markov chain** where:
 2. Calculate stationary state (eigenvector with eigenvalue 1)
 3. Compute expected occupancy from stationary probabilities
 
+## Analysis Structure and Progression
+
+When analyzing occupancy models with multiple parameters, follow a general-to-specific progression to maximize both practical utility and mathematical insight.
+
+### General-to-Specific Flow
+
+**Recommended structure for parametric analysis**:
+1. **Start with general model**: Analyze the problem with the full parameter set first
+2. **Provide numerical analysis**: Calculate results for representative distributions
+3. **Then introduce simplified models**: For analytical insight and closed-form solutions
+4. **Motivate the simplification**: Explain why and what insight it provides
+
+**Rationale**: This progression demonstrates the framework's generality before specializing, allows practical predictions for arbitrary distributions, and makes the transition to simplified models logically motivated rather than arbitrary.
+
+### Numerical vs. Analytical Analysis
+
+**Numerical analysis** (for general parameter spaces):
+- Use representative distributions to explore behavior across the parameter space
+- Calculate occupancy for practical scenarios (e.g., uniform, singles-heavy, pairs-heavy)
+- Visualize parameter sensitivity with heat maps or contour plots
+- Provide practical decision-making tools for operations planning
+
+**Analytical analysis** (for mathematical insight):
+- Introduce simplified parameterizations when general formulas are intractable
+- Explicitly motivate the simplification (e.g., "To gain deeper analytical insight into the trade-off between single guests and multi-person groups...")
+- Derive closed-form expressions for stationary state and expected occupancy
+- Explain what insight the simplified model provides that numerical analysis cannot
+
+### Example: Four-Seat Case Structure
+
+The analysis should follow this progression:
+
+1. **Transition matrix** (general, in terms of $p_1, p_2, p_3, p_4$)
+   - Present the transition matrix for all four parameters
+   - Validate matrix properties (row sums, dimensions)
+
+2. **General four-parameter model**:
+
+   a. **Analytical solution** (if tractable):
+      - Derive stationary distribution $\pi$ in terms of parameters
+      - Derive dispatch probability $p_D$ from $\pi$
+      - Derive expected occupancy $\mathrm{E}[Ocp]$ from $\pi$ and $p_D$
+      - **All three components should be derived** to provide complete analytical framework
+      - Document the complexity of expressions as motivation for simplified models
+
+   b. **Numerical analysis** (for practical insights):
+      - Numerical solutions for representative distributions (e.g., uniform, singles-heavy, large groups)
+      - Parameter sensitivity analysis (e.g., heat map of $(p_1, p_4)$ space)
+      - Visualization of occupancy behavior across parameter space
+      - Table comparing expected occupancy for different distributions
+
+3. **Simplified single-parameter model** (for analytical insight):
+   - **Motivation section**: "While these numerical results provide practical insights for specific distributions, exact analytical formulas in terms of all four parameters are cumbersome. To gain deeper analytical insight, we introduce a simplified parameterization..."
+   - Define simplification (e.g., $p_1=p$, $p_2=p_3=p_4=(1-p)/3$)
+   - Explain what this captures (e.g., "trade-off between single guests and multi-person groups")
+   - Derive closed-form solutions
+   - Visualize occupancy vs. simplified parameter
+
+4. **Operational variations** (single-rider queue, pre-grouping)
+   - Apply framework to operational strategies
+   - Compare with baseline (single queue case)
+
+### Consistency with Simpler Cases
+
+**Maintain structural consistency across case studies**:
+- **Two-seat case**: general $(p_1, p_2)$ → analytical solution → visualization
+- **Four-seat case**: general $(p_1, p_2, p_3, p_4)$ → numerical analysis → simplified $(p)$ model → operational variations
+
+**Maintain subsection structure consistency within each case**:
+- **Stationary Distribution** (or **Stationary State**): Derive $\pi$ from transition matrix
+- **Expected Occupancy**: Derive dispatch probability $p_D$ and expected occupancy $\mathrm{E}[Ocp]$ from $\pi$
+- Follow this structure in both general and simplified models for consistency
+- This parallel structure helps readers navigate the analysis and compare results
+
+This consistency helps readers understand the progression and see how complexity is managed as the parameter space grows.
+
+### When to Use Each Approach
+
+**Use numerical analysis when**:
+- The parameter space is multidimensional (3+ parameters)
+- General closed-form solutions are intractable
+- Practical predictions for specific distributions are needed
+- Exploring sensitivity to parameter changes
+
+**Use analytical analysis when**:
+- Closed-form solutions are obtainable
+- Mathematical insight into structure is desired
+- Simplified models can capture essential trade-offs
+- Results need to be expressed as functions of parameters
+
+**Use both approaches when**:
+- The parameter space is complex but simplified models can provide insight
+- Numerical results establish practical utility, analytical results provide understanding
+- Cross-validation between approaches strengthens confidence in results
+
 ## Mathematical Notation and Rigor
 
 When working with mathematical content in this repository, maintain the following standards:
@@ -107,6 +202,7 @@ When working with mathematical content in this repository, maintain the followin
 - **Use consistent LaTeX commands** throughout the document:
   - Expectation operator: Always use `\mathrm{E}[...]` with braces (not `\mathrm E[...]`)
   - Variables: Maintain consistent naming (e.g., always use $p_D$ for dispatch probability, not $D$)
+  - Normalizing constants: Use $Z$ (not $D$ or $N$) to avoid confusion with dispatch probability $p_D$ or natural numbers $\mathbb{N}$
   - Matrix notation: Use `\begin{pmatrix}...\end{pmatrix}` consistently
 - **Check for typos in mathematical symbols** during revision
 
@@ -139,6 +235,21 @@ When working with mathematical content in this repository, maintain the followin
 - **Both interpretations are mathematically valid** and yield the same expected occupancy rate.
 - **This repository uses Interpretation A** for its intuitive state transition visualization.
 - **Always explicitly state** which interpretation you are using and the observation timing.
+
+### Excluding States with Zero Stationary Probability
+
+When the stationary probability of a state is known to be zero, that state can be excluded from the state space for practical analysis:
+
+- **Example**: In continuous arrival scenarios, state 0 (empty vehicle) has $\pi_0=0$
+- **Justification**: Verified in simpler cases (e.g., two-seat case shows $\pi_0=0$)
+- **Benefit**: Simplifies analysis by reducing state space dimension
+- **When to apply**: After verifying in a simpler case or through theoretical argument
+- **Important**: Explicitly document the exclusion and provide justification
+
+**Example documentation pattern**:
+> "In the two-seat case analyzed earlier, we observed that the stationary probability of state 0 (completely empty vehicle) was $\pi_0=0$. This reflects the reality that under continuous guest arrivals in the stationary regime, we never observe a completely empty vehicle waiting for the next group. Therefore, for the four-seat analysis, we exclude state 0 and define the state space as $\Sigma = \{1, 2, 3, 4\}$."
+
+This practical refinement complements Interpretation A while maintaining mathematical rigor.
 
 ### Stationary Distribution in Markov Chains
 - **Explicitly state that stationary distribution exists** under appropriate conditions

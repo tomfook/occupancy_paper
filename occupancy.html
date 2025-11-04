@@ -1629,8 +1629,8 @@ Operation Planning<br><h4 class="date">2018-08-20</h4>
 </ul>
 <p>After a vehicle is dispatched, a new empty vehicle arrives. This means the state returns to the initial state <span class="math inline">\(\sigma_0\)</span> (an empty vehicle).</p>
 <!--a1[label = '<I>s@_{i}</I>', shape = circle];-->
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-114ba41b793b3acd4593" style="width:480px;height:192px;"></div>
-<script type="application/json" data-for="htmlwidget-114ba41b793b3acd4593">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n      a2[label = \"Which row\n to seat?\", shape = square];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a3[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n      edge[label = \"\"] a3 -> a4;\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-8cbe11cd21a7ba7cfe4c" style="width:480px;height:192px;"></div>
+<script type="application/json" data-for="htmlwidget-8cbe11cd21a7ba7cfe4c">{"x":{"diagram":"digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.1: State, Action, and Transition\",\n      fontsize = 15\n    ]\n    node[\n      fixedsize = false\n    ]\n      a1[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I><\/SUB><\/FONT>=<I>&sigma;<\/I>>, shape = circle];\n      a2[label = \"Which row\n to seat?\", shape = square];\n    edge[label = <<I>x<FONT POINT-SIZE=\"8\"><SUB>i<\/SUB><\/FONT><\/I>>] a1 -> a2 ;\n      a3[label = \"Dispatch\n or not?\", shape = square];\n    edge[label = \"\"] a2 -> a3;\n      a4[label = <<I>s<\/I><FONT POINT-SIZE=\"8\"><SUB><I>i<\/I>+1<\/SUB><\/FONT>=<I>&sigma;<\/I>&prime;>, shape = circle];\n      edge[label = \"\"] a3 -> a4;\n\n}\n  ","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>We assume that the situation is stationary. This stationarity assumption means that the probability of a group of size <span class="math inline">\(k\)</span> arriving is independent of time, i.e., <span class="math inline">\(P[x_i=k]=p_k\)</span> for all <span class="math inline">\(i\)</span>.</p>
 </div>
 </div>
@@ -1672,8 +1672,8 @@ T_{jk}&amp;=&amp;P[s_{i+1}=k|s_{i}=j]\\
 \]</span> We call matrix <span class="math inline">\(T\)</span> the <strong>transition matrix</strong>.</p>
 <p>We demonstrate an example with the simplest case: two seats. In this case, the seat occupancy can be in states <span class="math inline">\(s_i=0, 1, 2\)</span>.</p>
 <p>Fig.2 shows the Markov states and transitions in this situation.</p>
-<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e2a586212cd1871f7756" style="width:384px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-e2a586212cd1871f7756">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case (two seats). \nRed arrows indicate dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3d360383314ae5949129" style="width:384px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-3d360383314ae5949129">{"x":{"diagram":"\n  digraph dot{\n    graph[\n      rankdir = LR,\n      label = \"Fig.2: The Simplest Case (two seats). \nRed arrows indicate dispatch\",\n      fontsize = 10,\n      layout = neato,\n      ordering = out,\n    ];\n    node[\n      shape = circle,\n      fixedsize = true\n    ];\n    a0[label = \"0\"];\n    a1[label = \"1\"];\n    a2[label = \"2\"];\n    a0 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a0 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>];\n    a1 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n    a2 -> a1[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>, color = red];\n    a2 -> a2[label = <<I>p<\/I><FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>, color = red];\n  }\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p>Since each element <span class="math inline">\(T_{jk}\)</span> represents the probability of moving from state <span class="math inline">\(s_i=j\)</span> to state <span class="math inline">\(s_{i+1}=k\)</span>, we can define the transition matrix as <span class="math display">\[
 T=\begin{pmatrix}
   0 &amp; p_1 &amp; p_2 \\
@@ -1756,20 +1756,51 @@ p_D = 0 \cdot 1 + \frac{p_1}{1+p_1} \cdot p_2 + \frac{1}{1+p_1} \cdot 1 = \frac{
 <li>four seats per row</li>
 </ul>
 <p>This situation matches the seat configuration of Harry Potter and the Forbidden Journey.</p>
+<div id="state-space-definition" class="section level3">
+<h3>State Space Definition</h3>
+<p>In the two-seat case analyzed earlier, we observed that the stationary probability of state 0 (completely empty vehicle) was <span class="math inline">\(\pi_0=0\)</span>. This reflects the reality that under continuous guest arrivals in the stationary regime, we never observe a completely empty vehicle waiting for the next group.</p>
+<p>Therefore, for the four-seat analysis, we exclude state 0 and define the state space as <span class="math inline">\(\Sigma = \{1,2,3,4\}\)</span>, where each state represents the number of filled seats immediately after a group has been seated.</p>
+</div>
 <div id="transition-matrix" class="section level3">
 <h3>Transition Matrix</h3>
 <p>With only a single row, guests must be seated in arrival order. Therefore, the grouping strategy is determined automatically.</p>
 <p><span class="math display">\[
-T=\begin{pmatrix}
-  p_4 &amp; p_3+p_4&amp; p_2+p_4&amp;p_1+p_4\\
-  p_1&amp;0&amp;0&amp;0\\
-  p_2&amp;p_1&amp;0&amp;p_2\\
-  p_3&amp;p_2&amp;p_1+p_3&amp;p_3
-  \end{pmatrix}
+T = \begin{pmatrix}
+0 &amp; p_1 &amp; p_2 &amp; p_3+p_4\\
+0 &amp; 0 &amp; p_1 + p_3 &amp; p_2+p_4\\
+0 &amp; p_2 &amp; p_3 &amp; p_1+p_4\\
+p_1 &amp; p_2 &amp; p_3 &amp; p_4
+\end{pmatrix}
 \]</span></p>
 </div>
-<div id="single-queue-case" class="section level3">
-<h3>Single Queue Case</h3>
+<div id="stationary-distribution" class="section level3">
+<h3>Stationary Distribution</h3>
+<p>For the general four-parameter model <span class="math inline">\((p_1, p_2, p_3, p_4)\)</span> with <span class="math inline">\(p_1 + p_2 + p_3 + p_4 = 1\)</span>, solving the eigenvector equation <span class="math inline">\(\pi T = \pi\)</span> yields:</p>
+<p><span class="math display">\[
+\pi = (\pi_1, \pi_2, \pi_3, \pi_4)
+\]</span></p>
+<p>where <span class="math display">\[
+\begin{align}
+\pi_1 &amp;= \frac{p_1(-p_1 p_2 - p_2 p_3 - p_3 + 1)}{Z}\\
+\pi_2 &amp;= \frac{-p_1^2 p_3 + p_1^2 + p_1 p_2^2 + p_1 p_2 - p_2 p_3 + p_2 p_4 + p_2}{Z}\\
+\pi_3 &amp;= \frac{p_1^3 + p_1^2 p_3 + 2p_1 p_2 + p_1 + p_2 p_3 + p_4}{Z}\\
+\pi_4 &amp;= \frac{-p_1 p_2 - p_2 p_3 - p_3 + 1}{Z}
+\end{align}
+\]</span></p>
+<p>and <span class="math display">\[
+\begin{align}
+Z = &amp;\, p_1^3 - p_1^2 p_2 + p_1^2 + p_1 p_2^2 - p_1 p_2 p_3 + 2p_1 p_2 - p_1 p_3 + 2p_1\\
+  &amp;\, - p_2 p_3 + p_2 p_4 + p_2 - p_3 + p_4 + 1
+\end{align}
+\]</span></p>
+<p>While this solution is exact, the complexity of the expressions makes analytical interpretation difficult. To gain deeper insight into the relationship between arrival patterns and occupancy rates, we introduce a simplified single-parameter model later in this analysis.</p>
+</div>
+<div id="expected-occupancy" class="section level3">
+<h3>Expected Occupancy</h3>
+<p>(to be analyzed)</p>
+</div>
+<div id="single-parameter-model" class="section level3">
+<h3>Single-Parameter Model</h3>
 <p>To obtain an explicit solution, we introduce a single-parameter model by setting <span class="math inline">\(p_1=p\)</span> and <span class="math inline">\(p_2=p_3=p_4=(1-p)/3\)</span>. This represents the simplest scenario where single guests arrive with probability <span class="math inline">\(p\)</span>, and all multi-person groups (sizes 2, 3, 4) are equally likely, each with probability <span class="math inline">\((1-p)/3\)</span>. Then from the equation <span class="math inline">\(\pi T=\pi\)</span>, we can obtain the stationary state <span class="math display">\[
 \pi = \frac{1}{6(p+1)(2p^2-p+2)}\begin{pmatrix}
   2p^2+2p+5\\
