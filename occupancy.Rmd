@@ -364,6 +364,51 @@ $$
 While this solution is exact, the complexity of the expressions makes analytical interpretation difficult.
 To gain deeper insight into the relationship between arrival patterns and occupancy rates, we introduce a simplified single-parameter model later in this analysis.
 
+### Dispatch Probability
+
+For the general four-parameter model, the dispatch probability is calculated as:
+$$
+p_D = \sum_{j=1}^{4} \pi_j p_D(j)
+$$
+where $p_D(j)$ is the probability of dispatching the vehicle from state $j$:
+- $p_D(1) = p_4$ (from state 1: dispatch if next group has size 4)
+- $p_D(2) = p_3 + p_4$ (from state 2: dispatch if next group has size 3 or 4)
+- $p_D(3) = p_2 + p_3 + p_4$ (from state 3: dispatch if next group has size 2, 3, or 4)
+- $p_D(4) = 1$ (from state 4: always dispatch as vehicle is full)
+
+Substituting the stationary distribution from above and using the constraint $p_1 + p_2 + p_3 + p_4 = 1$, we obtain:
+$$
+p_D = \frac{N_D}{Z}
+$$
+Both $N_D$ and $Z$ can be expressed as polynomials in $p_1$:
+$$
+N_D = a_0 + a_1 p_1 + a_2 p_1^2 + a_3 p_1^3
+$$
+where
+$$
+\begin{align}
+a_3 &= p_2 + p_3 + p_4\\
+a_2 &= p_2 p_3 - p_2 p_4 + p_3 + p_4\\
+a_1 &= p_2^2 p_3 + p_2^2 p_4 + 2p_2^2 - p_2 p_3 p_4 + 3p_2 p_3 + 3p_2 p_4 - p_3 p_4 + p_3 + 2p_4\\
+a_0 &= p_2^2 p_3 + p_2 p_3 p_4 + p_2 p_4^2 + 2p_2 p_4 + p_3 p_4 - p_3 + p_4^2 + 1
+\end{align}
+$$
+and
+$$
+Z = b_0 + b_1 p_1 + b_2 p_1^2 + b_3 p_1^3
+$$
+where
+$$
+\begin{align}
+b_3 &= 1\\
+b_2 &= 1 - p_2\\
+b_1 &= p_2^2 - p_2 p_3 + 2p_2 - p_3 + 2\\
+b_0 &= -p_2 p_3 + p_2 p_4 + p_2 - p_3 + p_4 + 1
+\end{align}
+$$
+
+The complexity of this expression motivates the introduction of a simplified single-parameter model for gaining analytical insight.
+
 ### Expected Occupancy
 (to be analyzed)
  
