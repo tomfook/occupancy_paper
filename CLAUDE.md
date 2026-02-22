@@ -10,6 +10,21 @@ This is a research repository focused on mathematical modeling of seat occupancy
 
 ## Repository Structure
 
+```
+occupancy_paper/
+├── CLAUDE.md              # Project instructions (this file)
+├── occupancy.Rmd          # Main research paper
+├── R/
+│   └── sim_mnr.R          # Simulation functions for multi-row analysis
+├── notes/
+│   ├── NEXT_STEPS.md      # Development roadmap
+│   ├── planning.Rmd       # Research planning document
+│   ├── mnr.Rmd            # 4-seat 2-row configuration analysis
+│   └── markov_nrow.Rmd    # General n-row Markov chain framework
+├── output/                # Rendered HTML (gitignored, regenerable)
+└── .gitignore
+```
+
 - `occupancy.Rmd` - Main research paper: "General Framework for Seat Occupancy Expectation"
   - Establishes Markov chain model for predicting seat occupancy
   - Analyzes simple cases (single row of seats)
@@ -23,7 +38,9 @@ This is a research repository focused on mathematical modeling of seat occupancy
     - Comparison section with unified evaluation at $p_2=p_3=p_4=1/3$
   - Contains R code for generating diagrams, calculations, and visualizations
 
-- `*.html` - Rendered output files from R Markdown documents
+- `R/` - R scripts for simulation and computation
+- `notes/` - Supporting analyses, planning documents, and development roadmap
+- `output/` - Rendered HTML files (gitignored, regenerable from Rmd sources)
 
 ## Working with R Markdown
 
@@ -32,12 +49,12 @@ This is a research repository focused on mathematical modeling of seat occupancy
 To render an R Markdown file to HTML:
 ```r
 # In R or RStudio
-rmarkdown::render("occupancy.Rmd")
+rmarkdown::render("occupancy.Rmd", output_dir = "output")
 ```
 
 Or using command line with knitr:
 ```bash
-Rscript -e "rmarkdown::render('occupancy.Rmd')"
+Rscript -e "rmarkdown::render('occupancy.Rmd', output_dir='output')"
 ```
 
 ### Key R Dependencies

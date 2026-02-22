@@ -1,0 +1,11 @@
+# Rendered output (regenerable from Rmd sources)
+output/
+
+# R session files
+.Rhistory
+.RData
+.Rproj.user/
+
+# knitr cache
+*_cache/
+*_files/
